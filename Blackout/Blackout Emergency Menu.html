@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Emergency Menu Configurator</title>
+  <style>
+    body, html { margin:0; padding:0; width:100%; height:100%; font-family: Arial, sans-serif; background: #f5f5f5; }
+    .screen { display: none; width:100%; height:100%; align-items: center; justify-content: center; text-align: center; padding: 20px; box-sizing: border-box; position: relative; }
+    .visible { display: flex; flex-direction: column; }
+    h1 { font-size: 2.5em; margin-bottom: 0.5em; color: #333; }
+    p { font-size: 1.2em; line-height: 1.4; color: #555; margin-bottom: 1em; }
+    button { font-size: 1.2em; padding: 0.8em 1.5em; border:none; border-radius: 5px; background: #007BFF; color: white; cursor: pointer; margin-bottom: 1em; }
+    button:hover { background: #0056b3; }
+    .form-group { margin: 1em 0; text-align: left; }
+    label { display: block; font-size: 1.1em; margin-bottom: 0.3em; color: #333; }
+    select { font-size: 1.1em; padding: 0.5em; width: 100%; max-width: 300px; }
+    .guide-link { position: absolute; top: 20px; right: 20px; font-size: 1.1em; color: #007BFF; text-decoration: none; }
+    .guide-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <div id="screen1" class="screen visible">
+    <a href="https://www.amazon.com/dp/B0F6ZCSH5C" class="guide-link" target="_blank">
+      Link to the Complete Guide for Blackout Preparedness
+    </a>
+    <h1>Welcome to the Emergency Menu Configurator</h1>
+    <p>
+      This program lets you configure 1 to 7-day menus for women, men, or children,
+      in Standard, Gluten-free, Lactose-free, or Vegan formats.
+      You can download and print them.
+      These menus are designed for emergency situations like blackouts,
+      when there is no power for cooking or refrigeration.
+    </p>
+    <button onclick="showScreen(2)">Continue</button>
+  </div>
+
+  <div id="screen2" class="screen">
+    <a href="https://www.amazon.com/dp/B0F6ZCSH5C" class="guide-link" target="_blank">
+      Link to the Complete Guide for Blackout Preparedness
+    </a>
+    <h1>Select your options</h1>
+
+    <div class="form-group">
+      <label for="dias">Days:</label>
+      <select id="dias">
+        <option value="1">1 day</option>
+        <option value="2">2 days</option>
+        <option value="3">3 days</option>
+        <option value="4">4 days</option>
+        <option value="5">5 days</option>
+        <option value="6">6 days</option>
+        <option value="7">7 days</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="perfil">Profile:</label>
+      <select id="perfil">
+        <option value="Woman">Woman</option>
+        <option value="Man">Man</option>
+        <option value="Child">Child</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="dieta">Diet type:</label>
+      <select id="dieta">
+        <option value="Standard">Standard</option>
+        <option value="Gluten-Free">Gluten-Free</option>
+        <option value="Lactose-Free">Lactose-Free</option>
+        <option value="Vegan">Vegan</option>
+      </select>
+    </div>
+
+    <button onclick="generate()">Generate download link</button>
+    <p id="mensaje" style="margin-top:1em; font-size:1em; color:#777;">
+      The link to download your menu will appear here.
+    </p>
+  </div>
+
+  <script>
+    function showScreen(n) {
+      document.getElementById('screen1').classList.remove('visible');
+      document.getElementById('screen2').classList.add('visible');
+    }
+
+    function generate() {
+      const days = document.getElementById('dias').value;
+      const profile = document.getElementById('perfil').value;
+      const diet = document.getElementById('dieta').value;
+
+      // Calorie selection based on profile
+      let kcal = '2000';
+      if (profile === 'Child') kcal = '1600';
+      if (profile === 'Man') kcal = '2500';
+
+      const folders = {
+        "Standard": "Standard%20Menu",
+        "Gluten-Free": "Gluten-Free%20Menu",
+        "Lactose-Free": "Lactose-free%20Menu",
+        "Vegan": "Vegan%20Menu"
+      };
+
+      const folder = folders[diet];
+      const fileName = `${days}-Day ${diet} Menu ${kcal} kcal.docx`;
+      const fileUrl = encodeURIComponent(fileName).replace(/%20/g, "%20");
+
+      const url = `https://vertice1971.github.io/thomasbooks/Blackout/${folder}/${fileUrl}`;
+
+      document.getElementById('mensaje').innerHTML =
+        `<a href="${url}" download style="font-size:1.1em; color:#007BFF;">` +
+        `Download ${days}-day menu · Profile: ${profile} · Diet: ${diet} · ${kcal} kcal</a>`;
+    }
+  </script>
+
+</body>
+</html>
