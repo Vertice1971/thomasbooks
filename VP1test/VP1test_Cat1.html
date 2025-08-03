@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dues estrelles, un mateix somni: Lamine i Alexia ⚽🏆</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #00a8ff, #00d2d3);
+      margin: 0;
+      position: relative;
+    }
+    /* Capa de imagen semitransparente permanente */
+    #bgOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url("JoséGit.png") no-repeat center center;
+      background-size: contain;
+      opacity: 0.5;
+      z-index: 1;
+      pointer-events: none;
+    }
+    /* Portada inicial que se muestra completa durante 3 segundos */
+    #cover {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    #cover img {
+      max-height: 100%;
+      max-width: 100%;
+    }
+    .trivia-container, .mensaje-felicidades {
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 90%;
+      max-width: 450px;
+      border: 4px double #00a8ff;
+      position: relative;
+      z-index: 2; /* Por encima del bgOverlay */
+    }
+    /* Iconos actualizados para tema de fútbol */
+    .trivia-container::before, .mensaje-felicidades::before {
+      content: "⚽";
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      font-size: 30px;
+    }
+    .trivia-container::after, .mensaje-felicidades::after {
+      content: "🏆";
+      position: absolute;
+      bottom: -15px;
+      right: -15px;
+      font-size: 30px;
+    }
+    h1 {
+      font-size: 26px;
+      margin-bottom: 15px;
+      color: #00a8ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    p {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    #respuesta1 { background-color: #007bff; }
+    #respuesta2 { background-color: #ff9800; }
+    #respuesta3 { background-color: #9c27b0; }
+    .btn:hover {
+      filter: brightness(85%);
+      transform: scale(1.05);
+    }
+    .btn.incorrect {
+      background-color: #ff4444;
+      animation: shake 0.5s;
+    }
+    .btn.correct {
+      background-color: #00cc66 !important;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+    }
+    .temporizador {
+      font-size: 22px;
+      font-weight: bold;
+      color: #00a8ff;
+      background: #e3f2fd;
+      padding: 5px 10px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+    .mensaje-felicidades {
+      display: none;
+    }
+    .mensaje-felicidades h2 {
+      font-size: 30px;
+      color: #00cc66;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .mensaje-felicidades p {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+    .mensaje-felicidades .tiempo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #007bff;
+    }
+    .btn-restart {
+      background-color: #007bff;
+      padding: 15px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Portada inicial -->
+<div id="cover">
+  <img src="VP1Cat.png" alt="Portada">
+</div>
+
+<!-- Fondo semitransparente con la imagen, por encima del fondo azul -->
+<div id="bgOverlay"></div>
+
+<div class="trivia-container" id="triviaContainer">
+  <h1>⚽ Dues estrelles, un mateix somni: Lamine i Alexia 🏆</h1>
+  <div class="temporizador" id="temporizador">00:00</div>
+  <p id="pregunta"></p>
+  <button id="respuesta1" class="btn respuesta-btn"></button>
+  <button id="respuesta2" class="btn respuesta-btn"></button>
+  <button id="respuesta3" class="btn respuesta-btn"></button>
+</div>
+
+<div class="mensaje-felicidades" id="mensajeFelicidades">
+  <h2>🏆 Enhorabona!!! ⚽</h2>
+  <p>És difícil saber més coses que tu...</p>
+  <p>Temps total: <span class="tiempo" id="tiempoFinal"></span></p>
+  <button class="btn btn-restart" onclick="reloadGame()">Tornar a jugar</button>
+</div>
+
+<script>
+  function reloadGame() {
+    window.location.reload();
+  }
+
+  // Array completo de preguntas de fútbol
+  const preguntasCompletas = [
+    { 
+      pregunta: "En quin any va debutar Lamine Yamal amb el FC Barcelona?", 
+      correcta: "2023", 
+      opciones: ["2022", "2023", "2024"] 
+    },
+    { 
+      pregunta: "Quantes Pilotes d'Or ha guanyat Alexia Putellas?", 
+      correcta: "2", 
+      opciones: ["1", "2", "3"] 
+    },
+    { 
+      pregunta: "Quina posició juga Lamine Yamal?", 
+      correcta: "Extrem dret", 
+      opciones: ["Davanter centre", "Extrem dret", "Migcampista"] 
+    },
+    { 
+      pregunta: "Amb quina selecció nacional juga Lamine Yamal?", 
+      correcta: "Espanya", 
+      opciones: ["Espanya", "Marroc", "França"] 
+    },
+    { 
+      pregunta: "En quin any va guanyar Alexia Putellas la seva primera Pilota d'Or?", 
+      correcta: "2021", 
+      opciones: ["2020", "2021", "2022"] 
+    },
+    { 
+      pregunta: "Quina és la posició principal d'Alexia Putellas?", 
+      correcta: "Migcampista", 
+      opciones: ["Davantera", "Migcampista", "Defensora"] 
+    },
+    { 
+      pregunta: "Quin rècord va establir Lamine Yamal a l'Eurocopa 2024?", 
+      correcta: "Jugador més jove a marcar", 
+      opciones: ["Més assistències", "Jugador més jove a marcar", "Més minuts jugats"] 
+    },
+    { 
+      pregunta: "Quantes Champions League ha guanyat Alexia amb el Barcelona?", 
+      correcta: "2", 
+      opciones: ["1", "2", "3"] 
+    },
+    { 
+      pregunta: "En quina ciutat va néixer Lamine Yamal?", 
+      correcta: "Esplugues de Llobregat", 
+      opciones: ["Barcelona", "Esplugues de Llobregat", "Mataró"] 
+    },
+    { 
+      pregunta: "Quin dorsal porta Lamine Yamal al Barcelona?", 
+      correcta: "27", 
+      opciones: ["19", "27", "11"] 
+    },
+    { 
+      pregunta: "En quin any es va fundar el FC Barcelona?", 
+      correcta: "1899", 
+      opciones: ["1899", "1900", "1901"] 
+    },
+    { 
+      pregunta: "Quin és el sobrenom del FC Barcelona?", 
+      correcta: "Barça", 
+      opciones: ["Culés", "Barça", "Blaugranes"] 
+    },
+    { 
+      pregunta: "Quantes Champions League masculines ha guanyat el Barcelona?", 
+      correcta: "5", 
+      opciones: ["4", "5", "6"] 
+    },
+    { 
+      pregunta: "Qui és el màxim golejador històric del FC Barcelona?", 
+      correcta: "Lionel Messi", 
+      opciones: ["Lionel Messi", "César Rodríguez", "Luis Suárez"] 
+    },
+    { 
+      pregunta: "En quin estadi juga el FC Barcelona?", 
+      correcta: "Camp Nou", 
+      opciones: ["Camp Nou", "Santiago Bernabéu", "Wanda Metropolitano"] 
+    },
+    { 
+      pregunta: "Quina és la capacitat del Camp Nou?", 
+      correcta: "99.354", 
+      opciones: ["85.000", "99.354", "105.000"] 
+    },
+    { 
+      pregunta: "Què significa 'Més que un club'?", 
+      correcta: "Més que un club", 
+      opciones: ["Millor que un club", "Més que un club", "Molt més club"] 
+    },
+    { 
+      pregunta: "Quan va guanyar Espanya l'Eurocopa 2024?", 
+      correcta: "Juliol 2024", 
+      opciones: ["Juny 2024", "Juliol 2024", "Agost 2024"] 
+    },
+    { 
+      pregunta: "Contra quina selecció va jugar Espanya la final de l'Eurocopa 2024?", 
+      correcta: "Anglaterra", 
+      opciones: ["França", "Anglaterra", "Alemanya"] 
+    },
+    { 
+      pregunta: "Quantes Eurocopes ha guanyat Espanya?", 
+      correcta: "4", 
+      opciones: ["3", "4", "5"] 
+    },
+    { 
+      pregunta: "En quin any va guanyar Espanya el seu primer Mundial de futbol?", 
+      correcta: "2010", 
+      opciones: ["2008", "2010", "2012"] 
+    },
+    { 
+      pregunta: "Qui va ser l'entrenador d'Espanya al Mundial de 2010?", 
+      correcta: "Vicente del Bosque", 
+      opciones: ["Luis Aragonés", "Vicente del Bosque", "Fernando Hierro"] 
+    },
+    { 
+      pregunta: "Quin és el clàssic més famós del futbol espanyol?", 
+      correcta: "Real Madrid vs Barcelona", 
+      opciones: ["Real Madrid vs Atlético", "Real Madrid vs Barcelona", "Barcelona vs Atlético"] 
+    },
+    { 
+      pregunta: "Qui és considerat el millor jugador de la història del futbol per molts?", 
+      correcta: "Pelé o Maradona", 
+      opciones: ["Pelé o Maradona", "Cristiano Ronaldo", "Lionel Messi"] 
+    },
+    { 
+      pregunta: "Cada quants anys se celebra un Mundial de futbol?", 
+      correcta: "4 anys", 
+      opciones: ["2 anys", "4 anys", "3 anys"] 
+    },
+    { 
+      pregunta: "Quants jugadors té un equip de futbol al camp?", 
+      correcta: "11", 
+      opciones: ["10", "11", "12"] 
+    },
+    { 
+      pregunta: "Quant dura un partit de futbol?", 
+      correcta: "90 minuts", 
+      opciones: ["80 minuts", "90 minuts", "100 minuts"] 
+    },
+    { 
+      pregunta: "Com es diu la competició europea de clubs més prestigiosa?", 
+      correcta: "UEFA Champions League", 
+      opciones: ["UEFA Europa League", "UEFA Champions League", "UEFA Conference League"] 
+    },
+    { 
+      pregunta: "Quin país organitzarà el Mundial de 2026?", 
+      correcta: "Estats Units, Canadà i Mèxic", 
+      opciones: ["Qatar", "Estats Units, Canadà i Mèxic", "Espanya i Portugal"] 
+    },
+    { 
+      pregunta: "Qui va guanyar l'últim Mundial de futbol el 2022?", 
+      correcta: "Argentina", 
+      opciones: ["França", "Argentina", "Brasil"] 
+    },
+    { 
+      pregunta: "Quin premi s'atorga al millor jugador del món cada any?", 
+      correcta: "Pilota d'Or", 
+      opciones: ["Pilota d'Or", "FIFA The Best", "Bota d'Or"] 
+    },
+    { 
+      pregunta: "En quin país es va inventar el futbol modern?", 
+      correcta: "Anglaterra", 
+      opciones: ["Brasil", "Anglaterra", "Espanya"] 
+    },
+    { 
+      pregunta: "Quin és el club amb més Champions League guanyades?", 
+      correcta: "Real Madrid", 
+      opciones: ["Barcelona", "Real Madrid", "AC Milan"] 
+    },
+    { 
+      pregunta: "Què signifiquen les sigles FIFA?", 
+      correcta: "Federació Internacional de Futbol Associació", 
+      opciones: ["Federació Internacional de Futbol Associació", "Federació Internacional de Futbol Americà", "Futbol Internacional FIFA"] 
+    },
+    { 
+      pregunta: "Quan va néixer oficialment el futbol femení?", 
+      correcta: "Segle XIX", 
+      opciones: ["Segle XVIII", "Segle XIX", "Segle XX"] 
+    },
+    { 
+      pregunta: "Quina selecció femenina ha guanyat més Mundials?", 
+      correcta: "Estats Units", 
+      opciones: ["Alemanya", "Estats Units", "Brasil"] 
+    },
+    { 
+      pregunta: "En quin any se va celebrar el primer Mundial femení?", 
+      correcta: "1991", 
+      opciones: ["1990", "1991", "1995"] 
+    },
+    { 
+      pregunta: "Quin és el crit de guerra tradicional del FC Barcelona?", 
+      correcta: "Visca el Barça!", 
+      opciones: ["Visca el Barça!", "Força Barça!", "Hala Madrid!"] 
+    },
+    { 
+      pregunta: "De quins colors són tradicionalment les samarretes del Barcelona?", 
+      correcta: "Blau i granat", 
+      opciones: ["Blau i granat", "Vermell i blau", "Blau i blanc"] 
+    },
+    { 
+      pregunta: "Quina jugadora espanyola va guanyar la Pilota d'Or el 2023?", 
+      correcta: "Aitana Bonmatí", 
+      opciones: ["Alexia Putellas", "Aitana Bonmatí", "Jenni Hermoso"] 
+    },
+    { 
+      pregunta: "En quina posició juga principalment Aitana Bonmatí?", 
+      correcta: "Migcampista", 
+      opciones: ["Davantera", "Migcampista", "Defensora"] 
+    },
+    { 
+      pregunta: "Quin va ser el resultat de la final del Mundial femení 2023?", 
+      correcta: "Espanya 1-0 Anglaterra", 
+      opciones: ["Espanya 2-1 Anglaterra", "Espanya 1-0 Anglaterra", "Espanya 0-1 Anglaterra"] 
+    },
+    { 
+      pregunta: "Quin rècord va batre Lamine Yamal a l'Eurocopa 2024?", 
+      correcta: "Jugador més jove a jugar una Eurocopa", 
+      opciones: ["Més gols en una Eurocopa", "Jugador més jove a jugar una Eurocopa", "Més assistències"] 
+    }
+  ];
+
+  // Mezclar todas las preguntas y seleccionar 7 al azar
+  preguntasCompletas.sort(() => 0.5 - Math.random());
+  const preguntasSeleccionadas = preguntasCompletas.slice(0, 7);
+  preguntasSeleccionadas.forEach(p => p.opciones.sort(() => 0.5 - Math.random()));
+
+  let indicePregunta = 0;
+  let tiempoInicio;
+  let intervalo;
+
+  // Crear el contexto de audio
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Función para generar un sonido con fundido suave
+  function playBeep(frequency, duration, type = 'sine', fadeTime = 0.1) {
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    osc.frequency.value = frequency;
+    osc.type = type;
+    
+    // Comienza con volumen 0 y aumenta gradualmente
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + fadeTime);
+    gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration/1000 - fadeTime);
+    
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc.start();
+    setTimeout(() => osc.stop(), duration);
+  }
+
+  // Función para generar pitido de error (más suave, con frecuencia reducida)
+  function emitirPitido() {
+    if (audioCtx.state === 'suspended') 
+      audioCtx.resume().then(() => playBeep(500, 300, 'sine', 0.2));
+    else 
+      playBeep(500, 300, 'sine', 0.2);
+  }
+
+  // Función para generar el sonido de campanillas de celebración
+  function playChime(frequencies, duration, type = 'triangle', fadeTime = 0.2) {
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    osc1.frequency.value = frequencies[0];
+    osc2.frequency.value = frequencies[1];
+    osc1.type = type;
+    osc2.type = type;
+    
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + fadeTime);
+    gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration/1000 - fadeTime);
+    
+    osc1.connect(gainNode);
+    osc2.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc1.start();
+    osc2.start();
+    
+    setTimeout(() => {
+      osc1.stop();
+      osc2.stop();
+    }, duration);
+  }
+  
+  // Función para el pitido de acierto con sonido de celebración
+  function emitirPitidoDulce() {
+    if (audioCtx.state === 'suspended') 
+      audioCtx.resume().then(() => playChime([800, 1200], 800, 'triangle', 0.3));
+    else 
+      playChime([800, 1200], 800, 'triangle', 0.3);
+  }
+  
+  // Actualizar temporizador
+  function actualizarTemporizador() {
+    let tiempoPasado = Date.now() - tiempoInicio;
+    let minutos = Math.floor(tiempoPasado / 60000);
+    let segundos = Math.floor((tiempoPasado % 60000) / 1000);
+    document.getElementById("temporizador").textContent =
+      `${String(minutos).padStart(2, "0")}:${String(segundos).padStart(2, "0")}`;
+  }
+  
+  // Mostrar la pregunta actual y asignar eventos a los botones
+  function mostrarPregunta() {
+    if (indicePregunta >= preguntasSeleccionadas.length) {
+      clearInterval(intervalo);
+      document.getElementById("triviaContainer").style.display = "none";
+      document.getElementById("mensajeFelicidades").style.display = "block";
+      document.getElementById("tiempoFinal").textContent = document.getElementById("temporizador").textContent;
+      return;
+    }
+  
+    let preguntaActual = preguntasSeleccionadas[indicePregunta];
+    document.getElementById("pregunta").textContent = preguntaActual.pregunta;
+    document.getElementById("respuesta1").textContent = preguntaActual.opciones[0];
+    document.getElementById("respuesta2").textContent = preguntaActual.opciones[1];
+    document.getElementById("respuesta3").textContent = preguntaActual.opciones[2];
+  
+    document.querySelectorAll(".respuesta-btn").forEach(boton => {
+      boton.classList.remove("correct", "incorrect");
+      boton.onclick = () => {
+        if (boton.textContent === preguntaActual.correcta) {
+          boton.classList.add("correct");
+          emitirPitidoDulce();
+          setTimeout(() => { 
+            indicePregunta++; 
+            mostrarPregunta(); 
+          }, 500);
+        } else {
+          boton.classList.add("incorrect");
+          emitirPitido();
+          setTimeout(() => boton.classList.remove("incorrect"), 500);
+        }
+      };
+    });
+  }
+  
+  // Mostrar la portada por 3 segundos y luego iniciar el juego
+  setTimeout(function() {
+    document.getElementById("cover").style.display = "none";
+    // Iniciar el temporizador a partir de este momento
+    tiempoInicio = Date.now();
+    intervalo = setInterval(actualizarTemporizador, 1000);
+    mostrarPregunta();
+  }, 3000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dos estrellas, un mismo sueño: Lamine y Alexia ⚽🏆</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #a8e6cf, #dcedc1);
+      margin: 0;
+      position: relative;
+    }
+    /* Capa de imagen semitransparente permanente */
+    #bgOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url("JoséGit.png") no-repeat center center;
+      background-size: contain;
+      opacity: 0.5;
+      z-index: 1;
+      pointer-events: none;
+    }
+    /* Portada inicial que se muestra completa durante 3 segundos */
+    #cover {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    #cover img {
+      max-height: 100%;
+      max-width: 100%;
+    }
+    .trivia-container, .mensaje-felicidades {
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 90%;
+      max-width: 450px;
+      border: 4px double #4a90e2;
+      position: relative;
+      z-index: 2; /* Por encima del bgOverlay */
+    }
+    /* Iconos para tema de estrellas del fútbol */
+    .trivia-container::before, .mensaje-felicidades::before {
+      content: "⭐";
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      font-size: 30px;
+    }
+    .trivia-container::after, .mensaje-felicidades::after {
+      content: "🌟";
+      position: absolute;
+      bottom: -15px;
+      right: -15px;
+      font-size: 30px;
+    }
+    h1 {
+      font-size: 26px;
+      margin-bottom: 15px;
+      color: #4a90e2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    p {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    #respuesta1 { background-color: #ff6b6b; }
+    #respuesta2 { background-color: #4ecdc4; }
+    #respuesta3 { background-color: #45b7d1; }
+    .btn:hover {
+      filter: brightness(85%);
+      transform: scale(1.05);
+    }
+    .btn.incorrect {
+      background-color: #ff4444;
+      animation: shake 0.5s;
+    }
+    .btn.correct {
+      background-color: #00cc66 !important;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+    }
+    .temporizador {
+      font-size: 22px;
+      font-weight: bold;
+      color: #4a90e2;
+      background: #f0f8ff;
+      padding: 5px 10px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+    .mensaje-felicidades {
+      display: none;
+    }
+    .mensaje-felicidades h2 {
+      font-size: 30px;
+      color: #00cc66;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .mensaje-felicidades p {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+    .mensaje-felicidades .tiempo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #4a90e2;
+    }
+    .btn-restart {
+      background-color: #4a90e2;
+      padding: 15px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Portada inicial -->
+<div id="cover">
+  <img src="VP1.png" alt="Portada">
+</div>
+
+<!-- Fondo semitransparente con la imagen -->
+<div id="bgOverlay"></div>
+
+<div class="trivia-container" id="triviaContainer">
+  <h1>⭐ Dos estrellas, un mismo sueño: Lamine y Alexia 🌟</h1>
+  <div class="temporizador" id="temporizador">00:00</div>
+  <p id="pregunta"></p>
+  <button id="respuesta1" class="btn respuesta-btn"></button>
+  <button id="respuesta2" class="btn respuesta-btn"></button>
+  <button id="respuesta3" class="btn respuesta-btn"></button>
+</div>
+
+<div class="mensaje-felicidades" id="mensajeFelicidades">
+  <h2>🌟 ¡¡¡Enhorabuena!!! ⭐</h2>
+  <p>Conoces muy bien a nuestras dos estrellas...</p>
+  <p>Tiempo total: <span class="tiempo" id="tiempoFinal"></span></p>
+  <button class="btn btn-restart" onclick="reloadGame()">Volver a jugar</button>
+</div>
+
+<script>
+  function reloadGame() {
+    window.location.reload();
+  }
+
+  // Array completo de preguntas exclusivamente sobre Lamine Yamal y Alexia Putellas
+  const preguntasCompletas = [
+    // LAMINE YAMAL
+    { 
+      pregunta: "¿En qué año nació Lamine Yamal?", 
+      correcta: "2007", 
+      opciones: ["2006", "2007", "2008"] 
+    },
+    { 
+      pregunta: "¿En qué ciudad catalana nació Lamine Yamal?", 
+      correcta: "Esplugues de Llobregat", 
+      opciones: ["Barcelona", "Esplugues de Llobregat", "Mataró"] 
+    },
+    { 
+      pregunta: "¿A qué edad debutó Lamine Yamal con el primer equipo del Barcelona?", 
+      correcta: "15 años", 
+      opciones: ["15 años", "16 años", "17 años"] 
+    },
+    { 
+      pregunta: "¿Contra qué equipo hizo su debut oficial Lamine Yamal?", 
+      correcta: "Real Betis", 
+      opciones: ["Real Madrid", "Real Betis", "Sevilla"] 
+    },
+    { 
+      pregunta: "¿Qué dorsal lleva Lamine Yamal en el FC Barcelona?", 
+      correcta: "10", 
+      opciones: ["19", "10", "11"] 
+    },
+    { 
+      pregunta: "¿Cuál es la pierna hábil de Lamine Yamal?", 
+      correcta: "Izquierda", 
+      opciones: ["Derecha", "Izquierda", "Ambidiestro"] 
+    },
+    { 
+      pregunta: "¿A qué edad se convirtió Lamine en el jugador más joven en jugar con España?", 
+      correcta: "16 años", 
+      opciones: ["15 años", "16 años", "17 años"] 
+    },
+    { 
+      pregunta: "¿En qué competición internacional debutó Lamine con España?", 
+      correcta: "Eurocopa 2024", 
+      opciones: ["Nations League", "Eurocopa 2024", "Amistoso internacional"] 
+    },
+    { 
+      pregunta: "¿Qué récord batió Lamine en la Eurocopa 2024?", 
+      correcta: "Jugador más joven en marcar en una Eurocopa", 
+      opciones: ["Más asistencias", "Jugador más joven en marcar en una Eurocopa", "Más minutos jugados"] 
+    },
+    { 
+      pregunta: "¿Contra qué selección marcó su primer gol en la Eurocopa 2024?", 
+      correcta: "Francia", 
+      opciones: ["Alemania", "Francia", "Inglaterra"] 
+    },
+    { 
+      pregunta: "¿En qué posición juega principalmente Lamine Yamal?", 
+      correcta: "Extremo derecho", 
+      opciones: ["Extremo izquierdo", "Extremo derecho", "Mediapunta"] 
+    },
+    { 
+      pregunta: "¿Cuál es la nacionalidad de los padres de Lamine Yamal?", 
+      correcta: "Padre marroquí, madre de Guinea Ecuatorial", 
+      opciones: ["Ambos españoles", "Padre marroquí, madre de Guinea Ecuatorial", "Ambos marroquíes"] 
+    },
+    { 
+      pregunta: "¿A qué edad entró Lamine en La Masia del Barcelona?", 
+      correcta: "7 años", 
+      opciones: ["6 años", "7 años", "8 años"] 
+    },
+    { 
+      pregunta: "¿Cuántos goles marcó Lamine en la Eurocopa 2024?", 
+      correcta: "1", 
+      opciones: ["0", "1", "2"] 
+    },
+    
+    // ALEXIA PUTELLAS
+    { 
+      pregunta: "¿En qué año nació Alexia Putellas?", 
+      correcta: "1994", 
+      opciones: ["1993", "1994", "1995"] 
+    },
+    { 
+      pregunta: "¿En qué ciudad catalana nació Alexia Putellas?", 
+      correcta: "Mollet del Vallès", 
+      opciones: ["Barcelona", "Mollet del Vallès", "Sabadell"] 
+    },
+    { 
+      pregunta: "¿Cuántos Balones de Oro ha ganado Alexia Putellas?", 
+      correcta: "2", 
+      opciones: ["1", "2", "3"] 
+    },
+    { 
+      pregunta: "¿En qué años ganó Alexia sus Balones de Oro?", 
+      correcta: "2021 y 2022", 
+      opciones: ["2020 y 2021", "2021 y 2022", "2022 y 2023"] 
+    },
+    { 
+      pregunta: "¿Cuál es la posición principal de Alexia Putellas?", 
+      correcta: "Mediocampista", 
+      opciones: ["Delantera", "Mediocampista", "Defensora"] 
+    },
+    { 
+      pregunta: "¿Qué dorsal lleva Alexia Putellas en el Barcelona?", 
+      correcta: "11", 
+      opciones: ["8", "11", "10"] 
+    },
+    { 
+      pregunta: "¿A qué edad debutó Alexia con el primer equipo del Barcelona?", 
+      correcta: "17 años", 
+      opciones: ["16 años", "17 años", "18 años"] 
+    },
+    { 
+      pregunta: "¿Cuántas Champions League ha ganado Alexia con el Barcelona?", 
+      correcta: "2", 
+      opciones: ["1", "2", "3"] 
+    },
+    { 
+      pregunta: "¿En qué años ganó Alexia la Champions con el Barcelona?", 
+      correcta: "2021 y 2023", 
+      opciones: ["2020 y 2022", "2021 y 2023", "2022 y 2024"] 
+    },
+    { 
+      pregunta: "¿Cuándo fue nombrada Alexia capitana del Barcelona?", 
+      correcta: "2020", 
+      opciones: ["2019", "2020", "2021"] 
+    },
+    { 
+      pregunta: "¿Qué lesión sufrió Alexia antes de la Eurocopa 2022?", 
+      correcta: "Rotura de ligamento cruzado", 
+      opciones: ["Fractura de tobillo", "Rotura de ligamento cruzado", "Lesión muscular"] 
+    },
+    { 
+      pregunta: "¿En qué equipo jugó Alexia antes de llegar al Barcelona?", 
+      correcta: "Levante", 
+      opciones: ["Valencia", "Levante", "Espanyol"] 
+    },
+    { 
+      pregunta: "¿Cuántos goles marcó Alexia en la Champions 2020-21?", 
+      correcta: "Fue la máxima goleadora", 
+      opciones: ["5 goles", "Fue la máxima goleadora", "No marcó"] 
+    },
+    { 
+      pregunta: "¿A qué edad debutó Alexia con la selección española?", 
+      correcta: "19 años", 
+      opciones: ["18 años", "19 años", "20 años"] 
+    },
+    { 
+      pregunta: "¿Cuál fue el primer gran título que ganó Alexia con España?", 
+      correcta: "Mundial 2023", 
+      opciones: ["Eurocopa 2022", "Mundial 2023", "Nations League"] 
+    },
+    { 
+      pregunta: "¿Qué rol tiene Alexia en la selección española?", 
+      correcta: "Capitana", 
+      opciones: ["Jugadora", "Capitana", "Vicecapitana"] 
+    },
+    { 
+      pregunta: "¿Cuál es la característica más destacada del juego de Alexia?", 
+      correcta: "Su liderazgo y visión de juego", 
+      opciones: ["Su velocidad", "Su liderazgo y visión de juego", "Su altura"] 
+    },
+    { 
+      pregunta: "¿Qué premio individual recibió Alexia en el Mundial 2023?", 
+      correcta: "Balón de Plata", 
+      opciones: ["Balón de Oro", "Balón de Plata", "Bota de Oro"] 
+    },
+    { 
+      pregunta: "¿Cuántas ligas españolas ha ganado Alexia con el Barcelona?", 
+      correcta: "Más de 5", 
+      opciones: ["3", "Más de 5", "2"] 
+    },
+    { 
+      pregunta: "¿Qué significa para Alexia llevar el brazalete de capitana?", 
+      correcta: "Es un honor y responsabilidad", 
+      opciones: ["Solo es protocolo", "Es un honor y responsabilidad", "Le da más protagonismo"] 
+    },
+    { 
+      pregunta: "¿Con qué mano escribe Alexia Putellas?", 
+      correcta: "Zurda", 
+      opciones: ["Diestra", "Zurda", "Ambidiestra"] 
+    },
+    { 
+      pregunta: "¿Cuál fue la puntuación de Alexia en el Balón de Oro 2021?", 
+      correcta: "Ganó con amplia ventaja", 
+      opciones: ["Ganó por poco margen", "Ganó con amplia ventaja", "Empató en puntos"] 
+    }
+  ];
+
+  // Mezclar todas las preguntas y seleccionar 10 al azar
+  preguntasCompletas.sort(() => 0.5 - Math.random());
+  const preguntasSeleccionadas = preguntasCompletas.slice(0, 10);
+  preguntasSeleccionadas.forEach(p => p.opciones.sort(() => 0.5 - Math.random()));
+
+  let indicePregunta = 0;
+  let tiempoInicio;
+  let intervalo;
+
+  // Crear el contexto de audio
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Función para generar un sonido con fundido suave
+  function playBeep(frequency, duration, type = 'sine', fadeTime = 0.1) {
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    osc.frequency.value = frequency;
+    osc.type = type;
+    
+    // Comienza con volumen 0 y aumenta gradualmente
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + fadeTime);
+    gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration/1000 - fadeTime);
+    
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc.start();
+    setTimeout(() => osc.stop(), duration);
+  }
+
+  // Función para generar pitido de error
+  function emitirPitido() {
+    if (audioCtx.state === 'suspended') 
+      audioCtx.resume().then(() => playBeep(400, 400, 'sine', 0.2));
+    else 
+      playBeep(400, 400, 'sine', 0.2);
+  }
+
+  // Función para generar el sonido de estrella brillante
+  function playStarSound(frequencies, duration, type = 'triangle', fadeTime = 0.3) {
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    osc1.frequency.value = frequencies[0];
+    osc2.frequency.value = frequencies[1];
+    osc1.type = type;
+    osc2.type = type;
+    
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.4, audioCtx.currentTime + fadeTime);
+    gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration/1000 - fadeTime);
+    
+    osc1.connect(gainNode);
+    osc2.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc1.start();
+    osc2.start();
+    
+    setTimeout(() => {
+      osc1.stop();
+      osc2.stop();
+    }, duration);
+  }
+  
+  // Función para el sonido de acierto estrellado
+  function emitirPitidoDulce() {
+    if (audioCtx.state === 'suspended') 
+      audioCtx.resume().then(() => playStarSound([900, 1350], 900, 'triangle', 0.4));
+    else 
+      playStarSound([900, 1350], 900, 'triangle', 0.4);
+  }
+  
+  // Actualizar temporizador
+  function actualizarTemporizador() {
+    let tiempoPasado = Date.now() - tiempoInicio;
+    let minutos = Math.floor(tiempoPasado / 60000);
+    let segundos = Math.floor((tiempoPasado % 60000) / 1000);
+    document.getElementById("temporizador").textContent =
+      `${String(minutos).padStart(2, "0")}:${String(segundos).padStart(2, "0")}`;
+  }
+  
+  // Mostrar la pregunta actual y asignar eventos a los botones
+  function mostrarPregunta() {
+    if (indicePregunta >= preguntasSeleccionadas.length) {
+      clearInterval(intervalo);
+      document.getElementById("triviaContainer").style.display = "none";
+      document.getElementById("mensajeFelicidades").style.display = "block";
+      document.getElementById("tiempoFinal").textContent = document.getElementById("temporizador").textContent;
+      return;
+    }
+  
+    let preguntaActual = preguntasSeleccionadas[indicePregunta];
+    document.getElementById("pregunta").textContent = preguntaActual.pregunta;
+    document.getElementById("respuesta1").textContent = preguntaActual.opciones[0];
+    document.getElementById("respuesta2").textContent = preguntaActual.opciones[1];
+    document.getElementById("respuesta3").textContent = preguntaActual.opciones[2];
+  
+    document.querySelectorAll(".respuesta-btn").forEach(boton => {
+      boton.classList.remove("correct", "incorrect");
+      boton.onclick = () => {
+        if (boton.textContent === preguntaActual.correcta) {
+          boton.classList.add("correct");
+          emitirPitidoDulce();
+          setTimeout(() => { 
+            indicePregunta++; 
+            mostrarPregunta(); 
+          }, 500);
+        } else {
+          boton.classList.add("incorrect");
+          emitirPitido();
+          setTimeout(() => boton.classList.remove("incorrect"), 500);
+        }
+      };
+    });
+  }
+  
+  // Mostrar la portada por 3 segundos y luego iniciar el juego
+  setTimeout(function() {
+    document.getElementById("cover").style.display = "none";
+    // Iniciar el temporizador a partir de este momento
+    tiempoInicio = Date.now();
+    intervalo = setInterval(actualizarTemporizador, 1000);
+    mostrarPregunta();
+  }, 3000);
+</script>
+
+</body>
+</html>
