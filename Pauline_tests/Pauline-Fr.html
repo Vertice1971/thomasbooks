@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>El Tour de Pauline: La historia de una campeona 🚴‍♀️🏆</title>
+  <title>Le Tour de Pauline: L'histoire d'une championne 🚴‍♀️🏆</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -15,7 +15,7 @@
       margin: 0;
       position: relative;
     }
-    /* Capa de imagen semitransparente permanente */
+    /* Couche d'image semi-transparente permanente */
     #bgOverlay {
       position: fixed;
       top: 0;
@@ -28,7 +28,7 @@
       z-index: 1;
       pointer-events: none;
     }
-    /* Portada inicial que se muestra completa durante 3 segundos */
+    /* Couverture initiale qui s'affiche complètement pendant 3 secondes */
     #cover {
       position: fixed;
       top: 0;
@@ -55,9 +55,9 @@
       max-width: 450px;
       border: 4px double #FFD700;
       position: relative;
-      z-index: 2; /* Por encima del bgOverlay */
+      z-index: 2; /* Au-dessus du bgOverlay */
     }
-    /* Iconos actualizados para tema de ciclismo */
+    /* Icônes mises à jour pour le thème cyclisme */
     .trivia-container::before, .mensaje-felicidades::before {
       content: "🚴‍♀️";
       position: absolute;
@@ -158,19 +158,19 @@
 </head>
 <body>
 
-<!-- Portada inicial -->
+<!-- Couverture initiale -->
 <div id="cover">
-  <img src="VP1.png" alt="Portada">
+  <img src="VP1.png" alt="Couverture">
 </div>
 
-<!-- Fondo semitransparente con la imagen, por encima del fondo de gradiente -->
+<!-- Fond semi-transparent avec l'image, au-dessus du fond en dégradé -->
 <div id="bgOverlay"></div>
 
 <div class="trivia-container" id="triviaContainer">
   <p style="margin-bottom: 5px;">
-    <a href="https://www.amazon.es/dp/B0FKZVW765" target="_blank" style="color: red; font-weight: bold; text-decoration: underline;">Clic para ver el libro</a>
+    <a href="https://www.amazon.es/dp/B0FKZVW765" target="_blank" style="color: red; font-weight: bold; text-decoration: underline;">Cliquez pour voir le livre</a>
   </p>
-  <h1>🚴‍♀️ El Tour de Pauline 🏆</h1>
+  <h1>🚴‍♀️ Le Tour de Pauline 🏆</h1>
   <div class="temporizador" id="temporizador">00:00</div>
   <p id="pregunta"></p>
   <button id="respuesta1" class="btn respuesta-btn"></button>
@@ -179,10 +179,10 @@
 </div>
 
 <div class="mensaje-felicidades" id="mensajeFelicidades">
-  <h2>🏆 ¡¡¡Enhorabuena!!! 🚴‍♀️</h2>
-  <p>¡Conoces muy bien la historia de Pauline Ferrand-Prévot!</p>
-  <p>Tiempo total: <span class="tiempo" id="tiempoFinal"></span></p>
-  <button class="btn btn-restart" onclick="reloadGame()">Volver a jugar</button>
+  <h2>🏆 !!!Félicitations!!! 🚴‍♀️</h2>
+  <p>Vous connaissez très bien l'histoire de Pauline Ferrand-Prévot !</p>
+  <p>Temps total : <span class="tiempo" id="tiempoFinal"></span></p>
+  <button class="btn btn-restart" onclick="reloadGame()">Rejouer</button>
 </div>
 
 <script>
@@ -190,186 +190,186 @@
     window.location.reload();
   }
 
-  // Array completo de preguntas sobre Pauline Ferrand-Prévot
+  // Tableau complet de questions sur Pauline Ferrand-Prévot
   const preguntasCompletas = [
     { 
-      pregunta: "¿Dónde nació Pauline Ferrand-Prévot?", 
+      pregunta: "Où est née Pauline Ferrand-Prévot ?", 
       correcta: "Reims", 
-      opciones: ["Burdeos", "Reims", "Lyon"] 
+      opciones: ["Bordeaux", "Reims", "Lyon"] 
     },
     { 
-      pregunta: "¿Cómo se llamaba el padre de Pauline, que tenía una tienda de bicis?", 
+      pregunta: "Comment s'appelait le père de Pauline, qui avait un magasin de vélos ?", 
       correcta: "Dany", 
       opciones: ["Dany", "François", "Pierre"] 
     },
     { 
-      pregunta: "¿A qué edad montó Pauline por primera vez en bicicleta?", 
-      correcta: "A los cinco años", 
-      opciones: ["A los seis años", "A los cuatro años", "A los cinco años"] 
+      pregunta: "À quel âge Pauline a-t-elle fait du vélo pour la première fois ?", 
+      correcta: "À cinq ans", 
+      opciones: ["À six ans", "À quatre ans", "À cinq ans"] 
     },
     { 
-      pregunta: "¿En qué disciplina compitió Pauline a los seis años?", 
-      correcta: "Montaña y carretera", 
-      opciones: ["Montaña y carretera", "Pista cubierta", "BMX"] 
+      pregunta: "Dans quelle discipline Pauline a-t-elle concouru à six ans ?", 
+      correcta: "VTT et route", 
+      opciones: ["VTT et route", "Piste couverte", "BMX"] 
     },
     { 
-      pregunta: "¿Qué estudió Pauline en la universidad?", 
-      correcta: "Fisioterapia", 
-      opciones: ["Psicología", "Fisioterapia", "Educación Física"] 
+      pregunta: "Qu'a étudié Pauline à l'université ?", 
+      correcta: "Kinésithérapie", 
+      opciones: ["Psychologie", "Kinésithérapie", "Éducation physique"] 
     },
     { 
-      pregunta: "¿En qué campeonato ganó Pauline a los 17 años?", 
-      correcta: "Europeo contrarreloj junior", 
-      opciones: ["Mundial de ruta junior", "Europeo contrarreloj junior", "Campeonato francés junior"] 
+      pregunta: "À quel championnat Pauline a-t-elle gagné à 17 ans ?", 
+      correcta: "Championnat d'Europe contre-la-montre junior", 
+      opciones: ["Championnat du monde route junior", "Championnat d'Europe contre-la-montre junior", "Championnat français junior"] 
     },
     { 
-      pregunta: "¿Cuándo se proclamó Pauline campeona del mundo en ruta juvenil?", 
-      correcta: "A los 18 años", 
-      opciones: ["A los 18 años", "A los 19 años", "A los 17 años"] 
+      pregunta: "Quand Pauline s'est-elle proclamée championne du monde route junior ?", 
+      correcta: "À 18 ans", 
+      opciones: ["À 18 ans", "À 19 ans", "À 17 ans"] 
     },
     { 
-      pregunta: "¿Qué lesión silenciosa sufrió Pauline durante varios años?", 
-      correcta: "Endofibrosis ilíaca", 
-      opciones: ["Tendinitis rotuliana", "Endofibrosis ilíaca", "Esguince de tobillo"] 
+      pregunta: "Quelle blessure silencieuse Pauline a-t-elle subie pendant plusieurs années ?", 
+      correcta: "Endofibrose iliaque", 
+      opciones: ["Tendinite rotulienne", "Endofibrose iliaque", "Entorse de cheville"] 
     },
     { 
-      pregunta: "¿En qué equipo debutó Pauline en el ciclismo profesional en 2012?", 
+      pregunta: "Dans quelle équipe Pauline a-t-elle débuté dans le cyclisme professionnel en 2012 ?", 
       correcta: "Rabobank-Liv", 
       opciones: ["Team Visma", "Rabobank-Liv", "Movistar Team"] 
     },
     { 
-      pregunta: "¿En qué Juegos Olímpicos compitió Pauline por primera vez?", 
+      pregunta: "À quels Jeux olympiques Pauline a-t-elle participé pour la première fois ?", 
       correcta: "Londres 2012", 
-      opciones: ["Londres 2012", "Río 2016", "Tokio 2020"] 
+      opciones: ["Londres 2012", "Rio 2016", "Tokyo 2020"] 
     },
     { 
-      pregunta: "¿Qué logro único consiguió en 2015?", 
-      correcta: "Ser campeona del mundo en tres disciplinas", 
-      opciones: ["Ganar París-Roubaix", "Ser campeona del mundo en tres disciplinas", "Medalla de oro olímpica"] 
+      pregunta: "Quel exploit unique a-t-elle accompli en 2015 ?", 
+      correcta: "Être championne du monde dans trois disciplines", 
+      opciones: ["Gagner Paris-Roubaix", "Être championne du monde dans trois disciplines", "Médaille d'or olympique"] 
     },
     { 
-      pregunta: "¿Dónde ganó Pauline el Campeonato del Mundo de ruta en 2014?", 
-      correcta: "Ponferrada, España", 
-      opciones: ["Ponferrada, España", "Innsbruck, Austria", "Valkenburg, Países Bajos"] 
+      pregunta: "Où Pauline a-t-elle gagné le Championnat du monde route en 2014 ?", 
+      correcta: "Ponferrada, Espagne", 
+      opciones: ["Ponferrada, Espagne", "Innsbruck, Autriche", "Valkenburg, Pays-Bas"] 
     },
     { 
-      pregunta: "¿En qué año ganó de nuevo el Mundial de mountain bike XCO tras su operación?", 
+      pregunta: "En quelle année a-t-elle de nouveau gagné le Mondial de VTT XCO après son opération ?", 
       correcta: "2019", 
       opciones: ["2018", "2019", "2020"] 
     },
     { 
-      pregunta: "¿Cuál de estas modalidades ganó Pauline en 2022?", 
+      pregunta: "Laquelle de ces modalités Pauline a-t-elle gagnée en 2022 ?", 
       correcta: "Gravel", 
-      opciones: ["Pista en velódromo", "Gravel", "BMX freestyle"] 
+      opciones: ["Piste en vélodrome", "Gravel", "BMX freestyle"] 
     },
     { 
-      pregunta: "¿Qué lesión sufrió a finales de 2022?", 
-      correcta: "Lesión de cadera", 
-      opciones: ["Rotura de clavícula", "Lesión de cadera", "Fractura de muñeca"] 
+      pregunta: "Quelle blessure a-t-elle subie fin 2022 ?", 
+      correcta: "Blessure à la hanche", 
+      opciones: ["Fracture de la clavicule", "Blessure à la hanche", "Fracture du poignet"] 
     },
     { 
-      pregunta: "¿Qué medalla ganó Pauline en los Juegos Olímpicos de París 2024?", 
-      correcta: "Oro", 
-      opciones: ["Bronce", "Plata", "Oro"] 
+      pregunta: "Quelle médaille Pauline a-t-elle gagnée aux Jeux olympiques de Paris 2024 ?", 
+      correcta: "Or", 
+      opciones: ["Bronze", "Argent", "Or"] 
     },
     { 
-      pregunta: "¿Qué clásica ganó Pauline en 2025?", 
-      correcta: "París-Roubaix", 
-      opciones: ["Liège–Bastogne–Liège", "Strade Bianche", "París-Roubaix"] 
+      pregunta: "Quelle classique Pauline a-t-elle gagnée en 2025 ?", 
+      correcta: "Paris-Roubaix", 
+      opciones: ["Liège–Bastogne–Liège", "Strade Bianche", "Paris-Roubaix"] 
     },
     { 
-      pregunta: "¿Cómo se llamaba la madre de Pauline que animaba en las carreras?", 
+      pregunta: "Comment s'appelait la mère de Pauline qui l'encourageait dans les courses ?", 
       correcta: "Sylviane", 
       opciones: ["Marie", "Sylviane", "Isabelle"] 
     },
     { 
-      pregunta: "¿Cuántos hermanos y hermanas tiene Pauline?", 
-      correcta: "Dos", 
-      opciones: ["Dos", "Seis", "Ninguno"] 
+      pregunta: "Combien de frères et sœurs Pauline a-t-elle ?", 
+      correcta: "Deux", 
+      opciones: ["Deux", "Six", "Aucun"] 
     },
     { 
-      pregunta: "¿Qué combinaba Pauline desde niña?", 
-      correcta: "Libros y bicicletas", 
-      opciones: ["Pintura y ciclismo", "Libros y bicicletas", "Música y carreras"] 
+      pregunta: "Que combinait Pauline depuis l'enfance ?", 
+      correcta: "Livres et vélos", 
+      opciones: ["Peinture et cyclisme", "Livres et vélos", "Musique et courses"] 
     },
     { 
-      pregunta: "¿Cuántas etapas tiene el Tour de Francia femenino 2025?", 
-      correcta: "Nueve", 
-      opciones: ["Ocho", "Nueve", "Diez"] 
+      pregunta: "Combien d'étapes compte le Tour de France féminin 2025 ?", 
+      correcta: "Neuf", 
+      opciones: ["Huit", "Neuf", "Dix"] 
     },
     { 
-      pregunta: "¿Con qué equipo corría Pauline Ferrand-Prévot en 2025?", 
+      pregunta: "Avec quelle équipe Pauline Ferrand-Prévot courait-elle en 2025 ?", 
       correcta: "Visma-Lease a Bike", 
       opciones: ["SD Worx", "FDJ-Suez", "Visma-Lease a Bike"] 
     },
     { 
-      pregunta: "¿En qué etapa consiguió Pauline su primera victoria en el Tour de Francia femenino?", 
-      correcta: "Etapa 8", 
-      opciones: ["Etapa 8", "Etapa 6", "Etapa 4"] 
+      pregunta: "À quelle étape Pauline a-t-elle obtenu sa première victoire au Tour de France féminin ?", 
+      correcta: "Étape 8", 
+      opciones: ["Étape 8", "Étape 6", "Étape 4"] 
     },
     { 
-      pregunta: "¿Cuál era la subida final de la etapa en la que ganó Pauline por primera vez?", 
+      pregunta: "Quelle était la montée finale de l'étape où Pauline a gagné pour la première fois ?", 
       correcta: "Col de la Madeleine", 
       opciones: ["Col du Granier", "Col du Joux Plane", "Col de la Madeleine"] 
     },
     { 
-      pregunta: "¿Qué maillot se puso Pauline tras ganar la etapa 8?", 
-      correcta: "Amarillo", 
-      opciones: ["Verde", "Amarillo", "Blanco"] 
+      pregunta: "Quel maillot Pauline a-t-elle enfilé après avoir gagné l'étape 8 ?", 
+      correcta: "Jaune", 
+      opciones: ["Vert", "Jaune", "Blanc"] 
     },
     { 
-      pregunta: "¿En qué etapa se corrió la última jornada del Tour?", 
-      correcta: "Etapa 9", 
-      opciones: ["Etapa 7", "Etapa 9", "Etapa 5"] 
+      pregunta: "À quelle étape s'est déroulée la dernière journée du Tour ?", 
+      correcta: "Étape 9", 
+      opciones: ["Étape 7", "Étape 9", "Étape 5"] 
     },
     { 
-      pregunta: "¿Dónde acabó la última etapa del Tour de Francia femenino 2025?", 
+      pregunta: "Où s'est terminée la dernière étape du Tour de France féminin 2025 ?", 
       correcta: "Châtel", 
       opciones: ["Châtel", "Ambert", "Poitiers"] 
     },
     { 
-      pregunta: "¿Cuántos puertos de montaña subían en la etapa final?", 
-      correcta: "Tres", 
-      opciones: ["Dos", "Cuatro", "Tres"] 
+      pregunta: "Combien de cols de montagne montaient-ils dans l'étape finale ?", 
+      correcta: "Trois", 
+      opciones: ["Deux", "Quatre", "Trois"] 
     },
     { 
-      pregunta: "¿Quién fue la corredora que atacó primero en la etapa 9?", 
+      pregunta: "Qui était la coureuse qui a attaqué en premier à l'étape 9 ?", 
       correcta: "Anna van der Breggen", 
       opciones: ["Anna van der Breggen", "Demi Vollering", "Sarah Gigante"] 
     },
     { 
-      pregunta: "¿Qué clásica había ganado Pauline antes de correr el Tour en 2025?", 
-      correcta: "París-Roubaix", 
-      opciones: ["Strade Bianche", "París-Roubaix", "Liège–Bastogne–Liège"] 
+      pregunta: "Quelle classique Pauline avait-elle gagnée avant de courir le Tour en 2025 ?", 
+      correcta: "Paris-Roubaix", 
+      opciones: ["Strade Bianche", "Paris-Roubaix", "Liège–Bastogne–Liège"] 
     },
     { 
-      pregunta: "¿Qué medalla ganó Pauline en los Juegos de París 2024?", 
-      correcta: "Oro", 
-      opciones: ["Oro", "Plata", "Bronce"] 
+      pregunta: "Quelle médaille Pauline a-t-elle gagnée aux Jeux de Paris 2024 ?", 
+      correcta: "Or", 
+      opciones: ["Or", "Argent", "Bronze"] 
     },
     { 
-      pregunta: "¿Qué ciclista veterana formaba parte del equipo de Pauline?", 
+      pregunta: "Quelle cycliste vétérane faisait partie de l'équipe de Pauline ?", 
       correcta: "Marianne Vos", 
       opciones: ["Lorena Wiebes", "Katarzyna Niewiadoma", "Marianne Vos"] 
     },
     { 
-      pregunta: "¿A cuántos minutos y segundos quedó Demi Vollering de Pauline en la clasificación final?", 
+      pregunta: "À combien de minutes et secondes Demi Vollering s'est-elle classée derrière Pauline au classement final ?", 
       correcta: "3 min 42 s", 
       opciones: ["3 min 42 s", "2 min 37 s", "4 min 09 s"] 
     },
     { 
-      pregunta: "¿A cuántos minutos y segundos terminó Katarzyna Niewiadoma tras Pauline?", 
+      pregunta: "À combien de minutes et secondes Katarzyna Niewiadoma a-t-elle terminé derrière Pauline ?", 
       correcta: "4 min 09 s", 
       opciones: ["3 min 18 s", "4 min 09 s", "2 min 37 s"] 
     },
     { 
-      pregunta: "¿Hace cuántos años no ganaba una ciclista francesa el Tour de Francia femenino?", 
-      correcta: "35 años", 
-      opciones: ["30 años", "40 años", "35 años"] 
+      pregunta: "Depuis combien d'années une cycliste française n'avait-elle pas gagné le Tour de France féminin ?", 
+      correcta: "35 ans", 
+      opciones: ["30 ans", "40 ans", "35 ans"] 
     }
   ];
 
-  // Mezclar todas las preguntas y seleccionar 7 al azar
+  // Mélanger toutes les questions et en sélectionner 7 au hasard
   preguntasCompletas.sort(() => 0.5 - Math.random());
   const preguntasSeleccionadas = preguntasCompletas.slice(0, 7);
   preguntasSeleccionadas.forEach(p => p.opciones.sort(() => 0.5 - Math.random()));
@@ -378,10 +378,10 @@
   let tiempoInicio;
   let intervalo;
 
-  // Crear el contexto de audio
+  // Créer le contexte audio
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-  // Función para generar un sonido con fundido suave
+  // Fonction pour générer un son avec fondu doux
   function playBeep(frequency, duration, type = 'sine', fadeTime = 0.1) {
     const osc = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
@@ -389,7 +389,7 @@
     osc.frequency.value = frequency;
     osc.type = type;
     
-    // Comienza con volumen 0 y aumenta gradualmente
+    // Commence avec volume 0 et augmente graduellement
     gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
     gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + fadeTime);
     gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration/1000 - fadeTime);
@@ -401,7 +401,7 @@
     setTimeout(() => osc.stop(), duration);
   }
 
-  // Función para generar pitido de error (más suave, con frecuencia reducida)
+  // Fonction pour générer un bip d'erreur (plus doux, avec fréquence réduite)
   function emitirPitido() {
     if (audioCtx.state === 'suspended') 
       audioCtx.resume().then(() => playBeep(500, 300, 'sine', 0.2));
@@ -409,7 +409,7 @@
       playBeep(500, 300, 'sine', 0.2);
   }
 
-  // Función para generar el sonido de campanillas de celebración
+  // Fonction pour générer le son de carillons de célébration
   function playChime(frequencies, duration, type = 'triangle', fadeTime = 0.2) {
     const osc1 = audioCtx.createOscillator();
     const osc2 = audioCtx.createOscillator();
@@ -437,7 +437,7 @@
     }, duration);
   }
   
-  // Función para el pitido de acierto con sonido de celebración
+  // Fonction pour le bip de réussite avec son de célébration
   function emitirPitidoDulce() {
     if (audioCtx.state === 'suspended') 
       audioCtx.resume().then(() => playChime([800, 1200], 800, 'triangle', 0.3));
@@ -445,7 +445,7 @@
       playChime([800, 1200], 800, 'triangle', 0.3);
   }
   
-  // Actualizar temporizador
+  // Mettre à jour le chronomètre
   function actualizarTemporizador() {
     let tiempoPasado = Date.now() - tiempoInicio;
     let minutos = Math.floor(tiempoPasado / 60000);
@@ -454,7 +454,7 @@
       `${String(minutos).padStart(2, "0")}:${String(segundos).padStart(2, "0")}`;
   }
   
-  // Mostrar la pregunta actual y asignar eventos a los botones
+  // Afficher la question actuelle et assigner les événements aux boutons
   function mostrarPregunta() {
     if (indicePregunta >= preguntasSeleccionadas.length) {
       clearInterval(intervalo);
@@ -489,10 +489,10 @@
     });
   }
   
-  // Mostrar la portada por 3 segundos y luego iniciar el juego
+  // Afficher la couverture pendant 3 secondes puis commencer le jeu
   setTimeout(function() {
     document.getElementById("cover").style.display = "none";
-    // Iniciar el temporizador a partir de este momento
+    // Commencer le chronomètre à partir de ce moment
     tiempoInicio = Date.now();
     intervalo = setInterval(actualizarTemporizador, 1000);
     mostrarPregunta();
