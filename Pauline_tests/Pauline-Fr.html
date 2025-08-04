@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Tour de Pauline: La historia de una campeona 🚴‍♀️🏆</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #FFD700, #FF6B6B, #4ECDC4);
+      margin: 0;
+      position: relative;
+    }
+    /* Capa de imagen semitransparente permanente */
+    #bgOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url("JoséGit.png") no-repeat center center;
+      background-size: contain;
+      opacity: 0.3;
+      z-index: 1;
+      pointer-events: none;
+    }
+    /* Portada inicial que se muestra completa durante 3 segundos */
+    #cover {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    #cover img {
+      max-height: 100%;
+      max-width: 100%;
+    }
+    .trivia-container, .mensaje-felicidades {
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 90%;
+      max-width: 450px;
+      border: 4px double #FFD700;
+      position: relative;
+      z-index: 2; /* Por encima del bgOverlay */
+    }
+    /* Iconos actualizados para tema de ciclismo */
+    .trivia-container::before, .mensaje-felicidades::before {
+      content: "🚴‍♀️";
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      font-size: 30px;
+    }
+    .trivia-container::after, .mensaje-felicidades::after {
+      content: "🏆";
+      position: absolute;
+      bottom: -15px;
+      right: -15px;
+      font-size: 30px;
+    }
+    h1 {
+      font-size: 26px;
+      margin-bottom: 15px;
+      color: #FF6B6B;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    p {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    #respuesta1 { background-color: #FF6B6B; }
+    #respuesta2 { background-color: #4ECDC4; }
+    #respuesta3 { background-color: #45B7D1; }
+    .btn:hover {
+      filter: brightness(85%);
+      transform: scale(1.05);
+    }
+    .btn.incorrect {
+      background-color: #ff4444;
+      animation: shake 0.5s;
+    }
+    .btn.correct {
+      background-color: #00cc66 !important;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+    }
+    .temporizador {
+      font-size: 22px;
+      font-weight: bold;
+      color: #FF6B6B;
+      background: #FFE5E5;
+      padding: 5px 10px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+    .mensaje-felicidades {
+      display: none;
+    }
+    .mensaje-felicidades h2 {
+      font-size: 30px;
+      color: #00cc66;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .mensaje-felicidades p {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+    .mensaje-felicidades .tiempo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #FF6B6B;
+    }
+    .btn-restart {
+      background-color: #FF6B6B;
+      padding: 15px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Portada inicial -->
+<div id="cover">
+  <img src="VP1.png" alt="Portada">
+</div>
+
+<!-- Fondo semitransparente con la imagen, por encima del fondo de gradiente -->
+<div id="bgOverlay"></div>
+
+<div class="trivia-container" id="triviaContainer">
+  <p style="margin-bottom: 5px;">
+    <a href="https://www.amazon.es/dp/B0FKZVW765" target="_blank" style="color: red; font-weight: bold; text-decoration: underline;">Clic para ver el libro</a>
+  </p>
+  <h1>🚴‍♀️ El Tour de Pauline 🏆</h1>
+  <div class="temporizador" id="temporizador">00:00</div>
+  <p id="pregunta"></p>
+  <button id="respuesta1" class="btn respuesta-btn"></button>
+  <button id="respuesta2" class="btn respuesta-btn"></button>
+  <button id="respuesta3" class="btn respuesta-btn"></button>
+</div>
+
+<div class="mensaje-felicidades" id="mensajeFelicidades">
+  <h2>🏆 ¡¡¡Enhorabuena!!! 🚴‍♀️</h2>
+  <p>¡Conoces muy bien la historia de Pauline Ferrand-Prévot!</p>
+  <p>Tiempo total: <span class="tiempo" id="tiempoFinal"></span></p>
+  <button class="btn btn-restart" onclick="reloadGame()">Volver a jugar</button>
+</div>
+
+<script>
+  function reloadGame() {
+    window.location.reload();
+  }
+
+  // Array completo de preguntas sobre Pauline Ferrand-Prévot
+  const preguntasCompletas = [
+    { 
+      pregunta: "¿Dónde nació Pauline Ferrand-Prévot?", 
+      correcta: "Reims", 
+      opciones: ["Burdeos", "Reims", "Lyon"] 
+    },
+    { 
+      pregunta: "¿Cómo se llamaba el padre de Pauline, que tenía una tienda de bicis?", 
+      correcta: "Dany", 
+      opciones: ["Dany", "François", "Pierre"] 
+    },
+    { 
+      pregunta: "¿A qué edad montó Pauline por primera vez en bicicleta?", 
+      correcta: "A los cinco años", 
+      opciones: ["A los seis años", "A los cuatro años", "A los cinco años"] 
+    },
+    { 
+      pregunta: "¿En qué disciplina compitió Pauline a los seis años?", 
+      correcta: "Montaña y carretera", 
+      opciones: ["Montaña y carretera", "Pista cubierta", "BMX"] 
+    },
+    { 
+      pregunta: "¿Qué estudió Pauline en la universidad?", 
+      correcta: "Fisioterapia", 
+      opciones: ["Psicología", "Fisioterapia", "Educación Física"] 
+    },
+    { 
+      pregunta: "¿En qué campeonato ganó Pauline a los 17 años?", 
+      correcta: "Europeo contrarreloj junior", 
+      opciones: ["Mundial de ruta junior", "Europeo contrarreloj junior", "Campeonato francés junior"] 
+    },
+    { 
+      pregunta: "¿Cuándo se proclamó Pauline campeona del mundo en ruta juvenil?", 
+      correcta: "A los 18 años", 
+      opciones: ["A los 18 años", "A los 19 años", "A los 17 años"] 
+    },
+    { 
+      pregunta: "¿Qué lesión silenciosa sufrió Pauline durante varios años?", 
+      correcta: "Endofibrosis ilíaca", 
+      opciones: ["Tendinitis rotuliana", "Endofibrosis ilíaca", "Esguince de tobillo"] 
+    },
+    { 
+      pregunta: "¿En qué equipo debutó Pauline en el ciclismo profesional en 2012?", 
+      correcta: "Rabobank-Liv", 
+      opciones: ["Team Visma", "Rabobank-Liv", "Movistar Team"] 
+    },
+    { 
+      pregunta: "¿En qué Juegos Olímpicos compitió Pauline por primera vez?", 
+      correcta: "Londres 2012", 
+      opciones: ["Londres 2012", "Río 2016", "Tokio 2020"] 
+    },
+    { 
+      pregunta: "¿Qué logro único consiguió en 2015?", 
+      correcta: "Ser campeona del mundo en tres disciplinas", 
+      opciones: ["Ganar París-Roubaix", "Ser campeona del mundo en tres disciplinas", "Medalla de oro olímpica"] 
+    },
+    { 
+      pregunta: "¿Dónde ganó Pauline el Campeonato del Mundo de ruta en 2014?", 
+      correcta: "Ponferrada, España", 
+      opciones: ["Ponferrada, España", "Innsbruck, Austria", "Valkenburg, Países Bajos"] 
+    },
+    { 
+      pregunta: "¿En qué año ganó de nuevo el Mundial de mountain bike XCO tras su operación?", 
+      correcta: "2019", 
+      opciones: ["2018", "2019", "2020"] 
+    },
+    { 
+      pregunta: "¿Cuál de estas modalidades ganó Pauline en 2022?", 
+      correcta: "Gravel", 
+      opciones: ["Pista en velódromo", "Gravel", "BMX freestyle"] 
+    },
+    { 
+      pregunta: "¿Qué lesión sufrió a finales de 2022?", 
+      correcta: "Lesión de cadera", 
+      opciones: ["Rotura de clavícula", "Lesión de cadera", "Fractura de muñeca"] 
+    },
+    { 
+      pregunta: "¿Qué medalla ganó Pauline en los Juegos Olímpicos de París 2024?", 
+      correcta: "Oro", 
+      opciones: ["Bronce", "Plata", "Oro"] 
+    },
+    { 
+      pregunta: "¿Qué clásica ganó Pauline en 2025?", 
+      correcta: "París-Roubaix", 
+      opciones: ["Liège–Bastogne–Liège", "Strade Bianche", "París-Roubaix"] 
+    },
+    { 
+      pregunta: "¿Cómo se llamaba la madre de Pauline que animaba en las carreras?", 
+      correcta: "Sylviane", 
+      opciones: ["Marie", "Sylviane", "Isabelle"] 
+    },
+    { 
+      pregunta: "¿Cuántos hermanos y hermanas tiene Pauline?", 
+      correcta: "Dos", 
+      opciones: ["Dos", "Seis", "Ninguno"] 
+    },
+    { 
+      pregunta: "¿Qué combinaba Pauline desde niña?", 
+      correcta: "Libros y bicicletas", 
+      opciones: ["Pintura y ciclismo", "Libros y bicicletas", "Música y carreras"] 
+    },
+    { 
+      pregunta: "¿Cuántas etapas tiene el Tour de Francia femenino 2025?", 
+      correcta: "Nueve", 
+      opciones: ["Ocho", "Nueve", "Diez"] 
+    },
+    { 
+      pregunta: "¿Con qué equipo corría Pauline Ferrand-Prévot en 2025?", 
+      correcta: "Visma-Lease a Bike", 
+      opciones: ["SD Worx", "FDJ-Suez", "Visma-Lease a Bike"] 
+    },
+    { 
+      pregunta: "¿En qué etapa consiguió Pauline su primera victoria en el Tour de Francia femenino?", 
+      correcta: "Etapa 8", 
+      opciones: ["Etapa 8", "Etapa 6", "Etapa 4"] 
+    },
+    { 
+      pregunta: "¿Cuál era la subida final de la etapa en la que ganó Pauline por primera vez?", 
+      correcta: "Col de la Madeleine", 
+      opciones: ["Col du Granier", "Col du Joux Plane", "Col de la Madeleine"] 
+    },
+    { 
+      pregunta: "¿Qué maillot se puso Pauline tras ganar la etapa 8?", 
+      correcta: "Amarillo", 
+      opciones: ["Verde", "Amarillo", "Blanco"] 
+    },
+    { 
+      pregunta: "¿En qué etapa se corrió la última jornada del Tour?", 
+      correcta: "Etapa 9", 
+      opciones: ["Etapa 7", "Etapa 9", "Etapa 5"] 
+    },
+    { 
+      pregunta: "¿Dónde acabó la última etapa del Tour de Francia femenino 2025?", 
+      correcta: "Châtel", 
+      opciones: ["Châtel", "Ambert", "Poitiers"] 
+    },
+    { 
+      pregunta: "¿Cuántos puertos de montaña subían en la etapa final?", 
+      correcta: "Tres", 
+      opciones: ["Dos", "Cuatro", "Tres"] 
+    },
+    { 
+      pregunta: "¿Quién fue la corredora que atacó primero en la etapa 9?", 
+      correcta: "Anna van der Breggen", 
+      opciones: ["Anna van der Breggen", "Demi Vollering", "Sarah Gigante"] 
+    },
+    { 
+      pregunta: "¿Qué clásica había ganado Pauline antes de correr el Tour en 2025?", 
+      correcta: "París-Roubaix", 
+      opciones: ["Strade Bianche", "París-Roubaix", "Liège–Bastogne–Liège"] 
+    },
+    { 
+      pregunta: "¿Qué medalla ganó Pauline en los Juegos de París 2024?", 
+      correcta: "Oro", 
+      opciones: ["Oro", "Plata", "Bronce"] 
+    },
+    { 
+      pregunta: "¿Qué ciclista veterana formaba parte del equipo de Pauline?", 
+      correcta: "Marianne Vos", 
+      opciones: ["Lorena Wiebes", "Katarzyna Niewiadoma", "Marianne Vos"] 
+    },
+    { 
+      pregunta: "¿A cuántos minutos y segundos quedó Demi Vollering de Pauline en la clasificación final?", 
+      correcta: "3 min 42 s", 
+      opciones: ["3 min 42 s", "2 min 37 s", "4 min 09 s"] 
+    },
+    { 
+      pregunta: "¿A cuántos minutos y segundos terminó Katarzyna Niewiadoma tras Pauline?", 
+      correcta: "4 min 09 s", 
+      opciones: ["3 min 18 s", "4 min 09 s", "2 min 37 s"] 
+    },
+    { 
+      pregunta: "¿Hace cuántos años no ganaba una ciclista francesa el Tour de Francia femenino?", 
+      correcta: "35 años", 
+      opciones: ["30 años", "40 años", "35 años"] 
+    }
+  ];
+
+  // Mezclar todas las preguntas y seleccionar 7 al azar
+  preguntasCompletas.sort(() => 0.5 - Math.random());
+  const preguntasSeleccionadas = preguntasCompletas.slice(0, 7);
+  preguntasSeleccionadas.forEach(p => p.opciones.sort(() => 0.5 - Math.random()));
+
+  let indicePregunta = 0;
+  let tiempoInicio;
+  let intervalo;
+
+  // Crear el contexto de audio
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Función para generar un sonido con fundido suave
+  function playBeep(frequency, duration, type = 'sine', fadeTime = 0.1) {
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    osc.frequency.value = frequency;
+    osc.type = type;
+    
+    // Comienza con volumen 0 y aumenta gradualmente
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + fadeTime);
+    gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration/1000 - fadeTime);
+    
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc.start();
+    setTimeout(() => osc.stop(), duration);
+  }
+
+  // Función para generar pitido de error (más suave, con frecuencia reducida)
+  function emitirPitido() {
+    if (audioCtx.state === 'suspended') 
+      audioCtx.resume().then(() => playBeep(500, 300, 'sine', 0.2));
+    else 
+      playBeep(500, 300, 'sine', 0.2);
+  }
+
+  // Función para generar el sonido de campanillas de celebración
+  function playChime(frequencies, duration, type = 'triangle', fadeTime = 0.2) {
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    osc1.frequency.value = frequencies[0];
+    osc2.frequency.value = frequencies[1];
+    osc1.type = type;
+    osc2.type = type;
+    
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + fadeTime);
+    gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration/1000 - fadeTime);
+    
+    osc1.connect(gainNode);
+    osc2.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc1.start();
+    osc2.start();
+    
+    setTimeout(() => {
+      osc1.stop();
+      osc2.stop();
+    }, duration);
+  }
+  
+  // Función para el pitido de acierto con sonido de celebración
+  function emitirPitidoDulce() {
+    if (audioCtx.state === 'suspended') 
+      audioCtx.resume().then(() => playChime([800, 1200], 800, 'triangle', 0.3));
+    else 
+      playChime([800, 1200], 800, 'triangle', 0.3);
+  }
+  
+  // Actualizar temporizador
+  function actualizarTemporizador() {
+    let tiempoPasado = Date.now() - tiempoInicio;
+    let minutos = Math.floor(tiempoPasado / 60000);
+    let segundos = Math.floor((tiempoPasado % 60000) / 1000);
+    document.getElementById("temporizador").textContent =
+      `${String(minutos).padStart(2, "0")}:${String(segundos).padStart(2, "0")}`;
+  }
+  
+  // Mostrar la pregunta actual y asignar eventos a los botones
+  function mostrarPregunta() {
+    if (indicePregunta >= preguntasSeleccionadas.length) {
+      clearInterval(intervalo);
+      document.getElementById("triviaContainer").style.display = "none";
+      document.getElementById("mensajeFelicidades").style.display = "block";
+      document.getElementById("tiempoFinal").textContent = document.getElementById("temporizador").textContent;
+      return;
+    }
+  
+    let preguntaActual = preguntasSeleccionadas[indicePregunta];
+    document.getElementById("pregunta").textContent = preguntaActual.pregunta;
+    document.getElementById("respuesta1").textContent = preguntaActual.opciones[0];
+    document.getElementById("respuesta2").textContent = preguntaActual.opciones[1];
+    document.getElementById("respuesta3").textContent = preguntaActual.opciones[2];
+  
+    document.querySelectorAll(".respuesta-btn").forEach(boton => {
+      boton.classList.remove("correct", "incorrect");
+      boton.onclick = () => {
+        if (boton.textContent === preguntaActual.correcta) {
+          boton.classList.add("correct");
+          emitirPitidoDulce();
+          setTimeout(() => { 
+            indicePregunta++; 
+            mostrarPregunta(); 
+          }, 500);
+        } else {
+          boton.classList.add("incorrect");
+          emitirPitido();
+          setTimeout(() => boton.classList.remove("incorrect"), 500);
+        }
+      };
+    });
+  }
+  
+  // Mostrar la portada por 3 segundos y luego iniciar el juego
+  setTimeout(function() {
+    document.getElementById("cover").style.display = "none";
+    // Iniciar el temporizador a partir de este momento
+    tiempoInicio = Date.now();
+    intervalo = setInterval(actualizarTemporizador, 1000);
+    mostrarPregunta();
+  }, 3000);
+</script>
+
+</body>
+</html>
