@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Le Tour de Pauline: L'histoire d'une championne 🚴‍♀️🏆</title>
+  <title>Le Tour de Pauline 🚴‍♀️🏆</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -22,7 +22,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: url("JoséGit.png") no-repeat center center;
+      background: url("Pauline.jpg") no-repeat center center;
       background-size: contain;
       opacity: 0.3;
       z-index: 1;
@@ -160,17 +160,17 @@
 
 <!-- Couverture initiale -->
 <div id="cover">
-  <img src="VP1.png" alt="Couverture">
+  <img src="Pauline.jpg" alt="Couverture">
 </div>
 
-<!-- Fond semi-transparent avec l'image, au-dessus du fond en dégradé -->
+<!-- Arrière-plan semi-transparent avec l'image, au-dessus du dégradé de fond -->
 <div id="bgOverlay"></div>
 
 <div class="trivia-container" id="triviaContainer">
   <p style="margin-bottom: 5px;">
-    <a href="https://www.amazon.es/dp/B0FKZVW765" target="_blank" style="color: red; font-weight: bold; text-decoration: underline;">Cliquez pour voir le livre</a>
+    <a href="https://www.amazon.es/dp/B0FL83S1G1" target="_blank" style="color: red; font-weight: bold; text-decoration: underline;">Cliquez pour voir le livre</a>
   </p>
-  <h1>🚴‍♀️ Le Tour de Pauline 🏆</h1>
+  <h1>🚴‍♀️Le Tour de Pauline 🏆</h1>
   <div class="temporizador" id="temporizador">00:00</div>
   <p id="pregunta"></p>
   <button id="respuesta1" class="btn respuesta-btn"></button>
@@ -179,7 +179,7 @@
 </div>
 
 <div class="mensaje-felicidades" id="mensajeFelicidades">
-  <h2>🏆 !!!Félicitations!!! 🚴‍♀️</h2>
+  <h2>🏆 Félicitations !!! 🚴‍♀️</h2>
   <p>Vous connaissez très bien l'histoire de Pauline Ferrand-Prévot !</p>
   <p>Temps total : <span class="tiempo" id="tiempoFinal"></span></p>
   <button class="btn btn-restart" onclick="reloadGame()">Rejouer</button>
@@ -218,12 +218,12 @@
       opciones: ["Psychologie", "Kinésithérapie", "Éducation physique"] 
     },
     { 
-      pregunta: "À quel championnat Pauline a-t-elle gagné à 17 ans ?", 
-      correcta: "Championnat d'Europe contre-la-montre junior", 
-      opciones: ["Championnat du monde route junior", "Championnat d'Europe contre-la-montre junior", "Championnat français junior"] 
+      pregunta: "Dans quel championnat Pauline a-t-elle gagné à 17 ans ?", 
+      correcta: "Européen contre-la-montre junior", 
+      opciones: ["Mondial sur route junior", "Européen contre-la-montre junior", "Championnat français junior"] 
     },
     { 
-      pregunta: "Quand Pauline s'est-elle proclamée championne du monde route junior ?", 
+      pregunta: "Quand Pauline s'est-elle proclamée championne du monde sur route jeunesse ?", 
       correcta: "À 18 ans", 
       opciones: ["À 18 ans", "À 19 ans", "À 17 ans"] 
     },
@@ -238,7 +238,7 @@
       opciones: ["Team Visma", "Rabobank-Liv", "Movistar Team"] 
     },
     { 
-      pregunta: "À quels Jeux olympiques Pauline a-t-elle participé pour la première fois ?", 
+      pregunta: "À quels Jeux olympiques Pauline a-t-elle concouru pour la première fois ?", 
       correcta: "Londres 2012", 
       opciones: ["Londres 2012", "Rio 2016", "Tokyo 2020"] 
     },
@@ -248,7 +248,7 @@
       opciones: ["Gagner Paris-Roubaix", "Être championne du monde dans trois disciplines", "Médaille d'or olympique"] 
     },
     { 
-      pregunta: "Où Pauline a-t-elle gagné le Championnat du monde route en 2014 ?", 
+      pregunta: "Où Pauline a-t-elle gagné le Championnat du monde sur route en 2014 ?", 
       correcta: "Ponferrada, Espagne", 
       opciones: ["Ponferrada, Espagne", "Innsbruck, Autriche", "Valkenburg, Pays-Bas"] 
     },
@@ -263,9 +263,9 @@
       opciones: ["Piste en vélodrome", "Gravel", "BMX freestyle"] 
     },
     { 
-      pregunta: "Quelle blessure a-t-elle subie fin 2022 ?", 
+      pregunta: "Quelle blessure a-t-elle subie à la fin de 2022 ?", 
       correcta: "Blessure à la hanche", 
-      opciones: ["Fracture de la clavicule", "Blessure à la hanche", "Fracture du poignet"] 
+      opciones: ["Rupture de clavicule", "Blessure à la hanche", "Fracture du poignet"] 
     },
     { 
       pregunta: "Quelle médaille Pauline a-t-elle gagnée aux Jeux olympiques de Paris 2024 ?", 
@@ -278,7 +278,7 @@
       opciones: ["Liège–Bastogne–Liège", "Strade Bianche", "Paris-Roubaix"] 
     },
     { 
-      pregunta: "Comment s'appelait la mère de Pauline qui l'encourageait dans les courses ?", 
+      pregunta: "Comment s'appelait la mère de Pauline qui encourageait lors des courses ?", 
       correcta: "Sylviane", 
       opciones: ["Marie", "Sylviane", "Isabelle"] 
     },
@@ -298,12 +298,12 @@
       opciones: ["Huit", "Neuf", "Dix"] 
     },
     { 
-      pregunta: "Avec quelle équipe Pauline Ferrand-Prévot courait-elle en 2025 ?", 
+      pregunta: "Avec quelle équipe courait Pauline Ferrand-Prévot en 2025 ?", 
       correcta: "Visma-Lease a Bike", 
       opciones: ["SD Worx", "FDJ-Suez", "Visma-Lease a Bike"] 
     },
     { 
-      pregunta: "À quelle étape Pauline a-t-elle obtenu sa première victoire au Tour de France féminin ?", 
+      pregunta: "Dans quelle étape Pauline a-t-elle obtenu sa première victoire au Tour de France féminin ?", 
       correcta: "Étape 8", 
       opciones: ["Étape 8", "Étape 6", "Étape 4"] 
     },
@@ -318,7 +318,7 @@
       opciones: ["Vert", "Jaune", "Blanc"] 
     },
     { 
-      pregunta: "À quelle étape s'est déroulée la dernière journée du Tour ?", 
+      pregunta: "Dans quelle étape s'est déroulée la dernière journée du Tour ?", 
       correcta: "Étape 9", 
       opciones: ["Étape 7", "Étape 9", "Étape 5"] 
     },
@@ -328,12 +328,12 @@
       opciones: ["Châtel", "Ambert", "Poitiers"] 
     },
     { 
-      pregunta: "Combien de cols de montagne montaient-ils dans l'étape finale ?", 
+      pregunta: "Combien de cols ont été gravis dans l'étape finale ?", 
       correcta: "Trois", 
       opciones: ["Deux", "Quatre", "Trois"] 
     },
     { 
-      pregunta: "Qui était la coureuse qui a attaqué en premier à l'étape 9 ?", 
+      pregunta: "Qui était la coureuse qui a attaqué en premier dans l'étape 9 ?", 
       correcta: "Anna van der Breggen", 
       opciones: ["Anna van der Breggen", "Demi Vollering", "Sarah Gigante"] 
     },
@@ -348,7 +348,7 @@
       opciones: ["Or", "Argent", "Bronze"] 
     },
     { 
-      pregunta: "Quelle cycliste vétérane faisait partie de l'équipe de Pauline ?", 
+      pregunta: "Quelle cycliste vétéran faisait partie de l'équipe de Pauline ?", 
       correcta: "Marianne Vos", 
       opciones: ["Lorena Wiebes", "Katarzyna Niewiadoma", "Marianne Vos"] 
     },
@@ -445,7 +445,7 @@
       playChime([800, 1200], 800, 'triangle', 0.3);
   }
   
-  // Mettre à jour le chronomètre
+  // Mettre à jour le chronométrage
   function actualizarTemporizador() {
     let tiempoPasado = Date.now() - tiempoInicio;
     let minutos = Math.floor(tiempoPasado / 60000);
@@ -492,7 +492,7 @@
   // Afficher la couverture pendant 3 secondes puis commencer le jeu
   setTimeout(function() {
     document.getElementById("cover").style.display = "none";
-    // Commencer le chronomètre à partir de ce moment
+    // Commencer le chronométrage à partir de ce moment
     tiempoInicio = Date.now();
     intervalo = setInterval(actualizarTemporizador, 1000);
     mostrarPregunta();
