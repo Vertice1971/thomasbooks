@@ -1,12 +1,13 @@
 # **LAS FUENTES NORMATIVAS DE LAS OPOSICIONES AL CUERPO DE PROFESORADO DE SECUNDARIA**
-Tomás Cuesta.
-
-Profesor de Filosofía en el IES Juan de la Cierva de Vélez-Málaga
+Tomás Cuesta. Profesor de Filosofía en el IES Juan de la Cierva de Vélez-Málaga  
 tomascuesta@iesjuandelacierva.edu.es
 
+Este documento ofrece una guía normativa completa para preparar oposiciones al cuerpo de profesorado de Secundaria. Incluye dos apartados diferenciados:  
+- El apartado **A** recopila la normativa educativa esencial para diseñar y defender la programación didáctica, según el marco LOMLOE.  
+- El apartado **B** reúne la normativa que regula el acceso a la función pública docente, incluyendo las bases generales y ejemplos recientes de convocatoria.
 
 ## **A) Repositorio normativo de referencia para las Oposiciones de Secundaria**
-Este documento recoge la normativa educativa esencial de ámbito estatal y en su caso autonómico  aplicable al diseño de programaciones didácticas en ESO y Bachillerato según la LOMLOE. Cada norma aparece identificada con una breve descripción y un único enlace activo en el propio título, para facilitar su uso como consulta directa o repositorio base.
+Este documento recoge la normativa educativa esencial de ámbito estatal y en su caso autonómico aplicable al diseño de programaciones didácticas en ESO y Bachillerato según la LOMLOE. Cada norma aparece identificada con una breve descripción y un único enlace activo en el propio título, para facilitar su uso como consulta directa o repositorio base.
 
 - [Manual para el Diseño y Defensa de la Programación Didáctica](https://ejemplo.com/manual)
 - [Simulación de fases del proceso selectivo](https://ejemplo.com/simulador)
@@ -90,7 +91,7 @@ Ordena el currículo del Bachillerato en Andalucía.
 20. [**Orden de 30 de mayo de 2023 (Bachillerato)**](https://www.juntadeandalucia.es/boja/2023/104/37)  
 Desarrolla el currículo y organización del Bachillerato andaluz.
 
-## **B)Normativa sobre el acceso al cuerpo de profesorado de Secundaria**
+## **B) Normativa sobre el acceso al cuerpo de profesorado de Secundaria**
 
 Las oposiciones al cuerpo de profesores de Enseñanza Secundaria se regulan mediante normativa estatal básica que fija los aspectos generales del proceso (requisitos, fases, puntuación) y por normativa autonómica que concreta y convoca los procedimientos en cada comunidad. A continuación se recoge la normativa principal, con enlaces activos en los títulos.
 
@@ -107,25 +108,19 @@ Modifica el RD 276/2007 introduciendo un régimen transitorio de ingreso con may
 3. [Real Decreto 270/2022, de 12 de abril](https://www.boe.es/boe/dias/2022/04/13/pdfs/BOE-A-2022-6048.pdf)  
 Actualiza el sistema de concurso-oposición conforme a la LOMLOE, reajustando méritos y ponderaciones.
 
+---
+
 ### **Ejemplos de normativa específica para la última convocatoria**
 
-Estos ejemplos ya no tienen validez y se presentan solo a efectos de muestra. Permiten prever cómo se desarrollarán futuros procesos selectivos.
+Estos ejemplos ya no tienen validez. Se presentan solo como una muestra de cómo se desarrollarán futuros procesos selectivos. La convocatoria tiene dos niveles normativos, primero el estatal y luego el desarrollo autonómico, por eso se incluyen dos ejemplos de Comunidades Autónomas.
 
-[**Resolución de 27 de diciembre de 2024 (BOE‑A‑2024‑27552)**](https://www.boe.es/boe/dias/2024/12/31/pdfs/BOE-A-2024-27552.pdf)  
+- [**Resolución de 27 de diciembre de 2024 (BOE‑A‑2024‑27552)**](https://www.boe.es/boe/dias/2024/12/31/pdfs/BOE-A-2024-27552.pdf)  
 Convoca el proceso selectivo mediante concurso‑oposición para el ingreso al cuerpo de Profesores de Enseñanza Secundaria y otros cuerpos docentes.
 
-[**Resolución de 24 de marzo de 2025 (BOE‑A‑2025‑6824)**](https://www.boe.es/boe/dias/2025/04/04/pdfs/BOE-A-2025-6824.pdf)  
+- [**Resolución de 24 de marzo de 2025 (BOE‑A‑2025‑6824)**](https://www.boe.es/boe/dias/2025/04/04/pdfs/BOE-A-2025-6824.pdf)  
 Corrige errores de la convocatoria inicial y establece el plazo de presentación de solicitudes y la fecha de inicio de las pruebas selectivas.
 
-Cada comunidad autónoma publica su propia convocatoria, aplicando el marco estatal y desarrollando sus propios criterios, fechas, tribunales, plazas y rúbricas de evaluación. 
-
-[Convocatoria de Oposiciones en Andalucía 2025](https://www.juntadeandalucia.es/boja/2025/38/BOJA25-038-00071-2616-01_00316223.pdf)  
-Convocatoria oficial de acceso al cuerpo de Secundaria en Andalucía.
-
-[Convocatoria de Oposiciones en Madrid 2025](https://www.bocm.es/boletin/CM_Orden_BOCM/2025/02/28/BOCM-20250228-17.PDF)  
-Convocatoria oficial de oposiciones al cuerpo de Secundaria en la Comunidad de Madrid.
-
-[Rúbrica publicada en Andalucía 2025](https://www.juntadeandalucia.es/educacion/portales/documents/20123/1771905/Criterios%20de%20actuaci%C3%B3n%20y%20homogenizaci%C3%B3n%20Cuerpo%20590%20sin%20FP.pdf/ecfd3eab-e635-71ca-6d7e-6babf3122ca1?version=1.0)  
-
-[Rúbrica publicada en Madrid 2025](https://www.comunidad.madrid/sites/default/files/doc/educacion/rh03/rh03_257_2025_ce_590001_250625.pdf)  
-
+- [Convocatoria de Oposiciones en Andalucía 2025](https://www.juntadeandalucia.es/boja/2025/38/BOJA25-038-00071-2616-01_00316223.pdf)  
+- [Convocatoria de Oposiciones en Madrid 2025](https://www.bocm.es/boletin/CM_Orden_BOCM/2025/02/28/BOCM-20250228-17.PDF)  
+- [Rúbrica publicada en Andalucía 2025](https://www.juntadeandalucia.es/educacion/portales/documents/20123/1771905/Criterios%20de%20actuaci%C3%B3n%20y%20homogenizaci%C3%B3n%20Cuerpo%20590%20sin%20FP.pdf/ecfd3eab-e635-71ca-6d7e-6babf3122ca1?version=1.0)  
+- [Rúbrica publicada en Madrid 2025](https://www.comunidad.madrid/sites/default/files/doc/educacion/rh03/rh03_257_2025_ce_590001_250625.pdf)
