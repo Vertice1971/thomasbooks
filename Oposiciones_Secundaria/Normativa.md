@@ -10,7 +10,7 @@ Este documento ofrece una guía normativa completa para preparar oposiciones al 
 Este documento recoge la normativa educativa esencial de ámbito estatal y en su caso autonómico aplicable al diseño de programaciones didácticas en ESO y Bachillerato según la LOMLOE. Cada norma aparece identificada con una breve descripción y un único enlace activo en el propio título, para facilitar su uso como consulta directa o repositorio base.
 
 - [Manual para el Diseño y Defensa de la Programación Didáctica](https://ejemplo.com/manual)
-- [Simulación de fases del proceso selectivo](https://ejemplo.com/simulador)
+- [Simulación de fases del proceso selectivo](https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Oposiciones%20app/)
 - [Temarios de especialidades (1993)](https://www.boe.es/boe/dias/1993/09/21/pdfs/A27400-27438.pdf)  
 Temarios vigentes para muchas especialidades del cuerpo de Secundaria.
 
