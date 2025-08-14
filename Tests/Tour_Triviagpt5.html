@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Trivia Autocontenida: Tour de Francia</title>
+<style>
+    :root{
+        --bg:#0a0c10;
+        --card:#11151c;
+        --text:#e7edf3;
+        --muted:#9fb0c3;
+        --accent:#ffd23f;
+        --accent2:#34c759;
+        --danger:#ff453a;
+        --focus:#2563eb;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+        margin:0;
+        font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+        background:linear-gradient(180deg,#0a0c10 0%, #0d1117 100%);
+        color:var(--text);
+        -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .contenedor{max-width:920px;margin:0 auto;padding:24px}
+    header{margin-bottom:16px}
+    h1{margin:0;font-weight:800;letter-spacing:0.3px}
+    .sub{margin:8px 0 0 0;color:var(--muted)}
+    .tarjeta{
+        background:var(--card);
+        border:1px solid #1d2530;
+        border-radius:16px;
+        padding:20px;
+        box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    .fila{display:flex;gap:16px;flex-wrap:wrap}
+    .col{flex:1 1 280px}
+    button{
+        background:#1a2330;
+        color:var(--text);
+        border:1px solid #283346;
+        padding:12px 16px;
+        border-radius:12px;
+        font-weight:700;
+        cursor:pointer;
+        transition:.15s transform ease,.15s background ease,.15s border-color ease,.15s opacity ease;
+    }
+    button:hover{transform:translateY(-1px);border-color:#3a4a63}
+    button:active{transform:translateY(0)}
+    .primario{background:var(--accent); color:#111; border-color:#b69500}
+    .exito{background:var(--accent2); color:#041; border-color:#1f7a3a}
+    .peligro{background:var(--danger); color:#2b0302; border-color:#c21e16}
+    .fantasma{background:transparent}
+    .oculto{display:none !important}
+
+    .panel-config label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
+    .panel-config input[type="number"], .panel-config select{
+        width:100%;
+        padding:10px 12px;
+        border-radius:10px;
+        border:1px solid #283346;
+        background:#0f1319;
+        color:var(--text);
+        outline:none;
+    }
+    .panel-config input[type="checkbox"]{transform:scale(1.2);margin-right:8px}
+    .grupo{margin-bottom:14px}
+
+    .estado{
+        display:flex;align-items:center;justify-content:space-between;
+        gap:12px;margin-bottom:14px
+    }
+    .progreso{
+        width:100%;height:10px;background:#121923;border-radius:999px;overflow:hidden;border:1px solid #233047
+    }
+    .barra{
+        height:100%;width:0%;background:linear-gradient(90deg,#ffd23f,#ffb703);transition:width .3s ease
+    }
+    .reloj{
+        min-width:86px;text-align:center;padding:8px 10px;border-radius:10px;border:1px solid #283346;background:#0f1319;color:var(--muted)
+    }
+    .contador-puntos{
+        min-width:120px;text-align:center;padding:8px 10px;border-radius:10px;border:1px solid #283346;background:#0f1319
+    }
+
+    .pregunta{
+        font-size:20px;line-height:1.35;margin:6px 0 12px 0;font-weight:700
+    }
+    .opciones{display:grid;gap:10px}
+    .opcion{
+        padding:12px 14px;border-radius:12px;border:1px solid #2b3649;background:#0e141b;cursor:pointer;
+        display:flex;gap:10px;align-items:flex-start; text-align:left
+    }
+    .opcion:hover{border-color:#3c4f6c}
+    .opcion.correcta{background:rgba(52,199,89,.12); border-color:rgba(52,199,89,.6)}
+    .opcion.incorrecta{background:rgba(255,69,58,.10); border-color:rgba(255,69,58,.55)}
+    .opcion .letra{
+        width:28px;height:28px;display:inline-grid;place-items:center;border-radius:8px;
+        border:1px solid #344055;background:#121826;color:var(--muted);font-weight:700;flex:0 0 auto
+    }
+
+    .explicacion{
+        margin-top:10px;padding:12px;border-radius:12px;background:#0f1621;border:1px solid #273247;color:var(--muted)
+    }
+    .pie{
+        margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between
+    }
+
+    .resultado{
+        font-size:18px;margin:0;color:var(--muted)
+    }
+    .medalla{
+        font-weight:800;color:var(--accent)
+    }
+    .seleccionable{user-select:none}
+
+    @media (prefers-reduced-motion:no-preference){
+        .aparece{animation:aparece .25s ease both}
+        @keyframes aparece{from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)}}
+    }
+</style>
+</head>
+<body>
+<div class="contenedor">
+    <header>
+        <h1>Trivia del Tour de Francia</h1>
+        <p class="sub">Juego de preguntas y respuestas sobre historia, símbolos, montañas y curiosidades del Tour.</p>
+    </header>
+
+    <section id="pantalla-inicio" class="tarjeta aparece">
+        <div class="fila">
+            <div class="col panel-config">
+                <div class="grupo">
+                    <label for="cantidad">Número de preguntas</label>
+                    <input id="cantidad" type="number" min="5" max="25" value="12" />
+                </div>
+                <div class="grupo">
+                    <label for="dificultad">Dificultad</label>
+                    <select id="dificultad">
+                        <option value="mixto">Mixto</option>
+                        <option value="facil">Fácil</option>
+                        <option value="medio">Medio</option>
+                        <option value="dificil">Difícil</option>
+                    </select>
+                </div>
+                <div class="grupo">
+                    <label>Tiempo por pregunta</label>
+                    <div class="fila">
+                        <div class="col"><input id="tiempo" type="number" min="0" max="120" value="20" /></div>
+                        <div class="col" style="display:flex;align-items:center;gap:8px">
+                            <input id="sin-tiempo" type="checkbox" />
+                            <label for="sin-tiempo" class="seleccionable">Sin límite</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="grupo">
+                    <label class="seleccionable"><input id="explicaciones" type="checkbox" checked /> Mostrar explicaciones</label>
+                </div>
+                <div class="grupo">
+                    <label class="seleccionable"><input id="orden-aleatorio" type="checkbox" checked /> Barajar preguntas</label>
+                </div>
+            </div>
+            <div class="col">
+                <p style="color:var(--muted);margin-top:0">Instrucciones: elige las opciones de configuración y pulsa “Comenzar”. Cada acierto suma 1 punto. Si activas tiempo, al llegar a 0 la pregunta se da por fallada.</p>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <button id="btn-comenzar" class="primario">Comenzar</button>
+                    <button id="btn-demo" class="fantasma">Prueba rápida (8 preguntas)</button>
+                    <button id="btn-aprender" title="Muestra todas las preguntas en modo estudio">Modo estudio</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pantalla-juego" class="tarjeta oculto">
+        <div class="estado">
+            <div class="contador-puntos"><strong id="xIndex">1</strong>/<span id="xTotal">12</span> · Puntos: <strong id="xPuntos">0</strong></div>
+            <div class="progreso" aria-hidden="true"><div id="barra" class="barra" style="width:0%"></div></div>
+            <div class="reloj" id="reloj">∞ s</div>
+        </div>
+
+        <div id="enunciado" class="pregunta"></div>
+        <div id="opciones" class="opciones"></div>
+        <div id="explicacion" class="explicacion oculto"></div>
+
+        <div class="pie">
+            <div>
+                <button id="btn-anterior" class="fantasma">Anterior</button>
+                <button id="btn-saltar" class="">Saltar</button>
+            </div>
+            <div>
+                <button id="btn-comprobar" class="primario">Comprobar</button>
+                <button id="btn-siguiente" class="exito oculto">Siguiente</button>
+                <button id="btn-terminar" class="peligro oculto">Terminar</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="pantalla-final" class="tarjeta oculto">
+        <p class="resultado" id="resumen"></p>
+        <div class="fila" style="margin-top:12px">
+            <button id="btn-repetir" class="primario">Repetir configuración</button>
+            <button id="btn-inicio" class="">Volver al inicio</button>
+            <button id="btn-estudio" class="">Repasar preguntas</button>
+        </div>
+    </section>
+
+    <section id="pantalla-estudio" class="tarjeta oculto">
+        <div id="lista-estudio"></div>
+        <div class="pie">
+            <button id="btn-salir-estudio">Salir</button>
+        </div>
+    </section>
+</div>
+
+<script>
+/* ===== Banco de preguntas (historia estable, sin datos de última edición) ===== */
+const BANCO = [
+    // Fácil
+    q("¿En qué año se celebró la primera edición del Tour de Francia?", ["1903","1919","1924","1899"], 0, "La primera edición se disputó en 1903, organizada por el periódico L’Auto.", "facil"),
+    q("¿Qué color identifica al líder de la clasificación general?", ["Verde","Blanco","Amarillo","Lunares"], 2, "El maillot jaune (amarillo) señala al líder de la general desde 1919.", "facil"),
+    q("¿Qué maillot distingue al mejor escalador?", ["Verde","Blanco con lunares rojos","Amarillo","Azul"], 1, "El maillot de la montaña es blanco con lunares rojos.", "facil"),
+    q("¿Qué maillot porta el mejor joven (≤ 25 años)?", ["Blanco","Verde","Arcoíris","Negro"], 0, "El maillot blanco se otorga al mejor joven en la clasificación general.", "facil"),
+    q("¿En qué ciudad suelen terminarse las ediciones desde 1975?", ["Marsella","Lyon","Champs-Élysées (París)","Burdeos"], 2, "Desde 1975 la última etapa suele finalizar en los Campos Elíseos.", "facil"),
+    q("¿Cuántas curvas en herradura son clásicamente famosas en Alpe d’Huez?", ["12","15","21","30"], 2, "Alpe d’Huez es célebre por sus 21 curvas numeradas.", "facil"),
+    q("¿Qué macizo acoge el Col du Tourmalet?", ["Alpes","Pirineos","Apeninos","Cárpatos"], 1, "El Tourmalet está en los Pirineos, uno de los puertos más icónicos.", "facil"),
+    q("¿Cómo se llama el vehículo que retira a los ciclistas fuera de control?", ["Coche neutro","Voiture balai","Comisario jefe","Caravana"], 1, "La ‘voiture balai’ (coche escoba) retira a los corredores fuera de control.", "facil"),
+
+    // Medio
+    q("¿Quién fue el primer ganador del Tour?", ["Octave Lapize","Lucien Petit-Breton","Maurice Garin","Nicolas Frantz"], 2, "Maurice Garin ganó la edición inaugural de 1903.", "medio"),
+    q("¿Qué periódico impulsó la creación del Tour?", ["L’Auto","Le Miroir des Sports","L’Équipe","La Gazzetta"], 0, "Henri Desgrange dirigía L’Auto, promotor de la carrera.", "medio"),
+    q("¿Qué puerto alpino se asocia históricamente con etapas muy largas y el Télégraphe?", ["Izoard","Galibier","Iseran","Glandon"], 1, "El Galibier suele encadenarse con el Col du Télégraphe.", "medio"),
+    q("¿Qué significa ‘Lanterne Rouge’ en el Tour?", ["Líder de montaña","Último de la general","Premio combatividad","Coche de jueces"], 1, "La ‘Linterna Roja’ designa al último clasificado en la general.", "medio"),
+    q("¿Qué maillot distingue al líder por puntos (sprinters)?", ["Arcoíris","Verde","Naranja","Azul"], 1, "El maillot verde identifica al líder de la clasificación por puntos.", "medio"),
+    q("¿En qué montaña se han vivido episodios marcados por el viento y el pelado paisaje lunar?", ["Mont Ventoux","Puy de Dôme","La Planche des Belles Filles","Portet"], 0, "El Mont Ventoux es famoso por su cumbre árida y el viento mistral.", "medio"),
+    q("¿En qué década nació la caravana publicitaria del Tour?", ["1900s","1910s","1930s","1960s"], 2, "La caravana publicitaria se instauró en los años 30.", "medio"),
+    q("¿Cuál fue el primer ganador no europeo del Tour?", ["Greg LeMond","Luis Ocaña","Miguel Indurain","Eddy Merckx"], 0, "Greg LeMond (EE. UU.) ganó en 1986, primer no europeo.", "medio"),
+
+    // Difícil
+    q("¿En qué año se introdujo el maillot amarillo?", ["1903","1919","1920","1935"], 1, "Tras la Primera Guerra Mundial, en 1919.", "dificil"),
+    q("¿Quién es el único en ganar cinco Tours de forma consecutiva?", ["Eddy Merckx","Bernard Hinault","Jacques Anquetil","Miguel Indurain"], 3, "Indurain venció 1991–1995, cinco seguidos.", "dificil"),
+    q("¿Qué puerto pirenaico debutó en el Tour en 1910 y abrió paso a la alta montaña?", ["Aubisque","Peyresourde","Portet d’Aspet","Tourmalet"], 3, "El Tourmalet, incorporado en 1910, inauguró la era de la alta montaña.", "dificil"),
+    q("¿Cuál es el nombre del fundador/director histórico que institucionalizó el Tour?", ["Amaury","Desgrange","Goddet","Prudhomme"], 1, "Henri Desgrange fue el gran impulsor y director histórico.", "dificil"),
+    q("¿Qué puerto alpino suele emparejarse en la misma etapa con el Télégraphe y a veces con el Lautaret?", ["Iseran","Galibier","Madeleine","Vars"], 1, "La tríada Télégraphe–Galibier–Lautaret es un clásico de los Alpes.", "dificil"),
+    q("¿Qué ascensión de Auvernia es célebre por su carretera de acceso restringido y final en antena?", ["Mont Ventoux","Puy de Dôme","Super Besse","Cantal"], 1, "El Puy de Dôme, escenario histórico con acceso limitado.", "dificil"),
+    q("¿Qué etapa simbólica consolidó desde 1975 el esprint en un escenario urbano monumental?", ["Burdeos","París–Vel d’Hiv","París–Champs-Élysées","París–Parc des Princes"], 2, "Cierre en los Campos Elíseos desde 1975.", "dificil")
+];
+
+/* ===== Utilidades ===== */
+function q(pregunta, opciones, correcta, explicacion, dificultad){ 
+    return {pregunta, opciones, correcta, explicacion, dificultad}; 
+}
+function barajar(arr){
+    for(let i=arr.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    return arr;
+}
+function filtrarPorDificultad(banco, dif){
+    if(dif==="mixto") return [...banco];
+    return banco.filter(x=>x.dificultad===dif);
+}
+
+/* ===== Estado del juego ===== */
+const ui = {
+    inicio:      document.getElementById("pantalla-inicio"),
+    juego:       document.getElementById("pantalla-juego"),
+    final:       document.getElementById("pantalla-final"),
+    estudio:     document.getElementById("pantalla-estudio"),
+    cantidad:    document.getElementById("cantidad"),
+    dificultad:  document.getElementById("dificultad"),
+    tiempo:      document.getElementById("tiempo"),
+    sinTiempo:   document.getElementById("sin-tiempo"),
+    explics:     document.getElementById("explicaciones"),
+    barajar:     document.getElementById("orden-aleatorio"),
+    enunciado:   document.getElementById("enunciado"),
+    opciones:    document.getElementById("opciones"),
+    exp:         document.getElementById("explicacion"),
+    reloj:       document.getElementById("reloj"),
+    idx:         document.getElementById("xIndex"),
+    total:       document.getElementById("xTotal"),
+    puntos:      document.getElementById("xPuntos"),
+    barra:       document.getElementById("barra"),
+    resumen:     document.getElementById("resumen"),
+    listaEstudio:document.getElementById("lista-estudio"),
+    btns:{
+        comenzar: document.getElementById("btn-comenzar"),
+        demo:     document.getElementById("btn-demo"),
+        aprender: document.getElementById("btn-aprender"),
+        anterior: document.getElementById("btn-anterior"),
+        saltar:   document.getElementById("btn-saltar"),
+        comprobar:document.getElementById("btn-comprobar"),
+        siguiente:document.getElementById("btn-siguiente"),
+        terminar: document.getElementById("btn-terminar"),
+        repetir:  document.getElementById("btn-repetir"),
+        inicio:   document.getElementById("btn-inicio"),
+        estudio:  document.getElementById("btn-estudio"),
+        salirEst: document.getElementById("btn-salir-estudio")
+    }
+};
+
+let estado = {
+    preguntas: [],
+    orden: [],
+    actual: 0,
+    puntos: 0,
+    seleccion: null,
+    tiempoRestante: 0,
+    cuenta: null,
+    sinTiempo: false,
+    mostrarExp: true
+};
+
+/* ===== Navegación de pantallas ===== */
+function mostrar(section){
+    for(const s of [ui.inicio, ui.juego, ui.final, ui.estudio]) s.classList.add("oculto");
+    section.classList.remove("oculto");
+    section.classList.add("aparece");
+}
+
+function prepararJuego(opts){
+    const base = filtrarPorDificultad(BANCO, opts.dificultad);
+    const conjunto = opts.barajar ? barajar([...base]) : [...base];
+    const n = Math.max(5, Math.min(opts.cantidad, conjunto.length));
+    const seleccion = conjunto.slice(0, n);
+    estado.preguntas = opts.barajar ? seleccion.map(clonarYBarajarOpciones) : seleccion.map(clonarYBarajarOpciones);
+    estado.orden = [...Array(estado.preguntas.length).keys()];
+    estado.actual = 0;
+    estado.puntos = 0;
+    estado.seleccion = null;
+    estado.sinTiempo = opts.sinTiempo;
+    estado.mostrarExp = opts.explicaciones;
+    ui.total.textContent = String(estado.preguntas.length);
+    ui.puntos.textContent = "0";
+    ui.barra.style.width = "0%";
+    reiniciarCuenta(opts.tiempo);
+    pintarPregunta();
+    mostrar(ui.juego);
+}
+
+function clonarYBarajarOpciones(qo){
+    const copia = JSON.parse(JSON.stringify(qo));
+    // barajar opciones preservando índice correcto
+    const indices = copia.opciones.map((_,i)=>i);
+    barajar(indices);
+    const opcionesNuevas = indices.map(i=>copia.opciones[i]);
+    const nuevaCorrecta = indices.indexOf(copia.correcta);
+    copia.opciones = opcionesNuevas;
+    copia.correcta = nuevaCorrecta;
+    return copia;
+}
+
+/* ===== Pintado de pregunta ===== */
+function pintarPregunta(){
+    const i = estado.actual;
+    const q = estado.preguntas[i];
+    ui.idx.textContent = String(i+1);
+    ui.enunciado.textContent = q.pregunta;
+    ui.opciones.innerHTML = "";
+    ui.exp.classList.add("oculto");
+    ui.exp.textContent = "";
+    ui.btns.siguiente.classList.add("oculto");
+    ui.btns.terminar.classList.add("oculto");
+    ui.btns.comprobar.classList.remove("oculto");
+
+    const letras = "ABCD".split("");
+    q.opciones.forEach((texto, idx)=>{
+        const btn = document.createElement("button");
+        btn.className = "opcion";
+        btn.setAttribute("data-idx", idx);
+        btn.innerHTML = `<span class="letra">${letras[idx]||"?"}</span><span>${texto}</span>`;
+        btn.addEventListener("click", ()=>seleccionar(idx));
+        ui.opciones.appendChild(btn);
+    });
+
+    actualizarProgreso();
+    estado.seleccion = null;
+}
+
+function seleccionar(idx){
+    if(ui.btns.comprobar.classList.contains("oculto")) return;
+    estado.seleccion = idx;
+    [...ui.opciones.children].forEach(el=>el.style.outline="none");
+    const el = ui.opciones.querySelector(`[data-idx="${idx}"]`);
+    el.style.outline = `2px solid var(--focus)`;
+    el.scrollIntoView({block:"nearest", behavior:"smooth"});
+}
+
+function actualizarProgreso(){
+    const pct = (estado.actual/estado.preguntas.length)*100;
+    ui.barra.style.width = `${pct}%`;
+}
+
+/* ===== Comprobación y flujo ===== */
+function comprobar(){
+    detenerCuenta();
+    const q = estado.preguntas[estado.actual];
+    const sel = estado.seleccion;
+    // Sin selección: lo contamos como fallo
+    const acierto = sel === q.correcta;
+    [...ui.opciones.children].forEach((btn, idx)=>{
+        if(idx===q.correcta) btn.classList.add("correcta");
+        if(sel!==null && idx===sel && sel!==q.correcta) btn.classList.add("incorrecta");
+        btn.style.cursor="default";
+    });
+    if(acierto){ estado.puntos++; ui.puntos.textContent = String(estado.puntos); }
+
+    if(estado.mostrarExp && q.explicacion){
+        ui.exp.textContent = q.explicacion;
+        ui.exp.classList.remove("oculto");
+    }
+
+    ui.btns.comprobar.classList.add("oculto");
+    const ultima = estado.actual === estado.preguntas.length - 1;
+    if(ultima){ ui.btns.terminar.classList.remove("oculto"); }
+    else{ ui.btns.siguiente.classList.remove("oculto"); }
+}
+
+function siguiente(){
+    estado.actual++;
+    reiniciarCuenta(Number(ui.tiempo.value || 20));
+    pintarPregunta();
+}
+
+function anterior(){
+    if(estado.actual===0) return;
+    estado.actual--;
+    reiniciarCuenta(Number(ui.tiempo.value || 20));
+    pintarPregunta();
+}
+
+function saltar(){
+    detenerCuenta();
+    estado.seleccion = null;
+    comprobar(); // se marcará solo la correcta; no suma punto
+}
+
+/* ===== Temporizador ===== */
+function reiniciarCuenta(segundos){
+    detenerCuenta();
+    if(estado.sinTiempo || Number(segundos)<=0){
+        ui.reloj.textContent = "∞ s";
+        return;
+    }
+    estado.tiempoRestante = Number(segundos);
+    ui.reloj.textContent = estado.tiempoRestante + " s";
+    estado.cuenta = setInterval(()=>{
+        estado.tiempoRestante--;
+        if(estado.tiempoRestante<=0){
+            ui.reloj.textContent = "0 s";
+            detenerCuenta();
+            estado.seleccion = null;
+            comprobar();
+            return;
+        }
+        ui.reloj.textContent = estado.tiempoRestante + " s";
+    }, 1000);
+}
+function detenerCuenta(){
+    if(estado.cuenta){ clearInterval(estado.cuenta); estado.cuenta=null; }
+}
+
+/* ===== Final ===== */
+function terminar(){
+    mostrar(ui.final);
+    const n = estado.preguntas.length;
+    const p = estado.puntos;
+    const ratio = p/n;
+    const medalla = ratio>=0.85 ? "Oro" : ratio>=0.65 ? "Plata" : ratio>=0.45 ? "Bronce" : "Finalista";
+    ui.resumen.innerHTML = `Resultado: <span class="medalla">${medalla}</span>. Aciertos ${p}/${n}.`;
+}
+
+/* ===== Modo estudio ===== */
+function entrarEstudio(pregs = BANCO){
+    ui.listaEstudio.innerHTML = "";
+    const bloque = document.createDocumentFragment();
+    const letras = "ABCD".split("");
+    pregs.forEach((q,i)=>{
+        const card = document.createElement("div");
+        card.className = "tarjeta";
+        card.style.marginBottom = "12px";
+        const h = document.createElement("div");
+        h.className = "pregunta";
+        h.textContent = `${i+1}. ${q.pregunta}`;
+        const lista = document.createElement("div");
+        lista.className = "opciones";
+        q.opciones.forEach((op,idx)=>{
+            const p = document.createElement("div");
+            p.className = "opcion " + (idx===q.correcta?"correcta":"");
+            p.innerHTML = `<span class="letra">${letras[idx]}</span><span>${op}</span>`;
+            lista.appendChild(p);
+        });
+        const ex = document.createElement("div");
+        ex.className = "explicacion";
+        ex.textContent = q.explicacion || "";
+        card.append(h, lista, ex);
+        bloque.appendChild(card);
+    });
+    ui.listaEstudio.appendChild(bloque);
+    mostrar(ui.estudio);
+}
+
+/* ===== Eventos ===== */
+ui.btns.comenzar.addEventListener("click", ()=>{
+    prepararJuego({
+        cantidad: Number(ui.cantidad.value || 12),
+        dificultad: ui.dificultad.value,
+        sinTiempo: ui.sinTiempo.checked,
+        tiempo: Number(ui.tiempo.value || 20),
+        explicaciones: ui.explics.checked,
+        barajar: ui.barajar.checked
+    });
+});
+ui.btns.demo.addEventListener("click", ()=>{
+    ui.cantidad.value = 8;
+    ui.dificultad.value = "mixto";
+    prepararJuego({
+        cantidad: 8,
+        dificultad: "mixto",
+        sinTiempo: true,
+        tiempo: 0,
+        explicaciones: true,
+        barajar: true
+    });
+});
+ui.btns.aprender.addEventListener("click", ()=>entrarEstudio(barajar([...BANCO])));
+
+ui.btns.comprobar.addEventListener("click", comprobar);
+ui.btns.siguiente.addEventListener("click", siguiente);
+ui.btns.anterior.addEventListener("click", anterior);
+ui.btns.saltar.addEventListener("click", saltar);
+ui.btns.terminar.addEventListener("click", terminar);
+
+ui.btns.repetir.addEventListener("click", ()=>{
+    prepararJuego({
+        cantidad: estado.preguntas.length,
+        dificultad: ui.dificultad.value,
+        sinTiempo: estado.sinTiempo,
+        tiempo: Number(ui.tiempo.value || 20),
+        explicaciones: estado.mostrarExp,
+        barajar: true
+    });
+});
+ui.btns.inicio.addEventListener("click", ()=>mostrar(ui.inicio));
+ui.btns.estudio.addEventListener("click", ()=>entrarEstudio(estado.preguntas));
+ui.btns.salirEst.addEventListener("click", ()=>mostrar(ui.final));
+
+ui.sinTiempo.addEventListener("change", ()=>{
+    ui.tiempo.disabled = ui.sinTiempo.checked;
+});
+
+/* Accesos rápidos */
+document.addEventListener("keydown", (e)=>{
+    if(ui.juego.classList.contains("oculto")) return;
+    if(e.key==="Enter") {
+        if(!ui.btns.comprobar.classList.contains("oculto")) comprobar();
+        else if(!ui.btns.siguiente.classList.contains("oculto")) siguiente();
+    }
+    if(e.key==="ArrowRight" && !ui.btns.siguiente.classList.contains("oculto")) siguiente();
+    if(e.key==="ArrowLeft") anterior();
+});
+
+/* Inicio limpio */
+mostrar(ui.inicio);
+</script>
+</body>
+</html>

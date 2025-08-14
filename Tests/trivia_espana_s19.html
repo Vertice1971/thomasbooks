@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esto sí estaba en mi libro de Historia de España</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #CD853F 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: rgba(255, 248, 220, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 30px;
+            text-align: center;
+            border: 3px solid #8B4513;
+        }
+
+        .title {
+            color: #8B4513;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+
+        .subtitle {
+            color: #A0522D;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .score-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(139, 69, 19, 0.1);
+            border-radius: 10px;
+            border: 2px solid #D2691E;
+        }
+
+        .score-item {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #8B4513;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            border: 2px solid #D2691E;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            font-size: 1.3em;
+            color: #8B4513;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            font-weight: bold;
+        }
+
+        .answers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .answer-btn {
+            padding: 15px 20px;
+            font-size: 1.1em;
+            background: linear-gradient(145deg, #F5DEB3, #DEB887);
+            border: 2px solid #D2691E;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #8B4513;
+            font-weight: bold;
+        }
+
+        .answer-btn:hover {
+            background: linear-gradient(145deg, #DEB887, #D2691E);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .answer-btn.correct {
+            background: linear-gradient(145deg, #90EE90, #32CD32);
+            color: #006400;
+            border-color: #228B22;
+        }
+
+        .answer-btn.incorrect {
+            background: linear-gradient(145deg, #FFB6C1, #FF6B6B);
+            color: #8B0000;
+            border-color: #DC143C;
+        }
+
+        .answer-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .control-btn {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background: linear-gradient(145deg, #D2691E, #8B4513);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .control-btn:hover {
+            background: linear-gradient(145deg, #8B4513, #654321);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-message {
+            font-size: 1.3em;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .result-message.correct {
+            background: linear-gradient(145deg, #E8F5E8, #D4F4DD);
+            color: #006400;
+            border: 2px solid #32CD32;
+        }
+
+        .result-message.incorrect {
+            background: linear-gradient(145deg, #FFE8E8, #FFD4D4);
+            color: #8B0000;
+            border: 2px solid #FF6B6B;
+        }
+
+        .final-score {
+            font-size: 1.5em;
+            color: #8B4513;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 15px;
+            border: 3px solid #D2691E;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #F5DEB3;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #D2691E;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #D2691E, #8B4513);
+            border-radius: 8px;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 600px) {
+            .answers {
+                grid-template-columns: 1fr;
+            }
+            
+            .title {
+                font-size: 1.8em;
+            }
+            
+            .score-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="title">Esto sí estaba en mi libro de Historia de España</h1>
+        <p class="subtitle">Trivia sobre la España de la segunda mitad del siglo XIX</p>
+        
+        <div class="score-container">
+            <div class="score-item">Pregunta: <span id="currentQuestion">0</span>/6</div>
+            <div class="score-item">Correctas: <span id="score">0</span></div>
+            <div class="score-item">Incorrectas: <span id="incorrect">0</span></div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <div id="gameArea">
+            <div class="question-container">
+                <p>¡Bienvenido al juego de trivia sobre la España del siglo XIX! Responderás 6 preguntas aleatorias sobre política, economía y aspectos militares de la segunda mitad del siglo XIX español.</p>
+                <button class="control-btn" onclick="startGame()">Comenzar Juego</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "¿En qué año se produjo la Revolución de 1868, conocida como 'La Gloriosa'?",
+                answers: ["1868", "1866", "1870", "1869"],
+                correct: 0
+            },
+            {
+                question: "¿Quién fue el general que lideró el pronunciamiento que inició la Revolución de 1868?",
+                answers: ["Juan Prim", "Francisco Serrano", "Manuel Pavía", "Arsenio Martínez Campos"],
+                correct: 0
+            },
+            {
+                question: "¿Qué reina fue destronada durante la Revolución de 1868?",
+                answers: ["Isabel II", "María Cristina", "Mercedes de Orleans", "Victoria Eugenia"],
+                correct: 0
+            },
+            {
+                question: "¿Quién fue elegido rey de España en 1870 tras la búsqueda de un nuevo monarca?",
+                answers: ["Amadeo de Saboya", "Alfonso XII", "Leopoldo de Hohenzollern", "Antonio de Orleans"],
+                correct: 0
+            },
+            {
+                question: "¿En qué año abdicó Amadeo I de Saboya?",
+                answers: ["1873", "1872", "1874", "1871"],
+                correct: 0
+            },
+            {
+                question: "¿Cuánto duró la Primera República Española?",
+                answers: ["11 meses", "2 años", "6 meses", "1 año y medio"],
+                correct: 0
+            },
+            {
+                question: "¿Quién fue el primer presidente de la Primera República?",
+                answers: ["Estanislao Figueras", "Francisco Pi y Margall", "Nicolás Salmerón", "Emilio Castelar"],
+                correct: 0
+            },
+            {
+                question: "¿En qué año se restauró la monarquía borbónica con Alfonso XII?",
+                answers: ["1874", "1875", "1873", "1876"],
+                correct: 0
+            },
+            {
+                question: "¿Quién redactó el Manifiesto de Sandhurst?",
+                answers: ["Antonio Cánovas del Castillo", "Alfonso XII", "Francisco Silvela", "Práxedes Mateo Sagasta"],
+                correct: 0
+            },
+            {
+                question: "¿Cómo se llamó el sistema político establecido por Cánovas durante la Restauración?",
+                answers: ["Turno pacífico", "Sistema bipartidista", "Alternancia democrática", "Régimen constitucional"],
+                correct: 0
+            },
+            {
+                question: "¿Qué dos partidos se alternaron en el poder durante el turno pacífico?",
+                answers: ["Conservador y Liberal", "Moderado y Progresista", "Carlista y Liberal", "Republicano y Monárquico"],
+                correct: 0
+            },
+            {
+                question: "¿En qué año se promulgó la Constitución de la Restauración?",
+                answers: ["1876", "1875", "1877", "1878"],
+                correct: 0
+            },
+            {
+                question: "¿Qué característica tenía el sufragio según la Constitución de 1876 inicialmente?",
+                answers: ["Censitario", "Universal masculino", "Universal", "Por estamentos"],
+                correct: 0
+            },
+            {
+                question: "¿En qué año se estableció el sufragio universal masculino en España?",
+                answers: ["1890", "1885", "1888", "1892"],
+                correct: 0
+            },
+            {
+                question: "¿Qué práctica electoral corrupta era común durante la Restauración?",
+                answers: ["El caciquismo", "El pucherazo", "La compra de votos", "Todas las anteriores"],
+                correct: 3
+            },
+            {
+                question: "¿Cómo se llamaban los intermediarios políticos locales que controlaban las elecciones?",
+                answers: ["Caciques", "Notables", "Prohombres", "Gobernadores"],
+                correct: 0
+            },
+            {
+                question: "¿Qué guerra civil se desarrolló entre 1872 y 1876?",
+                answers: ["Tercera Guerra Carlista", "Segunda Guerra Carlista", "Guerra de los Comuneros", "Guerra de la Independencia"],
+                correct: 0
+            },
+            {
+                question: "¿En qué regiones tuvo más fuerza el carlismo durante la Tercera Guerra Carlista?",
+                answers: ["País Vasco, Navarra y Cataluña", "Andalucía y Extremadura", "Castilla y León", "Valencia y Murcia"],
+                correct: 0
+            },
+            {
+                question: "¿Quién fue el pretendiente carlista durante la Tercera Guerra Carlista?",
+                answers: ["Carlos VII", "Carlos VI", "Carlos V", "Don Juan"],
+                correct: 0
+            },
+            {
+                question: "¿Qué supuso el final de la Tercera Guerra Carlista para los fueros vascos?",
+                answers: ["Su abolición parcial", "Su confirmación total", "Su modernización", "Su extensión a otras regiones"],
+                correct: 0
+            },
+            {
+                question: "¿En qué año comenzó la Guerra de los Diez Años en Cuba?",
+                answers: ["1868", "1870", "1866", "1872"],
+                correct: 0
+            },
+            {
+                question: "¿Quién lideró el grito de Yara que inició la Guerra de los Diez Años?",
+                answers: ["Carlos Manuel de Céspedes", "José Martí", "Antonio Maceo", "Máximo Gómez"],
+                correct: 0
+            },
+            {
+                question: "¿Cómo se llamó el tratado que puso fin a la Guerra de los Diez Años en Cuba?",
+                answers: ["Paz del Zanjón", "Tratado de París", "Convenio de La Habana", "Pacto de Baire"],
+                correct: 0
+            },
+            {
+                question: "¿En qué año se firmó la Paz del Zanjón?",
+                answers: ["1878", "1877", "1879", "1880"],
+                correct: 0
+            },
+            {
+                question: "¿Qué general español negoció la Paz del Zanjón?",
+                answers: ["Arsenio Martínez Campos", "Manuel Pavía", "Fernando Primo de Rivera", "Valeriano Weyler"],
+                correct: 0
+            },
+            {
+                question: "¿Qué proyecto de ley elaboró Antonio Maura para reformar la administración?",
+                answers: ["Ley de Administración Local", "Ley de Reforma Electoral", "Ley de Descentralización", "Ley de Autonomías"],
+                correct: 0
+            },
+            {
+                question: "¿Cuál fue la principal industria que se desarrolló en Cataluña durante el siglo XIX?",
+                answers: ["Textil", "Siderúrgica", "Química", "Naval"],
+                correct: 0
+            },
+            {
+                question: "¿En qué región se desarrolló principalmente la industria siderúrgica española?",
+                answers: ["País Vasco", "Asturias", "Cataluña", "Valencia"],
+                correct: 0
+            },
+            {
+                question: "¿Qué compañía ferroviaria construyó la línea Madrid-Aranjuez en 1851?",
+                answers: ["Compañía del Camino de Hierro de María Cristina", "MZA", "Compañía del Norte", "Ferrocarriles del Estado"],
+                correct: 0
+            },
+            {
+                question: "¿En qué año se inauguró la primera línea ferroviaria española (Barcelona-Mataró)?",
+                answers: ["1848", "1850", "1851", "1847"],
+                correct: 0
+            },
+            {
+                question: "¿Qué ley de 1855 reguló la construcción del ferrocarril en España?",
+                answers: ["Ley General de Ferrocarriles", "Ley de Obras Públicas", "Ley de Transportes", "Ley de Comunicaciones"],
+                correct: 0
+            },
+            {
+                question: "¿Cuál fue la anchura de vía adoptada para los ferrocarriles españoles?",
+                answers: ["Ancho ibérico (1668 mm)", "Ancho europeo (1435 mm)", "Ancho ruso (1520 mm)", "Ancho irlandés (1600 mm)"],
+                correct: 0
+            },
+            {
+                question: "¿Qué ministro de Hacienda fue conocido por sus reformas fiscales durante el reinado de Isabel II?",
+                answers: ["Mon-Santillán", "Bravo Murillo", "Narváez", "Espartero"],
+                correct: 0
+            },
+            {
+                question: "¿En qué año se creó el Banco de España?",
+                answers: ["1856", "1858", "1854", "1860"],
+                correct: 0
+            },
+            {
+                question: "¿Qué proceso de venta de tierras de la Iglesia caracterizó el siglo XIX?",
+                answers: ["Desamortización", "Desvinculación", "Secularización", "Nacionalización"],
+                correct: 0
+            },
+            {
+                question: "¿Quién fue el principal responsable de la desamortización eclesiástica?",
+                answers: ["Juan Álvarez Mendizábal", "Pascual Madoz", "Salustiano Olózaga", "Práxedes Mateo Sagasta"],
+                correct: 0
+            },
+            {
+                question: "¿En qué década se produjo principalmente la desamortización de Mendizábal?",
+                answers: ["1830", "1840", "1820", "1850"],
+                correct: 0
+            },
+            {
+                question: "¿Qué tipo de bienes afectó principalmente la desamortización de Madoz (1855)?",
+                answers: ["Bienes municipales y comunales", "Bienes eclesiásticos", "Bienes nobiliarios", "Bienes de la Corona"],
+                correct: 0
+            },
+            {
+                question: "¿Cuál fue una consecuencia social negativa de las desamortizaciones?",
+                answers: ["Concentración de la propiedad", "Pérdida del patrimonio artístico", "Empobrecimiento municipal", "Todas las anteriores"],
+                correct: 3
+            },
+            {
+                question: "¿Qué tratado comercial firmó España con Francia en 1882?",
+                answers: ["Tratado de Comercio y Navegación", "Convenio Comercial Franco-Español", "Acuerdo Aduanero", "Pacto Comercial"],
+                correct: 0
+            },
+            {
+                question: "¿Cuál era la principal exportación española a finales del siglo XIX?",
+                answers: ["Productos agrícolas", "Minerales", "Productos textiles", "Productos siderúrgicos"],
+                correct: 0
+            },
+            {
+                question: "¿Qué política arancelaria adoptó España durante la Restauración?",
+                answers: ["Proteccionista", "Librecambista", "Mixta", "Autárquica"],
+                correct: 0
+            },
+            {
+                question: "¿En qué año se aprobó el arancel proteccionista de Cánovas?",
+                answers: ["1891", "1890", "1892", "1889"],
+                correct: 0
+            },
+            {
+                question: "¿Qué región española se especializó en la exportación de naranjas?",
+                answers: ["Valencia", "Andalucía", "Murcia", "Cataluña"],
+                correct: 0
+            },
+            {
+                question: "¿Cuál fue el principal problema del sistema fiscal español del siglo XIX?",
+                answers: ["La falta de ingresos suficientes", "El exceso de impuestos", "La complejidad burocrática", "Los privilegios fiscales"],
+                correct: 0
+            },
+            {
+                question: "¿Qué impuesto se estableció para financiar la Guerra Carlista?",
+                answers: ["Contribución extraordinaria de guerra", "Impuesto sobre bienes eclesiásticos", "Tributo militar", "Gravamen especial"],
+                correct: 0
+            },
+            {
+                question: "¿Quién fue el último presidente de la Primera República?",
+                answers: ["Emilio Castelar", "Francisco Pi y Margall", "Nicolás Salmerón", "Estanislao Figueras"],
+                correct: 0
+            },
+            {
+                question: "¿Qué golpe de estado puso fin a la Primera República?",
+                answers: ["Golpe del General Pavía", "Pronunciamiento de Sagunto", "Golpe de Martínez Campos", "Revolución de 1874"],
+                correct: 0
+            },
+            {
+                question: "¿En qué batalla se decidió principalmente la Tercera Guerra Carlista?",
+                answers: ["Sitio de Bilbao", "Batalla de Treviño", "Batalla de Montejurra", "Sitio de Pamplona"],
+                correct: 0
+            },
+            {
+                question: "¿Qué general carlista fue conocido como 'El Tigre del Maestrazgo'?",
+                answers: ["Ramón Cabrera", "Tomás de Zumalacárregui", "Rafael Maroto", "Carlos María de los Dolores"],
+                correct: 0
+            },
+            {
+                question: "¿Cuál fue la principal reforma militar de la segunda mitad del siglo XIX?",
+                answers: ["Establecimiento del servicio militar obligatorio", "Creación de la Guardia Civil", "Modernización del armamento", "Reorganización de los cuerpos"],
+                correct: 0
+            }
+        ];
+
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let incorrect = 0;
+        let answered = false;
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function selectRandomQuestions() {
+            const shuffled = shuffleArray(questions);
+            return shuffled.slice(0, 6);
+        }
+
+        function shuffleAnswers(question) {
+            const correctAnswer = question.answers[question.correct];
+            const shuffledAnswers = shuffleArray(question.answers);
+            const newCorrectIndex = shuffledAnswers.indexOf(correctAnswer);
+            
+            return {
+                ...question,
+                answers: shuffledAnswers,
+                correct: newCorrectIndex
+            };
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestionIndex / 6) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function startGame() {
+            currentQuestions = selectRandomQuestions().map(q => shuffleAnswers(q));
+            currentQuestionIndex = 0;
+            score = 0;
+            incorrect = 0;
+            answered = false;
+            
+            updateScore();
+            updateProgress();
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex >= currentQuestions.length) {
+                showFinalScore();
+                return;
+            }
+
+            const question = currentQuestions[currentQuestionIndex];
+            answered = false;
+
+            document.getElementById('gameArea').innerHTML = `
+                <div class="question-container">
+                    <div class="question">${question.question}</div>
+                    <div class="answers">
+                        ${question.answers.map((answer, index) => 
+                            `<button class="answer-btn" onclick="checkAnswer(${index})">${answer}</button>`
+                        ).join('')}
+                    </div>
+                    <div id="result"></div>
+                </div>
+            `;
+        }
+
+        function checkAnswer(selectedIndex) {
+            if (answered) return;
+
+            answered = true;
+            const question = currentQuestions[currentQuestionIndex];
+            const buttons = document.querySelectorAll('.answer-btn');
+            const resultDiv = document.getElementById('result');
+
+            buttons.forEach((btn, index) => {
+                btn.disabled = true;
+                if (index === question.correct) {
+                    btn.classList.add('correct');
+                } else if (index === selectedIndex) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            if (selectedIndex === question.correct) {
+                score++;
+                resultDiv.innerHTML = '<div class="result-message correct">¡Correcto! Muy bien.</div>';
+            } else {
+                incorrect++;
+                resultDiv.innerHTML = `<div class="result-message incorrect">Incorrecto. La respuesta correcta era: ${question.answers[question.correct]}</div>`;
+            }
+
+            updateScore();
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                updateProgress();
+                showQuestion();
+            }, 3000);
+        }
+
+        function updateScore() {
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('score').textContent = score;
+            document.getElementById('incorrect').textContent = incorrect;
+        }
+
+        function showFinalScore() {
+            const percentage = Math.round((score / 6) * 100);
+            let message = '';
+            
+            if (percentage >= 90) {
+                message = '¡Excelente! Eres un verdadero experto en historia española del siglo XIX.';
+            } else if (percentage >= 70) {
+                message = '¡Muy bien! Tienes buenos conocimientos sobre este período histórico.';
+            } else if (percentage >= 50) {
+                message = 'Bien. Conoces algunos aspectos importantes de la época.';
+            } else {
+                message = 'Puedes mejorar. Te recomendamos repasar este período histórico.';
+            }
+
+            document.getElementById('gameArea').innerHTML = `
+                <div class="question-container">
+                    <div class="final-score">
+                        ¡Juego terminado!<br>
+                        Puntuación final: ${score}/6 (${percentage}%)<br><br>
+                        ${message}
+                    </div>
+                    <button class="control-btn" onclick="startGame()">Jugar de nuevo</button>
+                    <button class="control-btn" onclick="location.reload()">Volver al inicio</button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

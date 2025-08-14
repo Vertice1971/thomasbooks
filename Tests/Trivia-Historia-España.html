@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Esto sí estaba en mi libro de Historia de España</title>
+<style>
+  :root{--bg:#0f172a;--card:#111827;--ink:#e5e7eb;--muted:#9ca3af;--accent:#2563eb}
+  html,body{height:100%}
+  body{margin:0;background:radial-gradient(1200px 800px at 20% -10%,#1f2937 0%,#0b1224 60%,#060a18 100%);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial}
+  .wrap{max-width:900px;margin:0 auto;padding:24px}
+  h1{margin:0 0 6px 0;font-size:clamp(24px,4vw,40px);letter-spacing:.2px}
+  .subtitle{color:var(--muted);margin-bottom:22px}
+  .card{background:linear-gradient(180deg,#0f162b 0%,#0c1224 100%);border:1px solid #1f2a44;box-shadow:0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.03);border-radius:18px;padding:18px}
+  .controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  button{appearance:none;border:0;border-radius:12px;padding:12px 16px;font-weight:600;cursor:pointer;transition:.15s transform ease,.15s background-color ease,.15s opacity ease}
+  button:active{transform:translateY(1px)}
+  .primary{background:var(--accent);color:white}
+  .ghost{background:#10172a;color:var(--ink);border:1px solid #1f2a44}
+  .muted{background:#0b1326;color:var(--muted);border:1px dashed #1f2a44}
+  .grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:640px){.grid{grid-template-columns:1fr 1fr}}
+  .qbox{background:linear-gradient(180deg,#121a33 0%,#0c1327 100%);border:1px solid #1b2743;border-radius:14px;padding:14px}
+  .qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .qnum{font-weight:700;color:#cbd5e1}
+  .qtext{margin:0 0 10px 0;font-size:18px;line-height:1.3}
+  .opt{display:flex;gap:10px;align-items:center;background:#0b1224;border:1px solid #1b2743;border-radius:12px;padding:10px;cursor:pointer}
+  .opt[data-state="idle"]:hover{background:#101a37}
+  .opt .tag{min-width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;background:#0e1a34;border:1px solid #22335a;color:#cbd5e1}
+  .opt[data-state="correct"]{border-color:#14532d;background:#08210f}
+  .opt[data-state="correct"] .tag{background:#0f3a1f;border-color:#166534;color:#bbf7d0}
+  .opt[data-state="wrong"]{border-color:#4c0519;background:#2a0a16}
+  .opt[data-state="wrong"] .tag{background:#3a0c19;border-color:#7f1d1d;color:#fecaca}
+  .opt[data-state="locked"]{opacity:.7;cursor:default}
+  .footer{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--muted)}
+  .score{font-weight:800;color:#e2e8f0}
+  .pill{display:inline-block;border:1px solid #1f2a44;background:#0b1326;color:#cbd5e1;border-radius:999px;padding:6px 10px;font-size:14px}
+  .sr{position:absolute;left:-9999px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Esto sí estaba en mi libro de Historia de España</h1>
+  <div class="subtitle">Juego de trivia: cada partida lanza 8 preguntas aleatorias, con respuestas barajadas y posición correcta variable.</div>
+
+  <div class="controls">
+    <button id="newGame" class="primary">Nueva partida</button>
+    <button id="reveal" class="ghost" disabled>Mostrar soluciones</button>
+    <span id="status" class="pill">Sin partida</span>
+  </div>
+
+  <div id="board" class="grid" aria-live="polite"></div>
+
+  <div class="card">
+    <div class="footer">
+      <div>Progreso: <span id="progress">0/8</span></div>
+      <div>Puntuación: <span id="score" class="score">0</span></div>
+      <div>
+        <button id="finish" class="ghost" disabled>Finalizar</button>
+        <button id="reset" class="muted">Reiniciar tablero</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PREGUNTAS = [
+  {"enunciado":"¿Qué principios básicos establecía la Constitución de Cádiz de 1812?","correcta":"Soberanía nacional, división de poderes, derechos individuales e igualdad ante la ley","incorrectas":["Supremacía del rey absoluto y mantenimiento del orden estamental","Soberanía compartida entre rey y nobleza con privilegios jurídicos"]},
+  {"enunciado":"¿Qué conflicto bélico coincidió con la proclamación de la Constitución de 1812?","correcta":"La Guerra de la Independencia contra la ocupación napoleónica","incorrectas":["La Primera Guerra Carlista","La guerra hispano-estadounidense"]},
+  {"enunciado":"¿Qué etapa se conoce como la 'Década Ominosa'?","correcta":"El periodo de 1823 a 1833 de restauración absolutista bajo Fernando VII","incorrectas":["El decenio de guerras contra Francia a finales del XVIII","Los diez años de la Primera República"]},
+  {"enunciado":"¿Qué fue el Trienio Liberal (1820–1823)?","correcta":"Un periodo de gobierno constitucional que restauró la Constitución de 1812","incorrectas":["Tres años de dictadura militar progresista","El primer gobierno republicano en España"]},
+  {"enunciado":"¿Qué objetivo tuvo la desamortización de Mendizábal (1836)?","correcta":"Obtener recursos para el Estado y debilitar el poder económico de la Iglesia","incorrectas":["Confiscar tierras comunales para su repoblación forestal","Repartir gratuitamente tierras a los campesinos sin tierras"]},
+  {"enunciado":"¿Qué conflicto político-militar enfrentó a carlistas y liberales?","correcta":"Las Guerras Carlistas","incorrectas":["Las Guerras Napoleónicas","La Guerra de África"]},
+  {"enunciado":"¿Quiénes defendían el mantenimiento del absolutismo y los fueros tradicionales?","correcta":"Los carlistas","incorrectas":["Los progresistas","Los unionistas liberales"]},
+  {"enunciado":"¿Qué constitución se promulgó durante la regencia de María Cristina en 1837?","correcta":"Una constitución de corte progresista con soberanía nacional y derechos amplios","incorrectas":["Una constitución absolutista que eliminaba las Cortes","Una carta otorgada inspirada en la Constitución de 1845"]},
+  {"enunciado":"¿Qué caracteriza a la Constitución de 1845?","correcta":"Un modelo moderado que restringía derechos y ampliaba el poder de la Corona","incorrectas":["La implantación del sufragio universal masculino","La supresión de la monarquía"]},
+  {"enunciado":"¿Qué papel tuvo el ejército en la política del siglo XIX en España?","correcta":"Protagonizó pronunciamientos militares que alteraban el gobierno","incorrectas":["Se mantuvo neutral y no intervino en la política","Se dedicó exclusivamente a campañas coloniales"]},
+  {"enunciado":"¿Qué acontecimiento desencadenó la Revolución de 1868?","correcta":"El descontento contra el reinado de Isabel II y la crisis económica y política","incorrectas":["La invasión francesa de 1808","El asesinato de Prim"]},
+  {"enunciado":"¿Cómo se conoció popularmente la Revolución de 1868?","correcta":"La Gloriosa","incorrectas":["La Semana Trágica","El Trienio Liberal"]},
+  {"enunciado":"¿Qué establecía la Constitución de 1869?","correcta":"Sufragio universal masculino y un amplio reconocimiento de derechos y libertades","incorrectas":["El sufragio restringido a propietarios","La reinstauración del absolutismo"]},
+  {"enunciado":"¿Qué monarca fue elegido por las Cortes tras la Revolución de 1868?","correcta":"Amadeo I de Saboya","incorrectas":["Alfonso XII","Fernando VII"]},
+  {"enunciado":"¿Por qué abdicó Amadeo I en 1873?","correcta":"Por la inestabilidad política, la oposición interna y el clima de violencia","incorrectas":["Por perder la Guerra de Cuba","Por un golpe de Estado militar exitoso"]},
+  {"enunciado":"¿Cuándo se proclamó la Primera República en España?","correcta":"En 1873 tras la abdicación de Amadeo I","incorrectas":["En 1868 tras la caída de Isabel II","En 1931 tras la caída de Alfonso XIII"]},
+  {"enunciado":"¿Qué divisiones internas debilitaron la Primera República?","correcta":"El enfrentamiento entre federalistas y unitarios, y la insurrección cantonal","incorrectas":["La lucha entre moderados y progresistas","Las diferencias entre carlistas y isabelinos"]},
+  {"enunciado":"¿Qué fue el golpe de Pavía (1874)?","correcta":"La disolución por la fuerza de las Cortes y el fin de la Primera República","incorrectas":["La derrota militar de los carlistas en el norte","La proclamación de la Constitución de 1869"]},
+  {"enunciado":"¿Qué supuso la Restauración borbónica de 1874?","correcta":"El retorno de Alfonso XII al trono y el inicio del sistema canovista","incorrectas":["La instauración de la Segunda República","La abolición de la monarquía en España"]},
+  {"enunciado":"¿Qué objetivo tenía el sistema de la Restauración diseñado por Cánovas?","correcta":"Garantizar la estabilidad política mediante la alternancia pactada de partidos","incorrectas":["Implantar el sufragio femenino universal","Impedir la existencia de partidos políticos"]},
+  {"enunciado":"¿Qué limitaciones democráticas tenía el sistema liberal del siglo XIX?","correcta":"Fraude electoral, caciquismo y exclusión de amplios sectores sociales","incorrectas":["Exceso de participación ciudadana y ausencia de control estatal","Predominio del voto directo de mujeres y hombres"]},
+  {"enunciado":"¿Qué fue el caciquismo?","correcta":"El control local de la política y elecciones por parte de élites influyentes","incorrectas":["La lucha armada de grupos campesinos contra terratenientes","El gobierno militar directo de las provincias"]},
+  {"enunciado":"¿Qué consecuencias sociales tuvo la desamortización de Madoz (1855)?","correcta":"Pérdida de bienes comunales y agravamiento de la situación de los campesinos pobres","incorrectas":["Aumento masivo de la propiedad campesina","Recuperación de tierras por la Iglesia"]},
+  {"enunciado":"¿Qué papel tuvieron los moderados en la política isabelina?","correcta":"Defendían un liberalismo restringido, fortaleciendo el poder real y limitando derechos","incorrectas":["Impulsaban el sufragio universal","Defendían el absolutismo"]},
+  {"enunciado":"¿Qué papel desempeñaban los progresistas?","correcta":"Defendían un liberalismo más amplio con mayores derechos y participación ciudadana","incorrectas":["Abolían las Cortes","Rechazaban toda forma de sufragio"]},
+  {"enunciado":"¿Qué implicó la Ley de Ayuntamientos de 1840?","correcta":"Concedió mayor autonomía municipal y fue apoyada por progresistas","incorrectas":["Centralizó la administración municipal","Abolió los ayuntamientos en zonas rurales"]},
+  {"enunciado":"¿Qué relación hubo entre liberalismo y ejército en el XIX español?","correcta":"El ejército fue un actor recurrente en cambios de gobierno mediante pronunciamientos","incorrectas":["El ejército defendía el apoliticismo absoluto","Se limitaba a actuar en conflictos exteriores"]},
+  {"enunciado":"¿Qué corriente ideológica defendía Isabel II?","correcta":"Un liberalismo moderado compatible con prerrogativas reales amplias","incorrectas":["El republicanismo federal","El absolutismo carlista"]},
+  {"enunciado":"¿Qué originó las Guerras Carlistas?","correcta":"Un conflicto dinástico y político tras la sucesión de Fernando VII","incorrectas":["La invasión francesa de 1808","La proclamación de la Primera República"]},
+  {"enunciado":"¿Qué papel jugó Prim en la Revolución de 1868?","correcta":"Fue uno de sus líderes militares y políticos clave","incorrectas":["Se opuso al derrocamiento de Isabel II","Encabezó la restauración inmediata de Alfonso XII"]},
+  {"enunciado":"¿Qué establecía el sufragio censitario?","correcta":"El derecho a voto limitado a quienes cumplían determinados requisitos de renta","incorrectas":["El voto universal para todos los ciudadanos adultos","El sufragio exclusivo para la nobleza"]},
+  {"enunciado":"¿Qué medida tomó Espartero durante su regencia?","correcta":"Intentó profundizar en reformas liberales y enfrentó oposición conservadora","incorrectas":["Restauró el absolutismo","Suprimió el sistema constitucional"]},
+  {"enunciado":"¿Qué supuso la Constitución de 1837 para los derechos individuales?","correcta":"Reconoció amplias libertades aunque condicionadas por leyes ordinarias","incorrectas":["Prohibió cualquier libertad de prensa","Otorgó libertad plena sin restricciones"]},
+  {"enunciado":"¿Qué diferencia esencial hubo entre las constituciones de 1837 y 1845?","correcta":"La de 1837 ampliaba derechos y participación; la de 1845 los restringía","incorrectas":["La de 1845 eliminó la monarquía","La de 1837 estableció una república federal"]},
+  {"enunciado":"¿Qué tendencia ideológica caracterizó a Cánovas del Castillo?","correcta":"Conservadora y monárquica, defensora del turno pacífico entre partidos","incorrectas":["Republicana federal","Anarquista colectivista"]},
+  {"enunciado":"¿Qué sectores sociales se beneficiaron más de las desamortizaciones?","correcta":"Burguesía urbana y grandes propietarios","incorrectas":["Campesinado sin tierras","Órdenes religiosas"]},
+  {"enunciado":"¿Qué acontecimiento puso fin al Sexenio Democrático?","correcta":"El pronunciamiento de Martínez Campos en Sagunto (1874)","incorrectas":["La derrota en la guerra hispano-estadounidense","La firma del Tratado de París"]},
+  {"enunciado":"¿Qué modelo político inspiró la Constitución de 1869?","correcta":"La monarquía parlamentaria con amplias libertades","incorrectas":["El absolutismo monárquico","El comunismo"]},
+  {"enunciado":"¿Qué limitación persistía en el sufragio universal masculino de 1869?","correcta":"Excluía a las mujeres y a menores de edad","incorrectas":["Permitía votar solo a extranjeros","Eliminaba el voto secreto"]},
+  {"enunciado":"¿Qué fue la 'Ley Moyano' de 1857?","correcta":"Una ley que reguló de forma unificada el sistema educativo en España","incorrectas":["Una ley de expropiación de bienes eclesiásticos","Una ley que abolió el servicio militar obligatorio"]},
+  {"enunciado":"¿Qué significó el 'turno pacífico' en la Restauración?","correcta":"La alternancia pactada en el poder entre conservadores y liberales","incorrectas":["El fin de las guerras carlistas","La alternancia libre según los resultados electorales sin manipulación"]},
+  {"enunciado":"¿Quién fue Sagasta?","correcta":"Líder del Partido Liberal durante la Restauración","incorrectas":["Presidente de la Primera República","Caudillo carlista en la Tercera Guerra Carlista"]},
+  {"enunciado":"¿Qué partido lideraba Cánovas del Castillo?","correcta":"El Partido Conservador","incorrectas":["El Partido Republicano Progresista","El Partido Demócrata Federal"]},
+  {"enunciado":"¿Qué fue la insurrección cantonal de 1873?","correcta":"Un movimiento federalista radical que proclamó cantones independientes","incorrectas":["Una rebelión campesina contra la desamortización","Un levantamiento carlista en Cataluña"]},
+  {"enunciado":"¿Qué conflicto colonial afectó al reinado de Alfonso XII?","correcta":"La Guerra de Cuba iniciada en 1868 y continuada durante la Restauración","incorrectas":["La Guerra de Marruecos de 1859","La Guerra de Filipinas contra Japón"]},
+  {"enunciado":"¿Qué relación tuvo la Primera República con el cantonalismo?","correcta":"El cantonalismo fue una de las crisis que debilitó gravemente a la República","incorrectas":["Fue el movimiento que consolidó la República","Se trató de una rebelión monárquica"]},
+  {"enunciado":"¿Qué fue la 'Noche de San Daniel' en 1865?","correcta":"Una protesta estudiantil reprimida violentamente por el gobierno de Narváez","incorrectas":["Un levantamiento carlista en Navarra","Una conspiración militar progresista en Madrid"]},
+  {"enunciado":"¿Qué líder militar encabezó el pronunciamiento de 1854 que inició el Bienio Progresista?","correcta":"O'Donnell","incorrectas":["Espartero","Prim"]},
+  {"enunciado":"¿Qué fue el Bienio Progresista (1854-1856)?","correcta":"Un periodo de reformas liberales impulsadas por progresistas y moderados reformistas","incorrectas":["Dos años de dictadura militar carlista","La primera experiencia republicana"]},
+  {"enunciado":"¿Qué monarca sucedió a Alfonso XII tras su muerte en 1885?","correcta":"Alfonso XIII, representado en su minoría de edad por la regencia de María Cristina de Habsburgo","incorrectas":["Isabel II","Amadeo I de Saboya"]},
+  {"enunciado":"¿Qué pacto político selló la paz entre conservadores y liberales en 1885?","correcta":"El Pacto del Pardo","incorrectas":["El Pacto de Ostende","El Tratado de París"]},
+  {"enunciado":"¿Qué fue el Estatuto Real de 1834?","correcta":"Una carta otorgada que creó Cortes bicamerales sin reconocer la soberanía nacional","incorrectas":["Una constitución democrática de sufragio universal","Un decreto absolutista que suprimió las Cortes"]},
+  {"enunciado":"¿Qué fue el Motín de La Granja de 1836?","correcta":"Un levantamiento que forzó la restauración de la Constitución de 1812","incorrectas":["Una sublevación carlista que depuso a María Cristina","Una huelga general contra la Ley Moyano"]},
+  {"enunciado":"¿Qué acuerdo puso fin a la Primera Guerra Carlista en el norte?","correcta":"El Convenio o Abrazo de Vergara (1839)","incorrectas":["El Pacto del Pardo","El Pacto de Ostende"]},
+  {"enunciado":"¿Qué establecía el Concordato de 1851 entre España y la Santa Sede?","correcta":"Restableció relaciones y reconoció el catolicismo como religión de Estado, regulando bienes y patronato","incorrectas":["Nacionalizó íntegramente los bienes de la Iglesia","Implantó la libertad religiosa plena e inmediata"]},
+  {"enunciado":"¿Qué fue el Manifiesto de Manzanares (1854)?","correcta":"Un programa reformista que pedía Cortes constituyentes, ley de imprenta y reforma electoral","incorrectas":["Una proclama carlista por el retorno del absolutismo","Un tratado internacional con Francia"]},
+  {"enunciado":"¿Qué cuerpo creó el moderantismo en 1844 para el orden público?","correcta":"La Guardia Civil","incorrectas":["La Guardia de Asalto","La Policía Armada"]},
+  {"enunciado":"¿Qué impulsó la Ley General de Ferrocarriles de 1855?","correcta":"La rápida expansión de la red con atracción de capital extranjero y garantías estatales","incorrectas":["La nacionalización inmediata de toda la red","La prohibición de inversión extranjera"]},
+  {"enunciado":"¿Qué orientación económica simboliza el Arancel de Figuerola (1869)?","correcta":"El librecambismo","incorrectas":["El proteccionismo extremo","La autarquía"]},
+  {"enunciado":"¿Qué fue la Unión Liberal?","correcta":"Un partido de O'Donnell que buscó una vía intermedia entre moderados y progresistas","incorrectas":["Una coalición carlista con republicanos","Un sindicato agrario"]},
+  {"enunciado":"Tras el Convenio de Vergara, ¿qué foco carlista siguió activo?","correcta":"El Maestrazgo bajo Cabrera y la cuestión foral pendiente","incorrectas":["La rebelión cantonal en Cartagena","La secesión de Cuba"]}
+];
+
+const randInt = (n)=>Math.floor(Math.random()*n);
+const shuffle = (arr)=>{for(let i=arr.length-1;i>0;i--){const j=randInt(i+1);[arr[i],arr[j]]=[arr[j],arr[i]]}return arr};
+const sample = (arr,k)=>{const idx=[...arr.keys()];shuffle(idx);return idx.slice(0,k).map(i=>arr[i])};
+
+let partida = [];
+let respuestas = new Map();
+let aciertos = 0;
+
+const board = document.getElementById('board');
+const statusEl = document.getElementById('status');
+const scoreEl = document.getElementById('score');
+const progressEl = document.getElementById('progress');
+const btnNew = document.getElementById('newGame');
+const btnReveal = document.getElementById('reveal');
+const btnFinish = document.getElementById('finish');
+const btnReset = document.getElementById('reset');
+
+function plantillaPregunta(item, idxGlobal){
+  const opciones = shuffle([item.correcta, ...item.incorrectas]);
+  const correctIndex = opciones.indexOf(item.correcta);
+  const letras = ['A','B','C'];
+  const qid = crypto.randomUUID();
+
+  const box = document.createElement('div');
+  box.className = 'qbox';
+  box.dataset.qid = qid;
+
+  const head = document.createElement('div');
+  head.className = 'qhead';
+  head.innerHTML = `<div class="qnum">Pregunta ${idxGlobal+1}/8</div><div class="pill" aria-hidden="true">Elige la respuesta</div>`;
+
+  const q = document.createElement('p');
+  q.className = 'qtext';
+  q.textContent = item.enunciado;
+
+  const opts = document.createElement('div');
+  opciones.forEach((texto, i)=>{
+    const btn = document.createElement('div');
+    btn.className = 'opt';
+    btn.dataset.state = 'idle';
+    btn.setAttribute('role','button');
+    btn.setAttribute('tabindex','0');
+    btn.setAttribute('aria-pressed','false');
+    btn.innerHTML = `<span class="tag">${letras[i]}</span><span>${texto}</span>`;
+    btn.addEventListener('click', ()=>marcar(qid,i,correctIndex,btn,opts));
+    btn.addEventListener('keyup', (e)=>{ if(e.key==='Enter' || e.key===' '){ marcar(qid,i,correctIndex,btn,opts); }});
+    opts.appendChild(btn);
+  });
+
+  box.appendChild(head);
+  box.appendChild(q);
+  box.appendChild(opts);
+
+  respuestas.set(qid, {picked:null, correctIndex, opciones, enunciado:item.enunciado, correcta:item.correcta, incorrectas:[...item.incorrectas]});
+  return box;
+}
+
+function marcar(qid, pickedIndex, correctIndex, node, contenedor){
+  const reg = respuestas.get(qid);
+  if(!reg || reg.picked!==null) return;
+
+  reg.picked = pickedIndex;
+  const children = [...contenedor.children];
+
+  children.forEach((c, i)=>{
+    if(i===correctIndex){
+      c.dataset.state = 'correct';
+    }else if(i===pickedIndex){
+      c.dataset.state = 'wrong';
+    }else{
+      c.dataset.state = 'locked';
+    }
+    c.setAttribute('aria-pressed', c.dataset.state==='correct' ? 'true' : 'false');
+  });
+
+  if(pickedIndex===correctIndex) aciertos++;
+  actualizarMarcadores();
+  actualizarProgreso();
+}
+
+function nuevaPartida(){
+  aciertos = 0;
+  respuestas.clear();
+  partida = sample(PREGUNTAS, 8);
+  board.innerHTML = '';
+  partida.forEach((item, idx)=> board.appendChild(plantillaPregunta(item, idx)) );
+  btnReveal.disabled = false;
+  btnFinish.disabled = false;
+  statusEl.textContent = 'Partida en curso';
+  actualizarMarcadores();
+  actualizarProgreso();
+}
+
+function mostrarSoluciones(){
+  document.querySelectorAll('.qbox').forEach(box=>{
+    const qid = box.dataset.qid;
+    const reg = respuestas.get(qid);
+    if(!reg) return;
+    const opts = box.querySelectorAll('.opt');
+    opts.forEach((opt,i)=>{
+      if(reg.picked===null){
+        if(i===reg.correctIndex){ opt.dataset.state='correct'; }
+        else{ opt.dataset.state='locked'; }
+      }else{
+        if(i===reg.correctIndex) opt.dataset.state='correct';
+        else if(i===reg.picked) opt.dataset.state='wrong';
+        else opt.dataset.state='locked';
+      }
+      opt.setAttribute('aria-pressed', opt.dataset.state==='correct' ? 'true' : 'false');
+    });
+  });
+}
+
+function finalizar(){
+  mostrarSoluciones();
+  statusEl.textContent = 'Partida finalizada';
+  btnReveal.disabled = true;
+  btnFinish.disabled = true;
+}
+
+function reiniciarTablero(){
+  aciertos = 0;
+  respuestas.forEach(r=>{ r.picked=null; });
+  const boxes = document.querySelectorAll('.qbox');
+  boxes.forEach(box=>{
+    const qid = box.dataset.qid;
+    const reg = respuestas.get(qid);
+    if(!reg) return;
+    const contenedor = box.querySelector(':scope > div + p + div');
+    contenedor.innerHTML = '';
+    const letras = ['A','B','C'];
+    const opciones = shuffle([reg.correcta, ...reg.incorrectas]);
+    reg.opciones = opciones;
+    reg.correctIndex = opciones.indexOf(reg.correcta);
+
+    opciones.forEach((texto,i)=>{
+      const btn = document.createElement('div');
+      btn.className='opt';
+      btn.dataset.state='idle';
+      btn.setAttribute('role','button');
+      btn.setAttribute('tabindex','0');
+      btn.setAttribute('aria-pressed','false');
+      btn.innerHTML = `<span class="tag">${letras[i]}</span><span>${texto}</span>`;
+      btn.addEventListener('click', ()=>marcar(qid,i,reg.correctIndex,btn,contenedor));
+      btn.addEventListener('keyup', (e)=>{ if(e.key==='Enter' || e.key===' '){ marcar(qid,i,reg.correctIndex,btn,contenedor); }});
+      contenedor.appendChild(btn);
+    });
+
+    const headPill = box.querySelector('.qhead .pill');
+    headPill.textContent = 'Respuestas barajadas';
+  });
+  btnReveal.disabled = false;
+  btnFinish.disabled = false;
+  statusEl.textContent = 'Tablero rebarajado';
+  actualizarMarcadores();
+  actualizarProgreso();
+}
+
+function actualizarMarcadores(){
+  scoreEl.textContent = aciertos;
+}
+
+function actualizarProgreso(){
+  const respondidas = [...respuestas.values()].filter(r=>r.picked!==null).length;
+  progressEl.textContent = `${respondidas}/8`;
+}
+
+document.getElementById('newGame').addEventListener('click', nuevaPartida);
+document.getElementById('reveal').addEventListener('click', mostrarSoluciones);
+document.getElementById('finish').addEventListener('click', finalizar);
+document.getElementById('reset').addEventListener('click', reiniciarTablero);
+</script>
+</body>
+</html>
