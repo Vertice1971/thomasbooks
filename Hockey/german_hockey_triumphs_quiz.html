@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deutsche Hockey-Erfolge Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000, #FF0000, #FFD700);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            padding: 30px;
+            max-width: 650px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #FFD700;
+            backdrop-filter: blur(10px);
+        }
+
+        .quiz-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,215,0,0.1), transparent);
+            pointer-events: none;
+        }
+
+        .german-flag {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(to bottom, 
+                #000000 0%, #000000 33.33%, 
+                #FF0000 33.33%, #FF0000 66.66%, 
+                #FFD700 66.66%);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .german-flag::after {
+            content: '🏑⚽🏆';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .title {
+            color: #1a1a1a;
+            font-size: 2.4em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+
+        .subtitle {
+            color: #d32f2f;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .team-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .team-badge {
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+            border: 2px solid #ddd;
+            color: #333;
+        }
+
+        .team-badge.men {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+        }
+
+        .team-badge.women {
+            background: linear-gradient(135deg, #E91E63, #C2185B);
+            color: white;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #f8f8f8, #e8e8e8);
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid #FFD700;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .score-value {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+
+        .question-container {
+            background: linear-gradient(135deg, #fff9f0, #fff5e6);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 3px solid #FFD700;
+            box-shadow: 0 8px 25px rgba(255,215,0,0.3);
+            position: relative;
+        }
+
+        .question-category {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #FFD700;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        .question {
+            font-size: 1.3em;
+            color: #1a1a1a;
+            margin-bottom: 25px;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        .answers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .answer-btn {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(33,150,243,0.3);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .answer-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .answer-btn:hover::before {
+            left: 100%;
+        }
+
+        .answer-btn:hover {
+            background: linear-gradient(135deg, #1976D2, #1565C0);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(33,150,243,0.5);
+        }
+
+        .answer-btn.correct {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            animation: correct 0.7s ease;
+            border-color: #FFD700;
+        }
+
+        .answer-btn.incorrect {
+            background: linear-gradient(135deg, #F44336, #C62828);
+            animation: incorrect 0.6s ease;
+        }
+
+        @keyframes correct {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.1); box-shadow: 0 0 30px #4CAF50; }
+            60% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes incorrect {
+            0% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-8px) rotate(-3deg); }
+            50% { transform: translateX(8px) rotate(3deg); }
+            75% { transform: translateX(-5px) rotate(-2deg); }
+            100% { transform: translateX(0) rotate(0deg); }
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            border-radius: 25px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            display: none;
+            box-shadow: 0 4px 15px rgba(255,152,0,0.4);
+        }
+
+        .next-btn:hover {
+            background: linear-gradient(135deg, #F57C00, #E65100);
+            transform: translateY(-2px);
+        }
+
+        .start-screen, .end-screen {
+            text-align: center;
+        }
+
+        .start-btn, .restart-btn {
+            background: linear-gradient(135deg, #d32f2f, #b71c1c);
+            color: white;
+            border: none;
+            padding: 20px 45px;
+            border-radius: 30px;
+            font-size: 1.6em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(211,47,47,0.4);
+        }
+
+        .start-btn:hover, .restart-btn:hover {
+            background: linear-gradient(135deg, #b71c1c, #8d0000);
+            transform: translateY(-3px);
+        }
+
+        .trophy-showcase {
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #FFD700;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #E0E0E0;
+            border-radius: 6px;
+            margin: 20px 0;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FFD700, #FFA000, #FF8F00);
+            border-radius: 6px;
+            transition: width 0.4s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .achievement-badge {
+            display: inline-block;
+            background: #FFD700;
+            color: #1a1a1a;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="start-screen" id="startScreen">
+            <div class="german-flag"></div>
+            <h1 class="title">🏆 Deutsche Hockey-Erfolge</h1>
+            <p class="subtitle">25 Jahre Dominanz im Welthotkey</p>
+            
+            <div class="trophy-showcase">
+                <div style="font-size: 1.3em; color: #333; margin-bottom: 15px; font-weight: bold;">
+                    🥇 Weltmeister • 🥇 Olympiasieger • 🥇 Europameister
+                </div>
+                <div class="team-selector">
+                    <div class="team-badge men">Herren 👨‍🦲</div>
+                    <div class="team-badge women">Damen 👩‍🦲</div>
+                </div>
+                <p style="font-size: 1.1em; color: #333; line-height: 1.6; margin-top: 15px;">
+                    Teste dein Wissen über die größten Erfolge<br>
+                    der deutschen Nationalmannschaften!<br><br>
+                    <strong>🎯 4 Fragen pro Runde • 📚 20 Fragen insgesamt</strong>
+                </p>
+            </div>
+            <button class="start-btn" onclick="startQuiz()">Quiz starten!</button>
+        </div>
+
+        <div class="quiz-screen hidden" id="quizScreen">
+            <div class="german-flag"></div>
+            <h1 class="title">🏆 Deutsche Hockey-Erfolge</h1>
+            
+            <div class="score-board">
+                <div class="score-item">
+                    <div class="score-label">Richtige Antworten</div>
+                    <div class="score-value" id="correctCount">0</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Frage</div>
+                    <div class="score-value"><span id="currentQ">1</span>/4</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Punkte</div>
+                    <div class="score-value" id="points">0</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 25%"></div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-category" id="questionCategory">WELTMEISTERSCHAFT</div>
+                <div class="question" id="questionText"></div>
+                <div class="answers" id="answersContainer"></div>
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Nächste Frage</button>
+            </div>
+        </div>
+
+        <div class="end-screen hidden" id="endScreen">
+            <div class="german-flag"></div>
+            <h1 class="title">🏆 Quiz beendet!</h1>
+            <div id="finalResult"></div>
+            <button class="restart-btn" onclick="restartQuiz()">Neues Spiel</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "In welchen Jahren gewann die Herren-Nationalmannschaft die Weltmeisterschaft?",
+                answers: ["2002, 2006, 2023", "2004, 2008, 2020", "2006, 2012, 2023", "2002, 2010, 2018"],
+                correct: 0,
+                category: "WELTMEISTERSCHAFT"
+            },
+            {
+                question: "Bei welchen Olympischen Spielen gewannen die deutschen Herren Gold?",
+                answers: ["Athen 2004, London 2012", "Peking 2008, London 2012", "Sydney 2000, Peking 2008", "London 2012, Rio 2016"],
+                correct: 1,
+                category: "OLYMPIA"
+            },
+            {
+                question: "Wann gewannen die deutschen Damen Olympic Gold?",
+                answers: ["Sydney 2000", "Athen 2004", "Peking 2008", "London 2012"],
+                correct: 1,
+                category: "OLYMPIA"
+            },
+            {
+                question: "Welche Europameisterschaften gewannen die Herren?",
+                answers: ["2003, 2011", "2005, 2013", "2007, 2015", "2009, 2017"],
+                correct: 0,
+                category: "EUROPAMEISTERSCHAFT"
+            },
+            {
+                question: "In welchen Jahren gewannen die Damen die Europameisterschaft?",
+                answers: ["2005, 2011", "2007, 2013", "2009, 2015", "2011, 2017"],
+                correct: 1,
+                category: "EUROPAMEISTERSCHAFT"
+            },
+            {
+                question: "Wann fand die letzte Weltmeisterschaft der Herren statt, die Deutschland gewann?",
+                answers: ["2022 in den Niederlanden", "2023 in Bhubaneswar, Indien", "2021 in Deutschland", "2024 in Belgien"],
+                correct: 1,
+                category: "WELTMEISTERSCHAFT"
+            },
+            {
+                question: "Welche Medaille gewannen die deutschen Damen 2006?",
+                answers: ["Champions Trophy Gold", "WM-Bronze", "EM-Silber", "Olympics-Bronze"],
+                correct: 0,
+                category: "CHAMPIONS TROPHY"
+            },
+            {
+                question: "Was erreichte die Damen-Nationalmannschaft in der Hockey Pro League 2023-2024?",
+                answers: ["Gold", "Silber", "Bronze", "4. Platz"],
+                correct: 1,
+                category: "PRO LEAGUE"
+            },
+            {
+                question: "Bei welchem großen Turnier 2025 triumphierten beide deutsche Teams?",
+                answers: ["Weltmeisterschaft", "Olympische Spiele", "Europameisterschaft", "Champions Trophy"],
+                correct: 2,
+                category: "EUROPAMEISTERSCHAFT"
+            },
+            {
+                question: "Gegen wen gewannen die deutschen Herren das EM-Finale 2025?",
+                answers: ["Belgien", "Niederlande", "Spanien", "England"],
+                correct: 1,
+                category: "EUROPAMEISTERSCHAFT"
+            },
+            {
+                question: "Wie entschieden die deutschen Herren das EM-Finale 2025?",
+                answers: ["2:1 nach Verlängerung", "Im Penaltyschießen", "3:0 regulär", "1:0 nach Verlängerung"],
+                correct: 1,
+                category: "EUROPAMEISTERSCHAFT"
+            },
+            {
+                question: "In welchen Jahren gewannen die Herren mehrfach die Champions Trophy?",
+                answers: ["2007-2011 Zeitraum", "2010-2015 Zeitraum", "2015-2020 Zeitraum", "2005-2010 Zeitraum"],
+                correct: 0,
+                category: "CHAMPIONS TROPHY"
+            },
+            {
+                question: "Welche Platzierung erreichten die Damen in der Liga Mundial 2014/15?",
+                answers: ["1. Platz", "2. Platz", "3. Platz", "4. Platz"],
+                correct: 2,
+                category: "LIGA MUNDIAL"
+            },
+            {
+                question: "Bei welchen Europameisterschaften gewannen die Damen Silber?",
+                answers: ["2009 und 2011", "2007 und 2013", "2005 und 2015", "2011 und 2017"],
+                correct: 0,
+                category: "EUROPAMEISTERSCHAFT"
+            },
+            {
+                question: "Wie oft wurden die deutschen Herren Weltmeister seit 2000?",
+                answers: ["2 Mal", "3 Mal", "4 Mal", "5 Mal"],
+                correct: 1,
+                category: "WELTMEISTERSCHAFT"
+            },
+            {
+                question: "Welches Jahr markierte den Beginn der deutschen Dominanz im neuen Millennium?",
+                answers: ["2000", "2002", "2004", "2006"],
+                correct: 1,
+                category: "GESCHICHTE"
+            },
+            {
+                question: "Wie viele olympische Goldmedaillen gewannen beide deutsche Teams zusammen seit 2000?",
+                answers: ["2", "3", "4", "5"],
+                correct: 1,
+                category: "OLYMPIA"
+            },
+            {
+                question: "Welcher Zeitraum war besonders erfolgreich für die deutschen Herren bei Olympia?",
+                answers: ["2000-2008", "2008-2012", "2012-2016", "2016-2020"],
+                correct: 1,
+                category: "OLYMPIA"
+            },
+            {
+                question: "In welcher Dekade begann der moderne Erfolgszyklus der deutschen Damen?",
+                answers: ["1990er", "2000er", "2010er", "2020er"],
+                correct: 1,
+                category: "GESCHICHTE"
+            },
+            {
+                question: "Was ist charakteristisch für die deutschen Hockey-Erfolge seit 2000?",
+                answers: ["Nur WM-Erfolge", "Nur EM-Erfolge", "Konstante Erfolge in allen großen Turnieren", "Nur olympische Erfolge"],
+                correct: 2,
+                category: "GESCHICHTE"
+            }
+        ];
+
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+        let totalPoints = 0;
+        let gameQuestions = 4;
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            correctAnswers = 0;
+            totalPoints = 0;
+            
+            currentQuestions = shuffleArray(questions).slice(0, gameQuestions);
+            
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            
+            updateScoreDisplay();
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = currentQuestions[currentQuestionIndex];
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('questionCategory').textContent = question.category;
+            
+            const answersContainer = document.getElementById('answersContainer');
+            answersContainer.innerHTML = '';
+            
+            question.answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.className = 'answer-btn';
+                button.textContent = answer;
+                button.onclick = () => selectAnswer(index);
+                answersContainer.appendChild(button);
+            });
+            
+            document.getElementById('nextBtn').style.display = 'none';
+            updateProgress();
+        }
+
+        function selectAnswer(selectedIndex) {
+            const question = currentQuestions[currentQuestionIndex];
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            
+            answerButtons.forEach(btn => btn.disabled = true);
+            
+            answerButtons[selectedIndex].classList.add(selectedIndex === question.correct ? 'correct' : 'incorrect');
+            if (selectedIndex !== question.correct) {
+                answerButtons[question.correct].classList.add('correct');
+            }
+            
+            if (selectedIndex === question.correct) {
+                correctAnswers++;
+                totalPoints += 25;
+            }
+            
+            updateScoreDisplay();
+            
+            setTimeout(() => {
+                document.getElementById('nextBtn').style.display = 'inline-block';
+            }, 1200);
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex >= gameQuestions) {
+                showEndScreen();
+            } else {
+                updateScoreDisplay();
+                showQuestion();
+            }
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('currentQ').textContent = currentQuestionIndex + 1;
+            document.getElementById('points').textContent = totalPoints;
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / gameQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showEndScreen() {
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('endScreen').classList.remove('hidden');
+            
+            let message = '';
+            let trophy = '';
+            let achievements = '';
+            
+            if (correctAnswers === 4) {
+                message = `Perfekt! Du hast alle ${correctAnswers} Fragen richtig beantwortet!<br>Du kennst die deutsche Hockey-Geschichte wie ein Experte! 🇩🇪`;
+                trophy = '🏆';
+                achievements = '<div class="achievement-badge">Hockey-Experte</div><div class="achievement-badge">Deutschland-Kenner</div>';
+            } else if (correctAnswers === 3) {
+                message = `Hervorragend! Du hast ${correctAnswers} von ${gameQuestions} Fragen richtig beantwortet!<br>Dein Wissen über deutsche Hockey-Erfolge ist beeindruckend! 👏`;
+                trophy = '🥇';
+                achievements = '<div class="achievement-badge">Hockey-Fan</div>';
+            } else if (correctAnswers === 2) {
+                message = `Gut gemacht! Du hast ${correctAnswers} von ${gameQuestions} Fragen richtig beantwortet!<br>Du weißt schon einiges über deutsche Triumphe! ⭐`;
+                trophy = '🥈';
+                achievements = '<div class="achievement-badge">Aufsteiger</div>';
+            } else if (correctAnswers === 1) {
+                message = `Du hast ${correctAnswers} von ${gameQuestions} Fragen richtig beantwortet.<br>Mit mehr Training wirst du zum Hockey-Experten! 💪`;
+                trophy = '🥉';
+                achievements = '<div class="achievement-badge">Anfänger</div>';
+            } else {
+                message = `Du hast ${correctAnswers} von ${gameQuestions} Fragen richtig beantwortet.<br>Zeit, die glorreiche deutsche Hockey-Geschichte zu entdecken! 📚`;
+                trophy = '🏑';
+                achievements = '<div class="achievement-badge">Lernender</div>';
+            }
+            
+            document.getElementById('finalResult').innerHTML = `
+                <div style="font-size: 4em; margin: 20px 0;">${trophy}</div>
+                <div style="font-size: 1.4em; color: #1a1a1a; line-height: 1.8; margin: 20px 0;">${message}</div>
+                <div style="font-size: 2em; margin: 25px 0; color: #d32f2f; font-weight: bold;">
+                    Gesamtpunkte: ${totalPoints}/100
+                </div>
+                <div style="margin: 20px 0;">${achievements}</div>
+                <div style="font-size: 1em; color: #666; font-style: italic; margin-top: 15px;">
+                    "25 Jahre deutsche Hockey-Dominanz - Weltspitze in Schwarz-Rot-Gold!"
+                </div>
+            `;
+        }
+
+        function restartQuiz() {
+            document.getElementById('endScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
