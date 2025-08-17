@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feldhockey-Quiz</title>
+    <title>Veldhockey-Quiz</title>
     <style>
         * {
             margin: 0;
@@ -226,29 +226,29 @@
 <body>
     <div class="quiz-container">
         <div class="start-screen" id="startScreen">
-            <h1 class="title">🏑 Feldhockey-Quiz 🏑</h1>
+            <h1 class="title">🏑 Veldhockey-Quiz 🏑</h1>
             <div class="field-decoration"></div>
             <p style="font-size: 1.2em; color: #2E7D32; margin: 20px 0;">
-                Teste dein Wissen über die Regeln des Feldhockeys!<br>
-                Du spielst 6 Fragen pro Runde.
+                Test je kennis van de veldhockeyregels!<br>
+                Je speelt 6 vragen per ronde.
             </p>
-            <button class="start-btn" onclick="startQuiz()">Spiel starten!</button>
+            <button class="start-btn" onclick="startQuiz()">Start het spel!</button>
         </div>
 
         <div class="quiz-screen hidden" id="quizScreen">
-            <h1 class="title">🏑 Feldhockey-Quiz 🏑</h1>
+            <h1 class="title">🏑 Veldhockey-Quiz 🏑</h1>
             
             <div class="score-board">
                 <div class="score-item">
-                    <div class="score-label">Richtige Antworten</div>
+                    <div class="score-label">Goede antwoorden</div>
                     <div class="score-value" id="correctCount">0</div>
                 </div>
                 <div class="score-item">
-                    <div class="score-label">Frage</div>
+                    <div class="score-label">Vraag</div>
                     <div class="score-value"><span id="currentQ">1</span>/6</div>
                 </div>
                 <div class="score-item">
-                    <div class="score-label">Punkte</div>
+                    <div class="score-label">Punten</div>
                     <div class="score-value" id="points">0</div>
                 </div>
             </div>
@@ -260,168 +260,168 @@
             <div class="question-container">
                 <div class="question" id="questionText"></div>
                 <div class="answers" id="answersContainer"></div>
-                <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Nächste Frage</button>
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Volgende vraag</button>
             </div>
         </div>
 
         <div class="end-screen hidden" id="endScreen">
-            <h1 class="title">🏑 Spiel beendet! 🏑</h1>
+            <h1 class="title">🏑 Spel afgelopen! 🏑</h1>
             <div class="field-decoration"></div>
             <div id="finalResult"></div>
-            <button class="restart-btn" onclick="restartQuiz()">Neues Spiel</button>
+            <button class="restart-btn" onclick="restartQuiz()">Nieuw spel</button>
         </div>
     </div>
 
     <script>
         const questions = [
             {
-                question: "Wie viele Spieler hat ein Feldhockey-Team auf dem Feld?",
-                answers: ["9 Spieler", "11 Spieler", "10 Spieler", "12 Spieler"],
+                question: "Hoeveel spelers heeft een veldhockeyteam op het veld?",
+                answers: ["9 spelers", "11 spelers", "10 spelers", "12 spelers"],
                 correct: 1
             },
             {
-                question: "Wie lange dauert ein Feldhockey-Spiel?",
-                answers: ["60 Minuten", "70 Minuten", "80 Minuten", "90 Minuten"],
+                question: "Hoe lang duurt een veldhockeywedstrijd?",
+                answers: ["60 minuten", "70 minuten", "80 minuten", "90 minuten"],
                 correct: 1
             },
             {
-                question: "Womit wird der Ball im Feldhockey gespielt?",
-                answers: ["Mit dem Fuß", "Mit beiden Seiten des Schlägers", "Nur mit der flachen Seite", "Mit den Händen"],
+                question: "Waarmee wordt de bal in het veldhockey gespeeld?",
+                answers: ["Met de voet", "Met beide kanten van de stick", "Alleen met de platte kant", "Met de handen"],
                 correct: 2
             },
             {
-                question: "Wie groß ist das Tor im Feldhockey?",
-                answers: ["2,14m hoch, 3,66m breit", "2,00m hoch, 4,00m breit", "2,44m hoch, 7,32m breit", "1,80m hoch, 3,00m breit"],
+                question: "Hoe groot is het doel in het veldhockey?",
+                answers: ["2,14m hoog, 3,66m breed", "2,00m hoog, 4,00m breed", "2,44m hoog, 7,32m breed", "1,80m hoog, 3,00m breed"],
                 correct: 0
             },
             {
-                question: "Was passiert bei einem Strafschlag?",
-                answers: ["Freier Schlag", "Elfmeter", "1 gegen 1 mit dem Torwart", "Einwurf"],
+                question: "Wat gebeurt er bij een strafslag?",
+                answers: ["Vrije slag", "Penalty", "1 tegen 1 met de keeper", "Inworp"],
                 correct: 2
             },
             {
-                question: "Wie nennt man die Linie um das Tor?",
-                answers: ["Torraum", "Strafraum", "Schusskreis", "Torkreis"],
+                question: "Hoe heet de lijn rond het doel?",
+                answers: ["Doelgebied", "Strafschopgebied", "Schietcirkel", "Doelcirkel"],
                 correct: 2
             },
             {
-                question: "Was ist ein 'Bully'?",
-                answers: ["Ein Foul", "Spielbeginn nach einer Unterbrechung", "Ein starker Schuss", "Eine gelbe Karte"],
+                question: "Wat is een 'bully'?",
+                answers: ["Een overtreding", "Spelhervatting na onderbreking", "Een harde slag", "Een gele kaart"],
                 correct: 1
             },
             {
-                question: "Darf der Ball hoch gespielt werden?",
-                answers: ["Nie", "Ja, aber nur außerhalb des Schusskreises", "Ja, immer", "Nur bei Strafschlägen"],
+                question: "Mag de bal hoog gespeeld worden?",
+                answers: ["Nooit", "Ja, maar alleen buiten de schietcirkel", "Ja, altijd", "Alleen bij strafslagen"],
                 correct: 1
             },
             {
-                question: "Was ist die härteste Strafe im Feldhockey?",
-                answers: ["Gelbe Karte", "Grüne Karte", "Rote Karte", "Blaue Karte"],
+                question: "Wat is de zwaarste straf in het veldhockey?",
+                answers: ["Gele kaart", "Groene kaart", "Rode kaart", "Blauwe kaart"],
                 correct: 2
             },
             {
-                question: "Wie breit ist ein Feldhockey-Feld?",
-                answers: ["55 Meter", "60 Meter", "65 Meter", "50 Meter"],
+                question: "Hoe breed is een veldhockeyveld?",
+                answers: ["55 meter", "60 meter", "65 meter", "50 meter"],
                 correct: 0
             },
             {
-                question: "Was bedeutet 'Abstoß'?",
-                answers: ["Ball geht ins Aus über die Grundlinie", "Ein Foul", "Spielende", "Halbzeit"],
+                question: "Wat betekent 'doeltrap'?",
+                answers: ["Bal gaat uit over de achterlijn", "Een overtreding", "Einde wedstrijd", "Rust"],
                 correct: 0
             },
             {
-                question: "Darf man den Ball mit dem Fuß stoppen?",
-                answers: ["Ja, immer", "Nein, nie", "Nur der Torwart", "Nur außerhalb des Schusskreises"],
+                question: "Mag je de bal met de voet stoppen?",
+                answers: ["Ja, altijd", "Nee, nooit", "Alleen de keeper", "Alleen buiten de schietcirkel"],
                 correct: 1
             },
             {
-                question: "Wie viele Auswechslungen sind erlaubt?",
-                answers: ["3 Wechsel", "5 Wechsel", "Unbegrenzt", "7 Wechsel"],
+                question: "Hoeveel wissels zijn toegestaan?",
+                answers: ["3 wissels", "5 wissels", "Onbeperkt", "7 wissels"],
                 correct: 2
             },
             {
-                question: "Was ist ein 'kurzer Eckball'?",
-                answers: ["Ball geht über die Seitenlinie", "Ball geht über die Grundlinie vom Verteidiger", "Ein Foul im Strafraum", "Spielbeginn"],
+                question: "Wat is een 'korte hoekslag'?",
+                answers: ["Bal gaat over de zijlijn", "Bal gaat over de achterlijn van verdediger", "Een overtreding in het strafschopgebied", "Spelbegin"],
                 correct: 1
             },
             {
-                question: "Wo muss der Ball beim Anstoß liegen?",
-                answers: ["Im Schusskreis", "An der Seitenlinie", "In der Spielfeldmitte", "Im Tor"],
+                question: "Waar moet de bal liggen bij de aftrap?",
+                answers: ["In de schietcirkel", "Bij de zijlijn", "In het middelpunt", "In het doel"],
                 correct: 2
             },
             {
-                question: "Was passiert bei einem Seitenlinie-Aus?",
-                answers: ["Freier Schlag", "Einschlag/Push-in", "Bully", "Eckball"],
+                question: "Wat gebeurt er bij een zijlijn-uit?",
+                answers: ["Vrije slag", "Inslag/Push-in", "Bully", "Hoekslag"],
                 correct: 1
             },
             {
-                question: "Darf man den Schläger über die Schulter heben?",
-                answers: ["Ja, immer", "Nein, das ist gefährlich", "Nur beim Schuss", "Nur der Torwart"],
+                question: "Mag je de stick boven de schouder heffen?",
+                answers: ["Ja, altijd", "Nee, dat is gevaarlijk", "Alleen bij het schieten", "Alleen de keeper"],
                 correct: 1
             },
             {
-                question: "Wie lang ist ein Feldhockey-Feld?",
-                answers: ["100 Meter", "91,4 Meter", "105 Meter", "90 Meter"],
+                question: "Hoe lang is een veldhockeyveld?",
+                answers: ["100 meter", "91,4 meter", "105 meter", "90 meter"],
                 correct: 1
             },
             {
-                question: "Was ist ein 'Penalty Stroke'?",
-                answers: ["Freier Schlag", "7-Meter-Strafstoß", "Eckball", "Einwurf"],
+                question: "Wat is een 'penalty stroke'?",
+                answers: ["Vrije slag", "7-meter strafschot", "Hoekslag", "Inworp"],
                 correct: 1
             },
             {
-                question: "Wie viele Schiedsrichter gibt es normalerweise?",
-                answers: ["1 Schiedsrichter", "2 Schiedsrichter", "3 Schiedsrichter", "4 Schiedsrichter"],
+                question: "Hoeveel scheidsrechters zijn er normaal gesproken?",
+                answers: ["1 scheidsrechter", "2 scheidsrechters", "3 scheidsrechters", "4 scheidsrechters"],
                 correct: 1
             },
             {
-                question: "Darf der Torwart den Ball mit der Hand fangen?",
-                answers: ["Ja, überall", "Nein, nie", "Nur im Schusskreis", "Nur bei hohen Bällen"],
+                question: "Mag de keeper de bal met de hand vangen?",
+                answers: ["Ja, overal", "Nee, nooit", "Alleen in de schietcirkel", "Alleen bij hoge ballen"],
                 correct: 2
             },
             {
-                question: "Was bedeutet 'Obstruction' (Behinderung)?",
-                answers: ["Den Gegner mit dem Körper blockieren", "Den Ball wegschlagen", "Zu schnell laufen", "Schreien"],
+                question: "Wat betekent 'obstruction' (belemmering)?",
+                answers: ["Tegenstander met lichaam blokkeren", "De bal wegslaan", "Te hard lopen", "Schreeuwen"],
                 correct: 0
             },
             {
-                question: "Wie schwer ist ein Feldhockey-Ball etwa?",
-                answers: ["120 Gramm", "156-163 Gramm", "200 Gramm", "100 Gramm"],
+                question: "Hoeveel weegt een veldhockeybal ongeveer?",
+                answers: ["120 gram", "156-163 gram", "200 gram", "100 gram"],
                 correct: 1
             },
             {
-                question: "Was ist ein 'Advantage' (Vorteil)?",
-                answers: ["Das Spiel läuft weiter trotz Foul", "Ein Punkt", "Eine Pause", "Ein Wechsel"],
+                question: "Wat is een 'advantage' (voordeel)?",
+                answers: ["Het spel gaat door ondanks overtreding", "Een punt", "Een pauze", "Een wissel"],
                 correct: 0
             },
             {
-                question: "Darf man rückwärts spielen?",
-                answers: ["Nein, nie", "Ja, ist erlaubt", "Nur im Angriff", "Nur in der Verteidigung"],
+                question: "Mag je achteruit spelen?",
+                answers: ["Nee, nooit", "Ja, is toegestaan", "Alleen in de aanval", "Alleen in de verdediging"],
                 correct: 1
             },
             {
-                question: "Was ist die '25-Yard-Linie'?",
-                answers: ["Die Mittellinie", "23-Meter-Linie", "Die Grundlinie", "Die Seitenlinie"],
+                question: "Wat is de '23-meter lijn'?",
+                answers: ["De middenlijn", "23-meter lijn", "De achterlijn", "De zijlijn"],
                 correct: 1
             },
             {
-                question: "Wie werden Tore erzielt?",
-                answers: ["Von überall auf dem Feld", "Nur aus dem Schusskreis", "Nur bei Strafschlägen", "Nur von der Mittellinie"],
+                question: "Hoe worden doelpunten gescoord?",
+                answers: ["Van overal op het veld", "Alleen uit de schietcirkel", "Alleen bij strafslagen", "Alleen vanaf de middenlijn"],
                 correct: 1
             },
             {
-                question: "Was passiert bei einer gelben Karte?",
-                answers: ["Spieler wird verwarnt", "2 Minuten Zeitstrafe", "Platzverweis", "Strafschlag"],
+                question: "Wat gebeurt er bij een gele kaart?",
+                answers: ["Speler krijgt waarschuwing", "2 minuten tijdstraf", "Wegsturen", "Strafslag"],
                 correct: 1
             },
             {
-                question: "Darf man den Ball intentional mit dem Fuß spielen?",
-                answers: ["Ja, ist erlaubt", "Nein, ist ein Foul", "Nur der Torwart", "Nur zur Verteidigung"],
+                question: "Mag je de bal opzettelijk met de voet spelen?",
+                answers: ["Ja, is toegestaan", "Nee, is een overtreding", "Alleen de keeper", "Alleen ter verdediging"],
                 correct: 1
             },
             {
-                question: "Was ist das Ziel beim Bully?",
-                answers: ["Den Ball erobern", "Ein Tor schießen", "Zeit gewinnen", "Den Gegner fouls"],
+                question: "Wat is het doel bij de bully?",
+                answers: ["De bal veroveren", "Een doelpunt maken", "Tijd winnen", "De tegenstander fouteren"],
                 correct: 0
             }
         ];
@@ -535,16 +535,16 @@
             let emoji = '';
             
             if (correctAnswers >= 5) {
-                message = `Fantastisch! Du hast ${correctAnswers} von ${gameQuestions} Fragen richtig beantwortet!<br>Du kennst dich super mit Feldhockey aus! 🏆`;
+                message = `Fantastisch! Je hebt ${correctAnswers} van de ${gameQuestions} vragen goed beantwoord!<br>Je kent veldhockey heel goed! 🏆`;
                 emoji = '🥇';
             } else if (correctAnswers >= 4) {
-                message = `Sehr gut! Du hast ${correctAnswers} von ${gameQuestions} Fragen richtig beantwortet!<br>Du weißt schon viel über Feldhockey! 🥈`;
+                message = `Heel goed! Je hebt ${correctAnswers} van de ${gameQuestions} vragen goed beantwoord!<br>Je weet al veel over veldhockey! 🥈`;
                 emoji = '🥈';
             } else if (correctAnswers >= 2) {
-                message = `Gut gemacht! Du hast ${correctAnswers} von ${gameQuestions} Fragen richtig beantwortet!<br>Mit etwas mehr Übung wirst du ein Profi! 🥉`;
+                message = `Goed gedaan! Je hebt ${correctAnswers} van de ${gameQuestions} vragen goed beantwoord!<br>Met wat meer oefening word je een expert! 🥉`;
                 emoji = '🥉';
             } else {
-                message = `Du hast ${correctAnswers} von ${gameQuestions} Fragen richtig beantwortet.<br>Kein Problem! Übung macht den Meister! 💪`;
+                message = `Je hebt ${correctAnswers} van de ${gameQuestions} vragen goed beantwoord.<br>Geen probleem! Oefening baart kunst! 💪`;
                 emoji = '📚';
             }
             
@@ -552,7 +552,7 @@
                 <div style="font-size: 4em; margin: 20px 0;">${emoji}</div>
                 <div style="font-size: 1.3em; color: #2E7D32; line-height: 1.6;">${message}</div>
                 <div style="font-size: 1.5em; margin: 20px 0; color: #FF9800;">
-                    <strong>Gesamtpunkte: ${totalPoints}</strong>
+                    <strong>Totaal punten: ${totalPoints}</strong>
                 </div>
             `;
         }
