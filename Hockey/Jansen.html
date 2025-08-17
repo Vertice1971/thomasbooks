@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nederlandse Vrouwenhockey Quiz – Yibbi Jansen</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg,#FF6600,#FF9933,#FFCC00);
+      background-size:400% 400%;
+      animation: orangeGradient 6s ease infinite;
+      min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px
+    }
+    @keyframes orangeGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .quiz-container{
+      background: rgba(255,255,255,0.96);
+      border-radius:25px; box-shadow:0 25px 70px rgba(255,102,0,0.4);
+      padding:35px; max-width:700px; width:100%; text-align:center; position:relative; overflow:hidden;
+      border:4px solid #FF6600; backdrop-filter: blur(10px)
+    }
+    .dutch-flag{
+      width:100%; height:60px;
+      background:linear-gradient(to bottom,#FF0000 0%,#FF0000 33.33%,#FFFFFF 33.33%,#FFFFFF 66.66%,#0066CC 66.66%);
+      border-radius:10px; margin-bottom:20px; position:relative; box-shadow:0 4px 15px rgba(0,0,0,0.2)
+    }
+    .title{color:#FF6600; font-size:2.4em; margin-bottom:8px; text-shadow:3px 3px 6px rgba(0,0,0,0.2); font-weight:bold}
+    .contact-info{font-size:.9em;color:#666;margin-bottom:5px;line-height:1.3}
+    .contact-info a{color:#0066CC;text-decoration:none}
+    .contact-info a:hover{text-decoration:underline}
+    .subtitle{color:#0066CC;font-size:1.2em;margin-top:15px;margin-bottom:20px;font-weight:bold}
+    .orange-decoration{background:linear-gradient(135deg,#FF6600,#FF9933);height:8px;width:100%;border-radius:4px;margin:15px 0;position:relative;overflow:hidden}
+    .orange-decoration::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.5),transparent);animation:shimmer 3s infinite}
+    @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+    .score-board{display:flex;justify-content:space-around;margin-bottom:20px;background:linear-gradient(135deg,#fff5f0,#ffe6d9);padding:16px;border-radius:15px;border:3px solid #FF6600;box-shadow:0 5px 15px rgba(255,102,0,0.2)}
+    .score-item{text-align:center}
+    .score-label{font-size:.9em;color:#666;margin-bottom:5px;font-weight:bold}
+    .score-value{font-size:1.6em;font-weight:bold;color:#FF6600}
+    .question-container{
+      background:linear-gradient(135deg,#fff9f5,#fff2e6);border-radius:18px;padding:30px;margin:25px 0;
+      border:4px solid #FF6600; box-shadow:0 10px 30px rgba(255,102,0,0.3); position:relative
+    }
+    .question-category{position:absolute;top:-15px;left:25px;background:#FF6600;color:#fff;padding:8px 18px;border-radius:20px;font-size:.85em;font-weight:bold;box-shadow:0 4px 12px rgba(255,102,0,0.4)}
+    .question{font-size:1.3em;color:#1a1a1a;margin-bottom:24px;font-weight:bold;line-height:1.5}
+    .answers{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+    .answer-btn{
+      background:linear-gradient(135deg,#FF6600,#FF8533); color:#fff; border:none; padding:16px; border-radius:14px;
+      font-size:1.05em; font-weight:bold; cursor:pointer; transition:all .25s ease; box-shadow:0 6px 18px rgba(255,102,0,0.3);
+      border:2px solid transparent; position:relative; overflow:hidden
+    }
+    .answer-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:left .6s}
+    .answer-btn:hover::before{left:100%}
+    .answer-btn:hover{background:linear-gradient(135deg,#FF8533,#FF6600);transform:translateY(-4px);box-shadow:0 8px 25px rgba(255,102,0,0.5)}
+    .answer-btn.correct{background:linear-gradient(135deg,#4CAF50,#2E7D32);border-color:#FFD700}
+    .answer-btn.incorrect{background:linear-gradient(135deg,#F44336,#C62828)}
+    .next-btn{
+      background:linear-gradient(135deg,#0066CC,#004499); color:#fff; border:none; padding:16px 36px; border-radius:28px;
+      font-size:1.2em; font-weight:bold; cursor:pointer; margin-top:10px; transition:all .25s ease; display:none; box-shadow:0 6px 18px rgba(0,102,204,0.4)
+    }
+    .next-btn:hover{background:linear-gradient(135deg,#004499,#003366);transform:translateY(-3px)}
+    .hidden{display:none}
+    .progress-bar{width:100%;height:12px;background:#E0E0E0;border-radius:7px;margin:18px 0;overflow:hidden;box-shadow:inset 0 3px 6px rgba(0,0,0,0.1)}
+    .progress-fill{height:100%;background:linear-gradient(90deg,#FF6600,#FF9933,#FFCC00);border-radius:7px;transition:width .4s ease;position:relative}
+    .progress-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);animation:shimmer 2.5s infinite}
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div id="startScreen">
+      <div class="dutch-flag"></div>
+      <h1 class="title">Nederlandse Vrouwenhockey Quiz – Yibbi Jansen</h1>
+      <div class="contact-info">
+        <a href="mailto:info@hockeyquiz.nl">info@hockeyquiz.nl</a><br>
+        <a href="https://www.knhb.nl">www.knhb.nl</a>
+      </div>
+      <p class="subtitle">Vijf vragen per spel, willekeurig gekozen uit de kennis over Yibbi Jansen en Oranje</p>
+      <div class="orange-decoration"></div>
+      <button class="next-btn" style="display:inline-block" onclick="startQuiz()">Start</button>
+    </div>
+
+    <div id="quizScreen" class="hidden">
+      <div class="dutch-flag"></div>
+      <h1 class="title">Vragen</h1>
+      <div class="contact-info">
+        <a href="mailto:info@hockeyquiz.nl">info@hockeyquiz.nl</a><br>
+        <a href="https://www.knhb.nl">www.knhb.nl</a>
+      </div>
+
+      <div class="score-board">
+        <div class="score-item"><div class="score-label">Goed</div><div class="score-value" id="good">0</div></div>
+        <div class="score-item"><div class="score-label">Vraag</div><div class="score-value"><span id="qnum">1</span>/5</div></div>
+        <div class="score-item"><div class="score-label">Punten</div><div class="score-value" id="pts">0</div></div>
+      </div>
+
+      <div class="progress-bar"><div id="bar" class="progress-fill" style="width:0%"></div></div>
+
+      <div class="question-container">
+        <div class="question-category" id="cat">ALGEMEEN</div>
+        <div class="question" id="qtext"></div>
+        <div class="answers" id="answers"></div>
+        <button class="next-btn" id="next" onclick="nextQuestion()">Volgende</button>
+      </div>
+    </div>
+
+    <div id="endScreen" class="hidden">
+      <div class="dutch-flag"></div>
+      <h1 class="title">Einde</h1>
+      <div class="orange-decoration"></div>
+      <div id="summary" style="margin-top:10px;font-size:1.1em;color:#333"></div>
+      <button class="next-btn" onclick="restartQuiz()">Opnieuw</button>
+    </div>
+  </div>
+
+  <script>
+    // ——— eenvoudige audio (beep) met Web Audio API ———
+    const Beeps = (() => {
+      let ctx;
+      function init(){ if(!ctx) ctx = new (window.AudioContext||window.webkitAudioContext)(); }
+      function beep(freq=880, dur=0.12, type='sine', gain=0.06){
+        init();
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = type; o.frequency.value = freq;
+        g.gain.value = gain;
+        o.connect(g); g.connect(ctx.destination);
+        o.start();
+        o.stop(ctx.currentTime + dur);
+      }
+      return {
+        correct(){ beep(880,0.10,'sine',0.07); setTimeout(()=>beep(1175,0.10,'sine',0.06),90); },
+        incorrect(){ beep(220,0.18,'sawtooth',0.06); }
+      };
+    })();
+
+    // ——— vragenpool op basis van de aangeleverde 40 feiten ———
+    const QUESTIONS_YIBBI = [
+      {question:"Waar en wanneer is Yibbi Jansen geboren?", answers:["Gemonde, 18 november 1999","Amsterdam, 12 mei 1998","Den Bosch, 3 maart 2000","Eindhoven, 1 januari 1999"], correct:0, category:"BIOGRAFIE"},
+      {question:"Wie is haar vader, zelf olympisch kampioen?", answers:["Ronald Jansen","Teun de Nooijer","Jaap Stockmann","Jeroen Delmee"], correct:0, category:"BIOGRAFIE"},
+      {question:"Met welke club had zij als kind een sterke band?", answers:["Den Bosch","Kampong","Amsterdam","HDM"], correct:0, category:"CLUB"},
+      {question:"Om welk wapen staat Jansen het meest bekend?", answers:["Strafcorner (sleep-push)","Lob vanaf de achterlijn","Backhand flats","Lange scoop"], correct:0, category:"SPELSTIJL"},
+      {question:"Bij welke club doorliep zij jeugdontwikkeling na Den Bosch?", answers:["Oranje-Rood","Bloemendaal","Pinoké","Hurley"], correct:0, category:"CLUB"},
+      {question:"Welke titel won zij met Jong Oranje in 2017?", answers:["EK U21 kampioen en topscorer","WK U21 kampioen","Pro League U21","Champions Trophy U21"], correct:0, category:"JEUGD"},
+      {question:"In welk jaar debuteerde zij in de Hoofdklasse met Den Bosch?", answers:["2018","2017","2019","2020"], correct:0, category:"CLUB"},
+      {question:"Tegen welk land debuteerde zij in 2018 bij Oranje?", answers:["Verenigde Staten","Duitsland","Spanje","Argentinië"], correct:0, category:"ORANJE"},
+      {question:"Waar scoorde zij haar eerste interlandgoal in 2018?", answers:["Champions Trophy tegen Argentinië","EK tegen Duitsland","WK tegen Australië","Vierlandentoernooi tegen België"], correct:0, category:"ORANJE"},
+      {question:"Wat typeert haar strafcorner vooral?", answers:["Precisie en kracht","Louter kracht","Louter effect","Vooral verrassing"], correct:0, category:"SPELSTIJL"},
+      {question:"Welke juniorentitel/vermelding behaalde zij in 2019?", answers:["Topscorer EK U21 (zilver)","MVP WK U21","Keeper van het toernooi","Beste verdediger Pro League U21"], correct:0, category:"JEUGD"},
+      {question:"Welke rol speelde zij in de eerste FIH Pro League (2019)?", answers:["Regelmatige basisspeelster met impact","Reserve zonder minuten","Alleen shoot-outs","Geen deelname"], correct:0, category:"PRO LEAGUE"},
+      {question:"Hoe werd ze in media ook wel genoemd om haar corner?", answers:["De kanonnier van Oranje","De architect","De regisseur","De libero"], correct:0, category:"PERS"},
+      {question:"Welk mondiaal toernooi won zij in 2022 met Oranje?", answers:["Wereldkampioenschap","Olympische Spelen","Champions Trophy","Nations Cup"], correct:0, category:"MONDIAAL"},
+      {question:"Welke individuele productie haalde zij in Pro League 2022–23?", answers:["Topscorer met 14 goals","Topassists met 20","Beste keeper","Beste jonge speelster"], correct:0, category:"PRO LEAGUE"},
+      {question:"Hoeveel goals maakte ze in Pro League 2023–24 volgens de opgave?", answers:["19","9","14","25"], correct:0, category:"PRO LEAGUE"},
+      {question:"Wat was haar reputatie in eindfases van wedstrijden?", answers:["Beslissende goals onder druk","Enkel verdedigende specialist","Vooral spelverdeler zonder goals","Alleen strafballen"], correct:0, category:"MENTALITEIT"},
+      {question:"Welke olympische prestatie in 2024 wordt haar toegeschreven?", answers:["Goud met Nederland","Zilver met Nederland","Brons met Nederland","Geen medaille"], correct:0, category:"OLYMPISCH"},
+      {question:"Hoeveel olympische goals in 2024 volgens de lijst?", answers:["9","5","12","3"], correct:0, category:"OLYMPISCH"},
+      {question:"Welk FIH Star Award ontving zij volgens de opgave in 2024?", answers:["Beste speelster van de wereld","Beste jonge speelster","Beste keeper","Fair Play"], correct:0, category:"AWARDS"},
+      {question:"Wat was haar status op EuroHockey 2025 volgens de gegevens?", answers:["Topscorer van het toernooi","Beste keeper","Beste coach","Topassists"], correct:0, category:"EUROHOCKEY 2025"},
+      {question:"Tegen wie won Nederland de EuroHockey 2025-finale?", answers:["Duitsland","Spanje","Engeland","België"], correct:0, category:"EUROHOCKEY 2025"},
+      {question:"Welke prestatie in de halve finale 2025 wordt genoemd?", answers:["Hat-trick uit corners vs Spanje","Vier goals vs Duitsland","Shoot-out winnaar vs Ierland","Doelpunt met backhand lob"], correct:0, category:"EUROHOCKEY 2025"},
+      {question:"Tegen welke groepsrivalen scoorde zij in 2025 volgens de lijst?", answers:["Ierland, Frankrijk, Duitsland","België, Italië, Tsjechië","Wales, Portugal, Schotland","Engeland, Oostenrijk, Polen"], correct:0, category:"EUROHOCKEY 2025"},
+      {question:"Welke eigenschappen worden vaak genoemd in de pers?", answers:["Koelbloedigheid en technische precisie","Impulsiviteit en brute kracht","Fysieke lengte als hoofdwapen","Louter snelheid zonder techniek"], correct:0, category:"PERS"},
+      {question:"Welke leeftijd en status worden haar toegeschreven rond 2025?", answers:["25 jaar, al een historische naam","21 jaar, nieuwkomer","30 jaar, aan einde carrière","28 jaar, vooral wissel"], correct:0, category:"BIOGRAFIE"},
+      {question:"Welke internationale mijlpaal is genoemd (interlandtotaal)?", answers:[">75 goals in 86 interlands","20 goals in 40 interlands","150 goals in 60 interlands","5 goals in 20 interlands"], correct:0, category:"STATISTIEK"},
+      {question:"Waarin is zij tevens een voorbeeldfunctie?", answers:["Promotie van vrouwen- en jeugdsport","Schaatsen op topniveau","Volleybalontwikkeling","Zwemsport promotie"], correct:0, category:"MAATSCHAPPIJ"},
+      {question:"Wat typeert haar aanpak van corners t.o.v. tegenstanders?", answers:["Planmatig aanpassen per tegenstander","Altijd dezelfde slaglijn","Vermijdt corners","Alleen hoge flats"], correct:0, category:"TAKTIEK"},
+      {question:"Welke rol had zij vaak in beslissende wedstrijden?", answers:["Goals in finales en krakers","Alleen wisselrol","Enkel verdedigend sluitstuk","Alleen assistgever"], correct:0, category:"MENTALITEIT"}
+    ];
+
+    const TOTAL_PER_GAME = 5;
+    const POINTS_PER_CORRECT = 10;
+
+    let draw = [];
+    let idx = 0;
+    let good = 0;
+    let pts = 0;
+    let locked = false;
+
+    const startScreen = document.getElementById('startScreen');
+    const quizScreen  = document.getElementById('quizScreen');
+    const endScreen   = document.getElementById('endScreen');
+
+    const catEl   = document.getElementById('cat');
+    const qtextEl = document.getElementById('qtext');
+    const answersEl = document.getElementById('answers');
+    const nextBtn = document.getElementById('next');
+
+    const goodEl = document.getElementById('good');
+    const qnumEl = document.getElementById('qnum');
+    const ptsEl  = document.getElementById('pts');
+    const barEl  = document.getElementById('bar');
+    const summaryEl = document.getElementById('summary');
+
+    function shuffle(a){
+      const arr = a.slice();
+      for(let i=arr.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]] = [arr[j],arr[i]];
+      }
+      return arr;
+    }
+
+    function startQuiz(){
+      good = 0; pts = 0; idx = 0; locked = false;
+      goodEl.textContent = '0'; qnumEl.textContent = '1'; ptsEl.textContent = '0'; barEl.style.width = '0%';
+      draw = shuffle([...Array(QUESTIONS_YIBBI.length).keys()]).slice(0,TOTAL_PER_GAME);
+      startScreen.classList.add('hidden');
+      endScreen.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      renderQuestion();
+    }
+
+    function renderQuestion(){
+      locked = false;
+      nextBtn.style.display = 'none';
+      answersEl.innerHTML = '';
+      const q = QUESTIONS_YIBBI[draw[idx]];
+      catEl.textContent = q.category || '';
+      qtextEl.textContent = q.question;
+
+      const opts = shuffle(q.answers.map((t,i)=>({t,i})));
+      opts.forEach(({t,i})=>{
+        const b = document.createElement('button');
+        b.className = 'answer-btn';
+        b.textContent = t;
+        b.onclick = () => answer(b, i === q.correct);
+        answersEl.appendChild(b);
+      });
+      qnumEl.textContent = String(idx+1);
+      barEl.style.width = `${(idx)*(100/TOTAL_PER_GAME)}%`;
+    }
+
+    function answer(btn, ok){
+      if(locked) return;
+      locked = true;
+      const buttons = Array.from(answersEl.querySelectorAll('.answer-btn'));
+      buttons.forEach(b=>b.disabled = true);
+
+      if(ok){
+        btn.classList.add('correct');
+        good += 1; pts += POINTS_PER_CORRECT; Beeps.correct();
+      }else{
+        btn.classList.add('incorrect'); Beeps.incorrect();
+        const q = QUESTIONS_YIBBI[draw[idx]];
+        buttons.forEach(b=>{
+          if(b.textContent === q.answers[q.correct]) b.classList.add('correct');
+        });
+      }
+      goodEl.textContent = String(good);
+      ptsEl.textContent = String(pts);
+      barEl.style.width = `${(idx+1)*(100/TOTAL_PER_GAME)}%`;
+      nextBtn.style.display = 'inline-block';
+    }
+
+    function nextQuestion(){
+      if(idx < TOTAL_PER_GAME-1){ idx += 1; renderQuestion(); }
+      else endQuiz();
+    }
+
+    function endQuiz(){
+      quizScreen.classList.add('hidden');
+      endScreen.classList.remove('hidden');
+      summaryEl.innerHTML = `Goed: ${good} / ${TOTAL_PER_GAME} · Punten: ${pts}`;
+    }
+
+    function restartQuiz(){
+      endScreen.classList.add('hidden');
+      startScreen.classList.remove('hidden');
+    }
+
+    window.startQuiz = startQuiz;
+    window.nextQuestion = nextQuestion;
+    window.restartQuiz = restartQuiz;
+  </script>
+</body>
+</html>

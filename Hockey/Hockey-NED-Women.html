@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nederlandse Vrouwenhockey Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FF6600, #FF9933, #FFCC00);
+            background-size: 400% 400%;
+            animation: orangeGradient 6s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        @keyframes orangeGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 25px;
+            box-shadow: 0 25px 70px rgba(255, 102, 0, 0.4);
+            padding: 35px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #FF6600;
+            backdrop-filter: blur(10px);
+        }
+
+        .dutch-flag {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(to bottom, 
+                #FF0000 0%, #FF0000 33.33%, 
+                #FFFFFF 33.33%, #FFFFFF 66.66%, 
+                #0066CC 66.66%);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .dutch-flag::after {
+            content: '🏑🇳🇱🏆';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 22px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .title {
+            color: #FF6600;
+            font-size: 2.6em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+
+        .subtitle {
+            color: #0066CC;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .orange-decoration {
+            background: linear-gradient(135deg, #FF6600, #FF9933);
+            height: 8px;
+            width: 100%;
+            border-radius: 4px;
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .orange-decoration::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff5f0, #ffe6d9);
+            padding: 16px;
+            border-radius: 15px;
+            border: 3px solid #FF6600;
+            box-shadow: 0 5px 15px rgba(255, 102, 0, 0.2);
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .score-value {
+            font-size: 1.7em;
+            font-weight: bold;
+            color: #FF6600;
+        }
+
+        .question-container {
+            background: linear-gradient(135deg, #fff9f5, #fff2e6);
+            border-radius: 18px;
+            padding: 30px;
+            margin: 25px 0;
+            border: 4px solid #FF6600;
+            box-shadow: 0 10px 30px rgba(255,102,0,0.3);
+            position: relative;
+        }
+
+        .question-category {
+            position: absolute;
+            top: -15px;
+            left: 25px;
+            background: #FF6600;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(255,102,0,0.4);
+        }
+
+        .question {
+            font-size: 1.4em;
+            color: #1a1a1a;
+            margin-bottom: 28px;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        .answers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .answer-btn {
+            background: linear-gradient(135deg, #FF6600, #FF8533);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 18px rgba(255,102,0,0.3);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .answer-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .answer-btn:hover::before {
+            left: 100%;
+        }
+
+        .answer-btn:hover {
+            background: linear-gradient(135deg, #FF8533, #FF6600);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255,102,0,0.5);
+        }
+
+        .answer-btn.correct {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            animation: correct 0.8s ease;
+            border-color: #FFD700;
+        }
+
+        .answer-btn.incorrect {
+            background: linear-gradient(135deg, #F44336, #C62828);
+            animation: incorrect 0.7s ease;
+        }
+
+        @keyframes correct {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); box-shadow: 0 0 40px #4CAF50; }
+            50% { transform: scale(1.05); }
+            75% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes incorrect {
+            0% { transform: translateX(0) rotate(0deg); }
+            20% { transform: translateX(-10px) rotate(-4deg); }
+            40% { transform: translateX(10px) rotate(4deg); }
+            60% { transform: translateX(-8px) rotate(-3deg); }
+            80% { transform: translateX(8px) rotate(3deg); }
+            100% { transform: translateX(0) rotate(0deg); }
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #0066CC, #004499);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 30px;
+            font-size: 1.4em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+            display: none;
+            box-shadow: 0 6px 18px rgba(0,102,204,0.4);
+        }
+
+        .next-btn:hover {
+            background: linear-gradient(135deg, #004499, #003366);
+            transform: translateY(-3px);
+        }
+
+        .start-screen, .end-screen {
+            text-align: center;
+        }
+
+        .start-btn, .restart-btn {
+            background: linear-gradient(135deg, #FF6600, #FF4400);
+            color: white;
+            border: none;
+            padding: 22px 50px;
+            border-radius: 35px;
+            font-size: 1.7em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255,102,0,0.4);
+        }
+
+        .start-btn:hover, .restart-btn:hover {
+            background: linear-gradient(135deg, #FF4400, #FF2200);
+            transform: translateY(-4px);
+        }
+
+        .achievements-showcase {
+            background: linear-gradient(135deg, #fff5f0, #ffe6d9);
+            padding: 25px;
+            border-radius: 18px;
+            margin: 25px 0;
+            border: 3px solid #FF6600;
+            box-shadow: 0 6px 20px rgba(255,102,0,0.2);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 14px;
+            background: #E0E0E0;
+            border-radius: 7px;
+            margin: 25px 0;
+            overflow: hidden;
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FF6600, #FF9933, #FFCC00);
+            border-radius: 7px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2.5s infinite;
+        }
+
+        .olympic-rings {
+            font-size: 2em;
+            margin: 15px 0;
+            letter-spacing: 5px;
+        }
+
+        .trophy-count {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .trophy-item {
+            text-align: center;
+            margin: 10px;
+        }
+
+        .trophy-emoji {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+
+        .trophy-text {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #FF6600;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="start-screen" id="startScreen">
+            <div class="dutch-flag"></div>
+            <h1 class="title">🏑 Nederlandse Vrouwenhockey Quiz</h1>
+            <p class="subtitle">De Dominantie van Oranje Vrouwen</p>
+            <div class="orange-decoration"></div>
+            
+            <div class="achievements-showcase">
+                <div class="olympic-rings">🥇🥇🥇🥇🥇</div>
+                <div style="font-size: 1.4em; color: #FF6600; margin-bottom: 20px; font-weight: bold;">
+                    25 Jaar van Wereldheerschappij
+                </div>
+                
+                <div class="trophy-count">
+                    <div class="trophy-item">
+                        <div class="trophy-emoji">🏆</div>
+                        <div class="trophy-text">4x Wereldkampioen</div>
+                    </div>
+                    <div class="trophy-item">
+                        <div class="trophy-emoji">🥇</div>
+                        <div class="trophy-text">5x Olympisch Goud</div>
+                    </div>
+                    <div class="trophy-item">
+                        <div class="trophy-emoji">🇪🇺</div>
+                        <div class="trophy-text">8x Europees Kampioen</div>
+                    </div>
+                    <div class="trophy-item">
+                        <div class="trophy-emoji">🏅</div>
+                        <div class="trophy-text">EuroHockey 2025</div>
+                    </div>
+                </div>
+                
+                <p style="font-size: 1.2em; color: #333; line-height: 1.7; margin-top: 20px;">
+                    Test je kennis over de grootste hockeydynastie ter wereld!<br>
+                    Van Sydney 2000 tot Parijs 2024 en verder...<br><br>
+                    <strong>🎯 5 Vragen per ronde • 📚 30+ Vragen totaal</strong>
+                </p>
+            </div>
+            <button class="start-btn" onclick="startQuiz()">Start Quiz!</button>
+        </div>
+
+        <div class="quiz-screen hidden" id="quizScreen">
+            <div class="dutch-flag"></div>
+            <h1 class="title">🏑 Nederlandse Vrouwenhockey</h1>
+            
+            <div class="score-board">
+                <div class="score-item">
+                    <div class="score-label">Goed</div>
+                    <div class="score-value" id="correctCount">0</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Vraag</div>
+                    <div class="score-value"><span id="currentQ">1</span>/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Punten</div>
+                    <div class="score-value" id="points">0</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 20%"></div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-category" id="questionCategory">OLYMPISCHE SPELEN</div>
+                <div class="question" id="questionText"></div>
+                <div class="answers" id="answersContainer"></div>
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Volgende Vraag</button>
+            </div>
+        </div>
+
+        <div class="end-screen hidden" id="endScreen">
+            <div class="dutch-flag"></div>
+            <h1 class="title">🏆 Quiz Voltooid!</h1>
+            <div class="orange-decoration"></div>
+            <div id="finalResult"></div>
+            <button class="restart-btn" onclick="restartQuiz()">Nieuw Spel</button>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="correctSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTuH0fPFeSMFKojQ8tf28dv03jjdI9ot2gvbAtrm2PjZF94QXrTp66hVFApGn+DyvmwhBTuH0fPFeSMFKojQ8tf28dv03jjdI9ot2gvbAtrm2PjZF94QXrTp66hVFApGn+DyvmwhBTuH0fPFeSMFKojQ8tf28dv03jjdI9ot2gvbAtrm2PjZF94QXrTp66hVFApGn+DyvmwhBTuH0fPFeSMFKojQ8tf28dv03jjdI9ot2gvbAtrm2PjZF94QXrTp66hVFApGn+DyvmwhBTuH0fPFeSMFKojQ8tf28dv03jjdI9ot2gvbAtrm2PjZF90=" type="audio/wav">
+    </audio>
+    <audio id="incorrectSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRuoCAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YcYCAAC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4QEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLhAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4QEBAQEBAQEBAQEBAQEBAQEBAQEBAQEC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLhAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4QEBAQEBAQEBAQEBAQEBAQEBAQEBAQEC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLhAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQA==" type="audio/wav">
+    </audio>
+
+    <script>
+        const questions = [
+            {
+                question: "Bij welke Olympische Spelen won Nederland voor het eerst goud in vrouwenhockey?",
+                answers: ["Barcelona 1992", "Sydney 2000", "Atlanta 1996", "Seoul 1988"],
+                correct: 1,
+                category: "OLYMPISCHE SPELEN"
+            },
+            {
+                question: "Hoeveel olympische gouden medailles heeft Nederland gewonnen sinds 2000?",
+                answers: ["4 medailles", "5 medailles", "6 medailles", "3 medailles"],
+                correct: 1,
+                category: "OLYMPISCHE SPELEN"
+            },
+            {
+                question: "In welke jaren won Nederland wereldkampioenschappen sinds 2000?",
+                answers: ["2006, 2014, 2018, 2022", "2002, 2010, 2014, 2018", "2006, 2010, 2014, 2022", "2006, 2014, 2018, 2020"],
+                correct: 0,
+                category: "WERELDKAMPIOENSCHAPPEN"
+            },
+            {
+                question: "Welke speelster staat bekend om haar iconische penalty corners?",
+                answers: ["Ellen Hoog", "Maartje Paumen", "Lidewij Welten", "Eva de Goede"],
+                correct: 1,
+                category: "LEGENDES"
+            },
+            {
+                question: "Tegen welk team verloor Nederland de finale op de Olympische Spelen van Athene 2004?",
+                answers: ["Argentinië", "Australië", "Duitsland", "Spanje"],
+                correct: 2,
+                category: "OLYMPISCHE SPELEN"
+            },
+            {
+                question: "In welk jaar vond het thuiswereldkampioenschap in Den Haag plaats?",
+                answers: ["2012", "2014", "2016", "2018"],
+                correct: 1,
+                category: "WERELDKAMPIOENSCHAPPEN"
+            },
+            {
+                question: "Hoeveel Europese titels heeft Nederland gewonnen sinds 2000?",
+                answers: ["7 titels", "8 titels", "9 titels", "6 titels"],
+                correct: 1,
+                category: "EUROPESE KAMPIOENSCHAPPEN"
+            },
+            {
+                question: "Wie is de topscorer in de recente Olympische Spelen van Parijs 2024?",
+                answers: ["Felice Albers", "Yibbi Jansen", "Frédérique Matla", "Xan de Waard"],
+                correct: 1,
+                category: "PARIS 2024"
+            },
+            {
+                question: "Hoeveel FIH Pro League titels heeft Nederland gewonnen?",
+                answers: ["3 titels", "4 titels", "5 titels", "6 titels"],
+                correct: 2,
+                category: "PRO LEAGUE"
+            },
+            {
+                question: "Tegen welk land speelde Nederland de finale van EuroHockey 2025?",
+                answers: ["België", "Duitsland", "Spanje", "Engeland"],
+                correct: 1,
+                category: "EUROHOCKEY 2025"
+            },
+            {
+                question: "Met welke score won Nederland de EuroHockey 2025 finale?",
+                answers: ["3-1", "4-2", "5-1", "2-0"],
+                correct: 2,
+                category: "EUROHOCKEY 2025"
+            },
+            {
+                question: "Hoeveel partijen heeft Nederland verloren in knock-out wedstrijden sinds 2017?",
+                answers: ["0 wedstrijden", "1 wedstrijd", "2 wedstrijden", "3 wedstrijden"],
+                correct: 0,
+                category: "STATISTIEKEN"
+            },
+            {
+                question: "Welke rivaal ontmoette Nederland het vaakst in grote finales?",
+                answers: ["Duitsland", "Australië", "Argentinië", "België"],
+                correct: 2,
+                category: "RIVALITEITEN"
+            },
+            {
+                question: "In welk jaar won Nederland de Champions Trophy voor het laatst?",
+                answers: ["2016", "2017", "2018", "2019"],
+                correct: 2,
+                category: "CHAMPIONS TROPHY"
+            },
+            {
+                question: "Hoeveel Champions Trophy titels heeft Nederland gewonnen sinds 2000?",
+                answers: ["5 titels", "6 titels", "7 titels", "8 titels"],
+                correct: 1,
+                category: "CHAMPIONS TROPHY"
+            },
+            {
+                question: "Wie was de coach tijdens de gouden periode 2008-2012?",
+                answers: ["Alyson Annan", "Max Caldas", "Marc Lammers", "Paul van Ass"],
+                correct: 3,
+                category: "COACHES"
+            },
+            {
+                question: "Welke speelster heeft de meeste interlands gespeeld voor Nederland?",
+                answers: ["Ellen Hoog", "Maartje Paumen", "Eva de Goede", "Lidewij Welten"],
+                correct: 2,
+                category: "LEGENDES"
+            },
+            {
+                question: "In welke stad vond de olympische finale van 2008 plaats?",
+                answers: ["Peking", "Shanghai", "Tianjin", "Guangzhou"],
+                correct: 0,
+                category: "OLYMPISCHE SPELEN"
+            },
+            {
+                question: "Hoeveel doelpunten maakte Nederland gemiddeld per wedstrijd in de laatste 7 jaar?",
+                answers: ["2 doelpunten", "2,5 doelpunten", "3 doelpunten", "3,5 doelpunten"],
+                correct: 2,
+                category: "STATISTIEKEN"
+            },
+            {
+                question: "Welke achievement behaalde Nederland in Tokio 2020?",
+                answers: ["Goud zonder nederlaag", "Goud na strafballen", "Zilver", "Brons"],
+                correct: 0,
+                category: "TOKIO 2020"
+            },
+            {
+                question: "Hoeveel doelpunten tegen kreeg Nederland in de laatste 7 jaar (circa)?",
+                answers: ["56", "66", "76", "86"],
+                correct: 2,
+                category: "STATISTIEKEN"
+            },
+            {
+                question: "Welk team versloeg Nederland in de WK-finale van 2010?",
+                answers: ["Argentinië", "Australië", "Duitsland", "Spanje"],
+                correct: 0,
+                category: "WERELDKAMPIOENSCHAPPEN"
+            },
+            {
+                question: "In welke jaren won Nederland zilver bij Europese Kampioenschappen?",
+                answers: ["2007, 2015", "2009, 2013", "2011, 2017", "2005, 2019"],
+                correct: 0,
+                category: "EUROPESE KAMPIOENSCHAPPEN"
+            },
+            {
+                question: "Hoeveel strafballenseries won Nederland in grote finales sinds 2017?",
+                answers: ["5 van 6", "6 van 7", "7 van 8", "8 van 9"],
+                correct: 2,
+                category: "STATISTIEKEN"
+            },
+            {
+                question: "Welke speelster scoorde het winnende doelpunt in de finale van Londen 2012?",
+                answers: ["Ellen Hoog", "Maartje Paumen", "Carlien Dirkse van den Heuvel", "Lidewij Welten"],
+                correct: 1,
+                category: "LONDEN 2012"
+            },
+            {
+                question: "In welk stadion vond de WK-finale van 2014 plaats?",
+                answers: ["Kyocera Stadion", "Wagener Stadium", "GreenFields Stadium", "Hockey Stadium"],
+                correct: 0,
+                category: "WK 2014"
+            },
+            {
+                question: "Welke coach leidde Nederland naar olympisch goud in Parijs 2024?",
+                answers: ["Alyson Annan", "Paul van Ass", "Jamilon Mülders", "Max Caldas"],
+                correct: 2,
+                category: "PARIS 2024"
+            },
+            {
+                question: "Hoeveel internationale wedstrijden heeft Nederland sinds 2017 gespeeld?",
+                answers: ["107", "117", "127", "137"],
+                correct: 1,
+                category: "STATISTIEKEN"
+            },
+            {
+                question: "Tegen welk team speelde Nederland de meest emotionele finales?",
+                answers: ["Las Leonas (Argentinië)", "Hockeyroos (Australië)", "Die Danas (Duitsland)", "Red Sticks (België)"],
+                correct: 0,
+                category: "RIVALITEITEN"
+            },
+            {
+                question: "In welk jaar beëindigde Ellen Hoog haar internationale carrière?",
+                answers: ["2015", "2016", "2017", "2018"],
+                correct: 1,
+                category: "LEGENDES"
+            },
+            {
+                question: "Hoeveel wedstrijden won Nederland van de 117 gespeelde sinds 2017?",
+                answers: ["100", "103", "106", "109"],
+                correct: 1,
+                category: "STATISTIEKEN"
+            },
+            {
+                question: "Welke prestatie behaalde Nederland op het WK 2018 in Londen?",
+                answers: ["Finalist", "Wereldkampioen", "Derde plaats", "Vierde plaats"],
+                correct: 1,
+                category: "WK 2018"
+            }
+        ];
+
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+        let totalPoints = 0;
+        let gameQuestions = 5;
+
+        // Audio functions
+        function playCorrectSound() {
+            const audio = document.getElementById('correctSound');
+            audio.currentTime = 0;
+            audio.play().catch(e => console.log('Audio play failed'));
+        }
+
+        function playIncorrectSound() {
+            const audio = document.getElementById('incorrectSound');
+            audio.currentTime = 0;
+            audio.play().catch(e => console.log('Audio play failed'));
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            correctAnswers = 0;
+            totalPoints = 0;
+            
+            currentQuestions = shuffleArray(questions).slice(0, gameQuestions);
+            
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            
+            updateScoreDisplay();
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = currentQuestions[currentQuestionIndex];
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('questionCategory').textContent = question.category;
+            
+            const answersContainer = document.getElementById('answersContainer');
+            answersContainer.innerHTML = '';
+            
+            question.answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.className = 'answer-btn';
+                button.textContent = answer;
+                button.onclick = () => selectAnswer(index);
+                answersContainer.appendChild(button);
+            });
+            
+            document.getElementById('nextBtn').style.display = 'none';
+            updateProgress();
+        }
+
+        function selectAnswer(selectedIndex) {
+            const question = currentQuestions[currentQuestionIndex];
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            
+            answerButtons.forEach(btn => btn.disabled = true);
+            
+            if (selectedIndex === question.correct) {
+                answerButtons[selectedIndex].classList.add('correct');
+                playCorrectSound();
+                correctAnswers++;
+                totalPoints += 20;
+            } else {
+                answerButtons[selectedIndex].classList.add('incorrect');
+                answerButtons[question.correct].classList.add('correct');
+                playIncorrectSound();
+            }
+            
+            updateScoreDisplay();
+            
+            setTimeout(() => {
+                document.getElementById('nextBtn').style.display = 'inline-block';
+            }, 1500);
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex >= gameQuestions) {
+                showEndScreen();
+            } else {
+                updateScoreDisplay();
+                showQuestion();
+            }
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('currentQ').textContent = currentQuestionIndex + 1;
+            document.getElementById('points').textContent = totalPoints;
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / gameQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showEndScreen() {
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('endScreen').classList.remove('hidden');
+            
+            let message = '';
+            let medal = '';
+            let dutchPhrase = '';
+            
+            if (correctAnswers === 5) {
+                message = `Perfect! Je hebt alle ${correctAnswers} vragen goed beantwoord!<br>Je bent een echte Oranje-expert! 🇳🇱`;
+                medal = '🏆';
+                dutchPhrase = '"Hup Holland Hup! Je bent een kampioen!"';
+            } else if (correctAnswers === 4) {
+                message = `Fantastisch! Je hebt ${correctAnswers} van de ${gameQuestions} vragen goed!<br>Je kent de Nederlandse hockeygeschiedenis heel goed! 👏`;
+                medal = '🥇';
+                dutchPhrase = '"Geweldig gedaan, een echte fan!"';
+            } else if (correctAnswers === 3) {
+                message = `Goed gedaan! Je hebt ${correctAnswers} van de ${gameQuestions} vragen goed!<br>Je weet al veel over onze hockeydames! ⭐`;
+                medal = '🥈';
+                dutchPhrase = '"Mooi resultaat, blijf leren!"';
+            } else if (correctAnswers >= 1) {
+                message = `Je hebt ${correctAnswers} van de ${gameQuestions} vragen goed beantwoord.<br>Met meer oefening word je een expert! 💪`;
+                medal = '🥉';
+                dutchPhrase = '"Oefening baart kunst!"';
+            } else {
+                message = `Je hebt ${correctAnswers} van de ${gameQuestions} vragen goed beantwoord.<br>Tijd om meer over onze hockeyhelden te leren! 📚`;
+                medal = '🏑';
+                dutchPhrase = '"Kennis is macht - ga leren!"';
+            }
+            
+            document.getElementById('finalResult').innerHTML = `
+                <div style="font-size: 4.5em; margin: 25px 0;">${medal}</div>
+                <div style="font-size: 1.5em; color: #FF6600; line-height: 1.8; margin: 25px 0;">${message}</div>
+                <div style="font-size: 2.2em; margin: 30px 0; color: #FF6600; font-weight: bold;">
+                    Totaalscore: ${totalPoints}/100
+                </div>
+                <div class="orange-decoration"></div>
+                <div style="font-size: 1.1em; color: #0066CC; font-style: italic; margin-top: 20px;">
+                    ${dutchPhrase}
+                </div>
+                <div style="font-size: 0.95em; color: #666; margin-top: 15px;">
+                    "Van Sydney tot Parijs - 25 jaar Nederlandse dominantie!"
+                </div>
+            `;
+        }
+
+        function restartQuiz() {
+            document.getElementById('endScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
