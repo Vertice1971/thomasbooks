@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nederlandse Mannenhockey Quiz</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FF6600, #FF9933, #FFCC00);
+            background-size: 400% 400%;
+            animation: orangeGradient 6s ease infinite;
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+        @keyframes orangeGradient { 0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%} }
+        .quiz-container {
+            background: rgba(255,255,255,0.96); border-radius: 25px; box-shadow: 0 25px 70px rgba(255,102,0,0.4);
+            padding: 35px; max-width: 700px; width: 100%; text-align: center; position: relative; overflow: hidden;
+            border: 4px solid #FF6600; backdrop-filter: blur(10px);
+        }
+        .dutch-flag {
+            width: 100%; height: 60px;
+            background: linear-gradient(to bottom,#FF0000 0%,#FF0000 33.33%,#FFFFFF 33.33%,#FFFFFF 66.66%,#0066CC 66.66%);
+            border-radius: 10px; margin-bottom: 20px; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .dutch-flag::after { content:'🏑🇳🇱🥇'; position:absolute; right:15px; top:50%; transform:translateY(-50%); font-size:22px; text-shadow:0 2px 4px rgba(0,0,0,0.3); }
+        .title { color:#FF6600; font-size:2.6em; margin-bottom:8px; text-shadow:3px 3px 6px rgba(0,0,0,0.2); font-weight:bold; }
+        .contact-info { font-size:0.9em; color:#666; margin-bottom:5px; line-height:1.3; }
+        .contact-info a { color:#0066CC; text-decoration:none; }
+        .contact-info a:hover { text-decoration:underline; }
+        .subtitle { color:#0066CC; font-size:1.3em; margin-top:15px; margin-bottom:20px; font-weight:bold; }
+        .orange-decoration { background:linear-gradient(135deg,#FF6600,#FF9933); height:8px; width:100%; border-radius:4px; margin:15px 0; position:relative; overflow:hidden; }
+        .orange-decoration::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.5),transparent); animation:shimmer 3s infinite; }
+        @keyframes shimmer { 0%{transform:translateX(-100%)}100%{transform:translateX(100%)} }
+        .score-board { display:flex; justify-content:space-around; margin-bottom:20px; background:linear-gradient(135deg,#fff5f0,#ffe6d9); padding:16px; border-radius:15px; border:3px solid #FF6600; box-shadow:0 5px 15px rgba(255,102,0,0.2); }
+        .score-item { text-align:center; }
+        .score-label { font-size:0.9em; color:#666; margin-bottom:5px; font-weight:bold; }
+        .score-value { font-size:1.7em; font-weight:bold; color:#FF6600; }
+        .question-container {
+            background:linear-gradient(135deg,#fff9f5,#fff2e6); border-radius:18px; padding:30px; margin:25px 0;
+            border:4px solid #FF6600; box-shadow:0 10px 30px rgba(255,102,0,0.3); position:relative;
+        }
+        .question-category { position:absolute; top:-15px; left:25px; background:#FF6600; color:#fff; padding:8px 18px; border-radius:20px; font-size:0.85em; font-weight:bold; box-shadow:0 4px 12px rgba(255,102,0,0.4); }
+        .question { font-size:1.4em; color:#1a1a1a; margin-bottom:28px; font-weight:bold; line-height:1.5; }
+        .answers { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:28px; }
+        .answer-btn {
+            background:linear-gradient(135deg,#FF6600,#FF8533); color:#fff; border:none; padding:18px; border-radius:15px;
+            font-size:1.1em; font-weight:bold; cursor:pointer; transition:all .3s ease; box-shadow:0 6px 18px rgba(255,102,0,0.3);
+            border:2px solid transparent; position:relative; overflow:hidden;
+        }
+        .answer-btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent); transition:left .6s; }
+        .answer-btn:hover::before { left:100%; }
+        .answer-btn:hover { background:linear-gradient(135deg,#FF8533,#FF6600); transform:translateY(-4px); box-shadow:0 8px 25px rgba(255,102,0,0.5); }
+        .answer-btn.correct { background:linear-gradient(135deg,#4CAF50,#2E7D32); animation:correct .8s ease; border-color:#FFD700; }
+        .answer-btn.incorrect { background:linear-gradient(135deg,#F44336,#C62828); animation:incorrect .7s ease; }
+        @keyframes correct { 0%{transform:scale(1)}25%{transform:scale(1.1); box-shadow:0 0 40px #4CAF50}50%{transform:scale(1.05)}75%{transform:scale(1.08)}100%{transform:scale(1)} }
+        @keyframes incorrect { 0%{transform:translateX(0) rotate(0)}20%{transform:translateX(-10px) rotate(-4deg)}40%{transform:translateX(10px) rotate(4deg)}60%{transform:translateX(-8px) rotate(-3deg)}80%{transform:translateX(8px) rotate(3deg)}100%{transform:translateX(0) rotate(0)} }
+        .next-btn {
+            background:linear-gradient(135deg,#0066CC,#004499); color:#fff; border:none; padding:18px 40px; border-radius:30px;
+            font-size:1.4em; font-weight:bold; cursor:pointer; margin-top:25px; transition:all .3s ease; display:none; box-shadow:0 6px 18px rgba(0,102,204,0.4);
+        }
+        .next-btn:hover { background:linear-gradient(135deg,#004499,#003366); transform:translateY(-3px); }
+        .start-screen, .end-screen { text-align:center; }
+        .start-btn, .restart-btn {
+            background:linear-gradient(135deg,#FF6600,#FF4400); color:#fff; border:none; padding:22px 50px; border-radius:35px;
+            font-size:1.7em; font-weight:bold; cursor:pointer; margin-top:30px; transition:all .3s ease; box-shadow:0 8px 25px rgba(255,102,0,0.4);
+        }
+        .start-btn:hover, .restart-btn:hover { background:linear-gradient(135deg,#FF4400,#FF2200); transform:translateY(-4px); }
+        .achievements-showcase { background:linear-gradient(135deg,#fff5f0,#ffe6d9); padding:25px; border-radius:18px; margin:25px 0; border:3px solid #FF6600; box-shadow:0 6px 20px rgba(255,102,0,0.2); }
+        .hidden { display:none; }
+        .progress-bar { width:100%; height:14px; background:#E0E0E0; border-radius:7px; margin:25px 0; overflow:hidden; box-shadow:inset 0 3px 6px rgba(0,0,0,0.1); }
+        .progress-fill { height:100%; background:linear-gradient(90deg,#FF6600,#FF9933,#FFCC00); border-radius:7px; transition:width .5s ease; position:relative; }
+        .progress-fill::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent); animation:shimmer 2.5s infinite; }
+        .olympic-rings { font-size:2em; margin:15px 0; letter-spacing:5px; }
+        .trophy-count { display:flex; justify-content:space-around; margin:20px 0; flex-wrap:wrap; }
+        .trophy-item { text-align:center; margin:10px; }
+        .trophy-emoji { font-size:2.5em; margin-bottom:5px; }
+        .trophy-text { font-size:0.9em; font-weight:bold; color:#FF6600; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="start-screen" id="startScreen">
+            <div class="dutch-flag"></div>
+            <h1 class="title">🏑 Nederlandse Mannenhockey Quiz</h1>
+            <div class="contact-info">
+                📧 <a href="mailto:info@hockeyquiz.nl">info@hockeyquiz.nl</a><br>
+                🌐 <a href="https://www.nederlandhockey.nl">www.nederlandhockey.nl</a>
+            </div>
+            <p class="subtitle">De Oranje Leeuwen - Meesters van het Wereldhockey</p>
+            <div class="orange-decoration"></div>
+            <div class="achievements-showcase">
+                <div class="olympic-rings">🥇🥈🥈🥉🥇</div>
+                <div style="font-size:1.4em; color:#FF6600; margin-bottom:20px; font-weight:bold;">25 Jaar van Wereldtop Prestaties</div>
+                <div class="trophy-count">
+                    <div class="trophy-item"><div class="trophy-emoji">🏆</div><div class="trophy-text">5x Europees Kampioen</div></div>
+                    <div class="trophy-item"><div class="trophy-emoji">🥇</div><div class="trophy-text">2x Olympisch Goud</div></div>
+                    <div class="trophy-item"><div class="trophy-emoji">🌍</div><div class="trophy-text">WK Finalist 2014</div></div>
+                    <div class="trophy-item"><div class="trophy-emoji">🏅</div><div class="trophy-text">Pro League Kampioen</div></div>
+                </div>
+                <p style="font-size:1.2em; color:#333; line-height:1.7; margin-top:20px;">
+                    Test je kennis over de Nederlandse mannenhockey!<br>
+                    Van Sydney 2000 tot de finale in Parijs 2024...<br><br>
+                    <strong>🎯 5 Vragen per ronde</strong>
+                </p>
+            </div>
+            <button class="start-btn" onclick="startQuiz()">Start Quiz!</button>
+        </div>
+
+        <div class="quiz-screen hidden" id="quizScreen">
+            <div class="dutch-flag"></div>
+            <h1 class="title">🏑 Nederlandse Mannenhockey</h1>
+            <div class="contact-info">
+                📧 <a href="mailto:info@hockeyquiz.nl">info@hockeyquiz.nl</a><br>
+                🌐 <a href="https://www.nederlandhockey.nl">www.nederlandhockey.nl</a>
+            </div>
+            <div class="score-board">
+                <div class="score-item"><div class="score-label">Goed</div><div class="score-value" id="correctCount">0</div></div>
+                <div class="score-item"><div class="score-label">Vraag</div><div class="score-value"><span id="currentQ">1</span>/5</div></div>
+                <div class="score-item"><div class="score-label">Punten</div><div class="score-value" id="points">0</div></div>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
+            <div class="question-container">
+                <div class="question-category" id="questionCategory">OLYMPISCHE SPELEN</div>
+                <div class="question" id="questionText"></div>
+                <div class="answers" id="answersContainer"></div>
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Volgende Vraag</button>
+            </div>
+        </div>
+
+        <div class="end-screen hidden" id="endScreen">
+            <div class="dutch-flag"></div>
+            <h1 class="title">🏆 Quiz Voltooid!</h1>
+            <div class="contact-info">
+                📧 <a href="mailto:info@hockeyquiz.nl">info@hockeyquiz.nl</a><br>
+                🌐 <a href="https://www.nederlandhockey.nl">www.nederlandhockey.nl</a>
+            </div>
+            <div class="orange-decoration"></div>
+            <div id="finalResult"></div>
+            <button class="restart-btn" onclick="restartQuiz()">Nieuw Spel</button>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="correctSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTuH0fPFeSMFKojQ8tf28dv03jjdI9ot2gvbAtrm2PjZF94QXrTp66hVFApGn+DyvmwhBTuH0fPFeSMFKojQ8tf28dv03jjdI9ot2gvbAtrm2PjZF94QXrTp66hVFApGn+DyvmwhBTuH0fPFeSMFKojQ8tf28dv03jjdI9ot2gvbAtrm2PjZF90=" type="audio/wav">
+    </audio>
+    <audio id="incorrectSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRuoCAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YcYCAAC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLhAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLhAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4QEBAQEBAQEBAQEBAQEBAQEBAQEBAQEC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLhAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4QEBAQEBAQEBAQEBAQEBAQEBAQEBAQEC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLhAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQA==" type="audio/wav">
+    </audio>
+
+    <script>
+        // Pool A: Mannen (30 vragen, 2000–2025)
+        const QUESTIONS = [
+            { question: "Welke twee olympische gouden medailles won Nederland sinds 2000?", answers: ["Sydney 2000 en Parijs 2024","Sydney 2000 en Peking 2008","Londen 2012 en Tokio 2020","Sydney 2000 en Londen 2012"], correct: 0, category: "OLYMPISCHE SPELEN" },
+            { question: "Hoe eindigde de olympische finale van Parijs 2024 tegen Duitsland?", answers: ["2-1 na verlengingen","1-1, winst via shoot-outs","3-2 in de reguliere tijd","0-0, winst via strafballen"], correct: 1, category: "OLYMPISCHE SPELEN" },
+            { question: "Welke medailles behaalde Nederland op Athene 2004 en Londen 2012?", answers: ["Brons en goud","Zilver en zilver","Goud en brons","Zilver en brons"], correct: 1, category: "OLYMPISCHE SPELEN" },
+            { question: "In welk jaar bereikte Nederland de finale van het WK in eigen land?", answers: ["2012","2014","2016","2018"], correct: 1, category: "WERELDKAMPIOENSCHAP" },
+            { question: "Tegen welk team verloor Nederland de WK-finale van 2014 in Den Haag?", answers: ["Duitsland","België","Australië","Argentinië"], correct: 2, category: "WERELDKAMPIOENSCHAP" },
+            { question: "Welke Europese kampioenschappen won Nederland in de periode 2007–2023?", answers: ["2007, 2015, 2017, 2021, 2023","2005, 2009, 2013, 2017, 2021","2007, 2011, 2015, 2019, 2023","2003, 2007, 2011, 2015, 2019"], correct: 0, category: "EUROHOCKEY" },
+            { question: "Wie stond bekend als dodelijke strafcornernemer tussen 2000 en 2012?", answers: ["Teun de Nooijer","Taeke Taekema","Billy Bakker","Jeroen Hertzberger"], correct: 1, category: "LEGENDES" },
+            { question: "Hoeveel Champions Trophy-titels won Nederland sinds 2000?", answers: ["2","3","4","5"], correct: 1, category: "CHAMPIONS TROPHY" },
+            { question: "In welke jaren won Nederland de Champions Trophy in de jaren 2000?", answers: ["2000, 2003, 2006","2001, 2004, 2007","2002, 2005, 2008","2000, 2002, 2005"], correct: 0, category: "CHAMPIONS TROPHY" },
+            { question: "Welke FIH Pro League-titels heeft Nederland gewonnen?", answers: ["2019 en 2020–21","2021–22 en 2022–23","2020–21 en 2023–24","2019 en 2022–23"], correct: 1, category: "PRO LEAGUE" },
+            { question: "Welke medaille won Nederland op de Olympische Spelen van Tokio 2020?", answers: ["Goud","Zilver","Brons","Geen medaille"], correct: 2, category: "OLYMPISCHE SPELEN" },
+            { question: "Wie waren de helden van de shoot-out in de olympische finale van 2024?", answers: ["Tjep Hoedemakers en Pirmin Blaak","Thijs van Dam en Maurits Visser","Tjep Hoedemakers, Thijs van Dam en Pirmin Blaak","Billy Bakker en Jaap Stockmann"], correct: 2, category: "OLYMPISCHE SPELEN" },
+            { question: "In welke stad werd het WK 2014 georganiseerd?", answers: ["Rotterdam","Den Haag","Utrecht","Eindhoven"], correct: 1, category: "WERELDKAMPIOENSCHAP" },
+            { question: "Welke Nederlander werd meervoudig FIH Speler van het Jaar in de jaren 2000?", answers: ["Teun de Nooijer","Guus Vogels","Sander van der Weide","Robert van der Horst"], correct: 0, category: "LEGENDES" },
+            { question: "Welke Europese rivaal treft Nederland het vaakst in finales?", answers: ["Spanje","Duitsland","Frankrijk","Engeland"], correct: 1, category: "EUROHOCKEY" },
+            { question: "Welke beslissingsvorm verving in de laatste jaren de klassieke strafballen?", answers: ["Powerplay","Shoot-outs","Golden goal","Sudden death"], correct: 1, category: "REGELS & FEITEN" },
+            { question: "Welke internationale competitie won Nederland in 2012–13?", answers: ["Champions Challenge","Hockey World League","Europa Cup","Nations Trophy"], correct: 1, category: "WERELDLIJKE TOERNOOIEN" },
+            { question: "Welke keeper stond onder de lat bij de beslissende redding in Parijs 2024?", answers: ["Jaap Stockmann","Pirmin Blaak","Maurits Visser","Guus Vogels"], correct: 1, category: "OLYMPISCHE SPELEN" },
+            { question: "Welke cornerspecialist domineerde het vorige decennium met zijn sleeppush?", answers: ["Robbert Kemperman","Mink van der Weerden","Jip Janssen","Valentin Verga"], correct: 1, category: "LEGENDES" },
+            { question: "Tegen wie won Nederland de EK-finale 2017 in Amsterdam?", answers: ["België","Duitsland","Spanje","Engeland"], correct: 0, category: "EUROHOCKEY" },
+            { question: "Welke medaille haalde Nederland op de Olympische Spelen van Peking 2008 (mannen)?", answers: ["Goud","Zilver","Brons","Geen medaille"], correct: 3, category: "OLYMPISCHE SPELEN" },
+            { question: "Welke plaats behaalde Nederland op het WK 2010?", answers: ["Goud","Zilver","Brons","Vierde"], correct: 2, category: "WERELDKAMPIOENSCHAP" },
+            { question: "Welke plaats behaalde Nederland op het WK 2002?", answers: ["Goud","Zilver","Brons","Vierde"], correct: 2, category: "WERELDKAMPIOENSCHAP" },
+            { question: "Tegen welk land speelde Nederland de olympische finale van Sydney 2000?", answers: ["Zuid-Korea","Duitsland","Pakistan","Spanje"], correct: 0, category: "OLYMPISCHE SPELEN" },
+            { question: "Op welke manier werd het olympisch goud in Sydney 2000 beslist?", answers: ["Reguliere tijd","Golden goal","Shoot-outs (Australisch)","Strafballen na gelijkspel"], correct: 3, category: "OLYMPISCHE SPELEN" },
+            { question: "Welke klassering behaalde Nederland in de FIH Pro League 2019?", answers: ["Eerste","Tweede","Derde","Vierde"], correct: 2, category: "PRO LEAGUE" },
+            { question: "Wie is géén Nederlandse international?", answers: ["Teun de Nooijer","Robbert Kemperman","Moritz Fürste","Jeroen Hertzberger"], correct: 2, category: "WEDSTRIJDEN & FEITEN" },
+            { question: "Waar vond het EK 2021 plaats dat Nederland won?", answers: ["Amstelveen","Antwerpen","Londen","Hamburg"], correct: 0, category: "EUROHOCKEY" },
+            { question: "Welke middenvelder gold rond 2018–2021 als creatieve aanvoerder van Oranje?", answers: ["Billy Bakker","Valentin Verga","Seve van Ass","Sander de Wijn"], correct: 0, category: "LEGENDES" },
+            { question: "Wat was de eindstand na reguliere speeltijd in de olympische finale van 2024?", answers: ["0-0","1-1","2-2","3-3"], correct: 1, category: "OLYMPISCHE SPELEN" }
+        ];
+
+        // ————— Logica quiz —————
+        const TOTAL_PER_GAME = 5;
+        const pointsPerCorrect = 20;
+
+        let draw = [];
+        let currentIndex = 0;
+        let correctCount = 0;
+        let points = 0;
+        let lock = false;
+
+        const startScreen = document.getElementById('startScreen');
+        const quizScreen  = document.getElementById('quizScreen');
+        const endScreen   = document.getElementById('endScreen');
+
+        const correctCountEl = document.getElementById('correctCount');
+        const currentQEl     = document.getElementById('currentQ');
+        const pointsEl       = document.getElementById('points');
+        const progressFillEl = document.getElementById('progressFill');
+
+        const questionCategoryEl = document.getElementById('questionCategory');
+        const questionTextEl     = document.getElementById('questionText');
+        const answersContainerEl = document.getElementById('answersContainer');
+        const nextBtn            = document.getElementById('nextBtn');
+
+        const correctSound = document.getElementById('correctSound');
+        const incorrectSound = document.getElementById('incorrectSound');
+
+        function shuffle(array) {
+            const a = array.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function startQuiz() {
+            // Reset
+            correctCount = 0; points = 0; currentIndex = 0; lock = false;
+            correctCountEl.textContent = '0';
+            currentQEl.textContent = '1';
+            pointsEl.textContent = '0';
+            progressFillEl.style.width = '0%';
+            // Trek 5 willekeurige, unieke vragen uit de pool van 30
+            draw = shuffle([...Array(QUESTIONS.length).keys()]).slice(0, TOTAL_PER_GAME);
+            // Schermen wisselen
+            startScreen.classList.add('hidden');
+            endScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            // Eerste vraag
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            lock = false;
+            nextBtn.style.display = 'none';
+            answersContainerEl.innerHTML = '';
+            const q = QUESTIONS[draw[currentIndex]];
+            questionCategoryEl.textContent = q.category || '';
+            questionTextEl.textContent = q.question;
+
+            const shuffled = shuffle(q.answers.map((text, idx) => ({ text, isCorrect: idx === q.correct })));
+            shuffled.forEach(({ text, isCorrect }) => {
+                const btn = document.createElement('button');
+                btn.className = 'answer-btn';
+                btn.textContent = text;
+                btn.addEventListener('click', () => handleAnswer(btn, isCorrect));
+                answersContainerEl.appendChild(btn);
+            });
+
+            currentQEl.textContent = String(currentIndex + 1);
+            progressFillEl.style.width = `${(currentIndex) * (100 / TOTAL_PER_GAME)}%`;
+        }
+
+        function handleAnswer(btn, isCorrect) {
+            if (lock) return;
+            lock = true;
+
+            const buttons = Array.from(answersContainerEl.querySelectorAll('.answer-btn'));
+            buttons.forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                correctCount += 1;
+                points += pointsPerCorrect;
+                correctSound.currentTime = 0; correctSound.play().catch(()=>{});
+            } else {
+                btn.classList.add('incorrect');
+                const q = QUESTIONS[draw[currentIndex]];
+                // markeer het juiste antwoord
+                buttons.forEach((b, i) => {
+                    if (b.textContent === q.answers[q.correct]) b.classList.add('correct');
+                });
+                incorrectSound.currentTime = 0; incorrectSound.play().catch(()=>{});
+            }
+            correctCountEl.textContent = String(correctCount);
+            pointsEl.textContent = String(points);
+            nextBtn.style.display = 'inline-block';
+            progressFillEl.style.width = `${(currentIndex + 1) * (100 / TOTAL_PER_GAME)}%`;
+        }
+
+        function nextQuestion() {
+            if (currentIndex < TOTAL_PER_GAME - 1) {
+                currentIndex += 1;
+                renderQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            quizScreen.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+            
+            let message = '';
+            let medal = '';
+            let dutchPhrase = '';
+            
+            if (correctCount === 5) {
+                message = `Perfect! Je hebt alle ${correctCount} vragen goed beantwoord!<br>Je bent een echte Oranje-expert! 🇳🇱`;
+                medal = '🏆';
+                dutchPhrase = '"Hup Holland Hup! De Leeuwen brullen!"';
+            } else if (correctCount === 4) {
+                message = `Fantastisch! Je hebt ${correctCount} van de ${TOTAL_PER_GAME} vragen goed!<br>Je kent de Nederlandse hockeymannen heel goed! 👏`;
+                medal = '🥇';
+                dutchPhrase = '"Geweldig gedaan, een echte fan!"';
+            } else if (correctCount === 3) {
+                message = `Goed gedaan! Je hebt ${correctCount} van de ${TOTAL_PER_GAME} vragen goed!<br>Je weet al veel over onze hockeymannen! ⭐`;
+                medal = '🥈';
+                dutchPhrase = '"Mooi resultaat, blijf leren!"';
+            } else if (correctCount >= 1) {
+                message = `Je hebt ${correctCount} van de ${TOTAL_PER_GAME} vragen goed beantwoord.<br>Met meer oefening word je een expert! 💪`;
+                medal = '🥉';
+                dutchPhrase = '"Oefening baart kunst!"';
+            } else {
+                message = `Je hebt ${correctCount} van de ${TOTAL_PER_GAME} vragen goed beantwoord.<br>Tijd om meer over onze hockeyhelden te leren! 📚`;
+                medal = '🏑';
+                dutchPhrase = '"Kennis is macht - ga leren!"';
+            }
+            
+            document.getElementById('finalResult').innerHTML = `
+                <div style="font-size: 4.5em; margin: 25px 0;">${medal}</div>
+                <div style="font-size: 1.5em; color: #FF6600; line-height: 1.8; margin: 25px 0;">${message}</div>
+                <div style="font-size: 2.2em; margin: 30px 0; color: #FF6600; font-weight: bold;">
+                    Totaalscore: ${points}/100
+                </div>
+                <div class="orange-decoration"></div>
+                <div style="font-size: 1.1em; color: #0066CC; font-style: italic; margin-top: 20px;">
+                    ${dutchPhrase}
+                </div>
+                <div style="font-size: 0.95em; color: #666; margin-top: 15px;">
+                    "Van Sydney tot Parijs - Nederlandse hockeyglorie!"
+                </div>
+            `;
+        }
+
+        function restartQuiz() {
+            document.getElementById('endScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+        }
+
+        // Exposeer functies aan globale scope voor onclick-attributen
+        window.startQuiz = startQuiz;
+        window.nextQuestion = nextQuestion;
+        window.restartQuiz = restartQuiz;
+    </script>
+</body>
+</html>
