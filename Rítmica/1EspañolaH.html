@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz – Historia de la Selección Española de Gimnasia Rítmica</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg,#ff69b4,#ff9cd6,#ffd700);
+      background-size:400% 400%;
+      animation: fondo 7s ease infinite;
+      min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px
+    }
+    @keyframes fondo{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    .quiz-container{
+      background: rgba(255,255,255,0.96);
+      border-radius:25px; box-shadow:0 25px 70px rgba(255,105,180,0.4);
+      padding:35px; max-width:820px; width:100%; text-align:center; position:relative; overflow:hidden;
+      border:4px solid #ff69b4; backdrop-filter: blur(10px)
+    }
+    .title{color:#8a2be2; font-size:2.2em; margin-bottom:6px; text-shadow:2px 2px 5px rgba(0,0,0,0.2); font-weight:bold}
+    .explain{color:#333;margin:6px 0 12px}
+    .ondertitel{font-size:.9em;margin-bottom:5px}
+    .ondertitel a{color:#ff69b4;text-decoration:none}
+    .ondertitel a:hover{text-decoration:underline}
+    .contact-info{font-size:.9em;color:#666;margin-bottom:10px}
+    .subtitle{color:#8a2be2;font-size:1.05em;margin-top:6px;margin-bottom:16px;font-weight:bold}
+
+    .pink-decoration{background:linear-gradient(135deg,#ff69b4,#ffd6ec);height:8px;width:100%;border-radius:4px;margin:10px 0;position:relative;overflow:hidden}
+    .pink-decoration::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent);animation:shimmer 3s infinite}
+    @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+    .score-board{display:flex;justify-content:space-around;margin-bottom:16px;background:#fff0f6;
+      padding:12px;border-radius:15px;border:3px solid #ff69b4;box-shadow:0 5px 15px rgba(255,105,180,0.2)}
+    .score-item{text-align:center}
+    .score-label{font-size:.9em;color:#666;margin-bottom:5px;font-weight:bold}
+    .score-value{font-size:1.6em;font-weight:bold;color:#ff69b4}
+
+    .progress-bar{width:100%;height:12px;background:#E0E0E0;border-radius:7px;margin:14px 0;overflow:hidden;box-shadow:inset 0 3px 6px rgba(0,0,0,0.08)}
+    .progress-fill{height:100%;background:linear-gradient(90deg,#ff69b4,#ff9cd6,#ffd700);border-radius:7px;transition:width .4s ease}
+
+    .question-container{
+      background:#fffafc;border-radius:18px;padding:24px;margin:18px 0;
+      border:4px solid #ff69b4; box-shadow:0 10px 30px rgba(255,105,180,0.28); position:relative
+    }
+    .question-category{position:absolute;top:-14px;left:20px;background:#ff69b4;color:#fff;padding:7px 16px;border-radius:20px;font-size:.85em;font-weight:bold;box-shadow:0 4px 12px rgba(255,105,180,0.4)}
+    .question{font-size:1.22em;color:#1a1a1a;margin-bottom:18px;font-weight:bold;line-height:1.5}
+    .answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+    .answer-btn{
+      background:linear-gradient(135deg,#ff69b4,#ff85c1); color:#fff; border:none; padding:14px; border-radius:14px;
+      font-size:1.02em; font-weight:bold; cursor:pointer; transition:all .22s ease; box-shadow:0 6px 18px rgba(255,105,180,0.3);
+      border:2px solid transparent; position:relative; overflow:hidden
+    }
+    .answer-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:left .6s}
+    .answer-btn:hover::before{left:100%}
+    .answer-btn:hover{background:linear-gradient(135deg,#ff85c1,#ff69b4);transform:translateY(-3px)}
+    .answer-btn.correct{background:linear-gradient(135deg,#4CAF50,#2E7D32);border-color:#FFD700}
+    .answer-btn.incorrect{background:linear-gradient(135deg,#F44336,#C62828)}
+
+    .next-btn{
+      background:linear-gradient(135deg,#8a2be2,#5e1da1); color:#fff; border:none; padding:12px 26px; border-radius:26px;
+      font-size:1.02em; font-weight:bold; cursor:pointer; margin-top:6px; transition:all .22s ease; display:none;
+      box-shadow:0 6px 18px rgba(138,43,226,0.35)
+    }
+    .next-btn:hover{background:linear-gradient(135deg,#5e1da1,#4b1485);transform:translateY(-2px)}
+    .hidden{display:none}
+
+    /* mini animación de cinta y pelota */
+    .arena{display:grid;place-items:center;margin:8px 0 2px;position:relative;}
+    .arena-box{width:320px;height:110px;background:linear-gradient(180deg,#ffe4f1,#ffc6e0);border:3px solid #ff69b4;border-radius:14px;box-shadow:inset 0 0 0 3px #ffffffa6,0 8px 20px rgba(0,0,0,.08);position:relative;overflow:hidden}
+    .cinta{position:absolute;width:300px;height:6px;background:linear-gradient(90deg,#ff69b4,#ffd700,#8a2be2);border-radius:3px;top:36%;left:10px;animation:mover-cinta 4s infinite ease-in-out}
+    @keyframes mover-cinta{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+    .pelota{position:absolute;width:20px;height:20px;border-radius:50%;background:#ffd700;bottom:12px;left:42%;animation:botar 2.4s infinite}
+    @keyframes botar{0%,100%{transform:translateY(0)}50%{transform:translateY(-24px)}}
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div id="startScreen">
+      <h1 class="title">Historia de la Selección Española de Gimnasia Rítmica</h1>
+      <p class="explain">Responde preguntas sobre los grandes hitos, medallas y anécdotas de la selección española (conjuntos e individual).</p>
+      <p class="ondertitel"><a href="https://www.amazon.nl/dp/B0FMR8KPN4" target="_blank" rel="noopener noreferrer">Geniet van het boek</a></p>
+      <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
+      <p class="subtitle">Cada partida selecciona 5 preguntas al azar de un banco de 40</p>
+      <div class="pink-decoration"></div>
+      <div class="arena" aria-label="Animación Gimnasia Rítmica">
+        <div class="arena-box">
+          <div class="cinta"></div>
+          <div class="pelota"></div>
+        </div>
+      </div>
+      <button class="next-btn" style="display:inline-block" onclick="startQuiz()">Comenzar</button>
+    </div>
+
+    <div id="quizScreen" class="hidden">
+      <h1 class="title">Pregunta</h1>
+      <p class="ondertitel"><a href="https://www.amazon.nl/dp/B0FMR8KPN4" target="_blank" rel="noopener noreferrer">Geniet van het boek</a></p>
+      <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
+
+      <div class="score-board">
+        <div class="score-item"><div class="score-label">Correctas</div><div class="score-value" id="good">0</div></div>
+        <div class="score-item"><div class="score-label">Pregunta</div><div class="score-value"><span id="qnum">1</span>/5</div></div>
+        <div class="score-item"><div class="score-label">Puntos</div><div class="score-value" id="pts">0</div></div>
+      </div>
+
+      <div class="progress-bar"><div id="bar" class="progress-fill" style="width:0%"></div></div>
+
+      <div class="question-container">
+        <div class="question-category" id="cat">GENERAL</div>
+        <div class="question" id="qtext"></div>
+        <div class="answers" id="answers"></div>
+        <button class="next-btn" id="next" onclick="nextQuestion()">Siguiente</button>
+      </div>
+    </div>
+
+    <div id="endScreen" class="hidden">
+      <h1 class="title">Fin del juego</h1>
+      <div class="pink-decoration"></div>
+      <div id="summary" style="margin-top:10px;font-size:1.08em;color:#333"></div>
+      <button class="next-btn" onclick="restartQuiz()">Reiniciar</button>
+    </div>
+  </div>
+
+  <script>
+    // ——— Sonidos tipo modelo (Web Audio API): correcto / incorrecto ———
+    const Beeps = (() => {
+      let ctx;
+      function init(){ if(!ctx) ctx = new (window.AudioContext||window.webkitAudioContext)(); }
+      function beep(freq=880, dur=0.12, type='sine', gain=0.06){
+        init();
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = type; o.frequency.value = freq;
+        g.gain.value = gain;
+        o.connect(g); g.connect(ctx.destination);
+        o.start();
+        o.stop(ctx.currentTime + dur);
+      }
+      return {
+        correct(){ beep(880,0.10,'sine',0.07); setTimeout(()=>beep(1175,0.10,'sine',0.06),90); },
+        incorrect(){ beep(220,0.18,'sawtooth',0.06); }
+      };
+    })();
+
+    // ——— Banco de 40 preguntas (logros históricos y anécdotas) ———
+    const QUESTIONS = [
+      {question:"¿Quién ganó la primera medalla olímpica española en rítmica?", answers:["Carolina Pascual","Carmen Acedo","Almudena Cid","Carolina Rodríguez"], correct:0, category:"JJOO 1992"},
+      {question:"¿Qué medalla logró Carolina Pascual en Barcelona 1992?", answers:["Plata","Oro","Bronce","Cuarto puesto"], correct:0, category:"JJOO 1992"},
+      {question:"¿En qué aparato Carmen Acedo fue campeona del mundo en 1993?", answers:["Mazas","Aro","Pelota","Cinta"], correct:0, category:"MUNDIAL 1993"},
+      {question:"¿Dónde se celebró el Mundial del oro de Acedo (1993)?", answers:["Alicante","Sevilla","Madrid","Valencia"], correct:0, category:"MUNDIAL 1993"},
+      {question:"¿Cómo se conoce al conjunto oro olímpico de 1996?", answers:["Las Niñas de Oro","Las Campeonas","Las Leonas","Las Doradas"], correct:0, category:"JJOO 1996"},
+      {question:"¿Qué modalidad debutó en Atlanta 1996 con oro español?", answers:["Conjuntos","Individual","Mixto","Exhibición"], correct:0, category:"JJOO 1996"},
+      {question:"¿Qué medalla consiguió el conjunto en los JJOO de Río 2016?", answers:["Plata","Oro","Bronce","Ninguna"], correct:0, category:"JJOO 2016"},
+      {question:"¿Quién disputó cuatro finales olímpicas consecutivas?", answers:["Almudena Cid","Carolina Pascual","Carmen Acedo","Natalia García"], correct:0, category:"JJOO"},
+      {question:"¿Qué título logró España en el Europeo de Viena 1996?", answers:["Oro en conjuntos","Plata individual","Bronce por equipos","Oro en mazas"], correct:0, category:"EUROPEO 1996"},
+      {question:"¿Qué aparato ganó España en el Europeo de Ginebra 2001?", answers:["5 cintas","Aros","Mazas","Cuerda"], correct:0, category:"EUROPEO 2001"},
+      {question:"¿Qué medalla obtuvo España en el Europeo de Riesa 2003 (conjuntos)?", answers:["Plata","Oro","Bronce","Cuarto puesto"], correct:0, category:"EUROPEO 2003"},
+      {question:"¿Qué medalla logró el conjunto español en Stuttgart 2015 (All Around)?", answers:["Bronce","Plata","Oro","Ninguna"], correct:0, category:"MUNDIAL 2015"},
+      {question:"¿Quiénes integraron el conjunto plata en Río 2016?", answers:["Aguilar, Mohedano, Quereda, López, Gavezou","Cid, Pascual, Acedo, Rodríguez, García","Solaun, Bergua, Arnau, Martínez, Pérez","Baldó, Cabanillas, Giménez, Guréndez, Lamarca"], correct:0, category:"JJOO 2016"},
+      {question:"¿Qué música se asocia a la plata de Río 2016?", answers:["Vida Carnaval","Bolero de Ravel","Sevillanas","Concierto de Aranjuez"], correct:0, category:"JJOO 2016"},
+      {question:"¿Qué puesto logró el conjunto en París 2024 (JJOO)?", answers:["Décimo","Quinto","Tercero","Primero"], correct:0, category:"JJOO 2024"},
+      {question:"¿Qué medalla consiguió España por equipos en el Mundial 2022 (Sofía)?", answers:["Bronce","Plata","Oro","Ninguna"], correct:0, category:"MUNDIAL 2022"},
+      {question:"¿Qué final mundial júnior alcanzó Salma Solaun en 2019?", answers:["Bronce en cinta","Oro en aro","Plata en pelota","Bronce en mazas"], correct:0, category:"JÚNIOR 2019"},
+      {question:"¿Qué logró España en el Europeo de Budapest 2024 (conjuntos)?", answers:["Oro mixto, plata 5 aros, bronce AA","Triple oro","Plata y bronce","Solo oro"], correct:0, category:"EUROPEO 2024"},
+      {question:"¿Qué gesta logró España en el Europeo de Tallin 2025?", answers:["Triple oro (AA, 5 cintas, 2 aros/3 pelotas)","Doble plata","Oro y bronce","Solo un oro"], correct:0, category:"EUROPEO 2025"},
+      {question:"¿Quiénes formaron el conjunto triple oro en Tallin 2025?", answers:["Bergua, Solaun, Muñoz, Corral, Fernández, Cortelles","Aguilar, Mohedano, Quereda, López, Gavezou","Baldó, Cabanillas, Giménez, Guréndez, Lamarca, Martínez","Arnau, Bergua, Martínez, Pérez, Solaun"], correct:0, category:"EUROPEO 2025"},
+      {question:"¿Qué medalla mundial de conjuntos (AA) consiguió España en Valencia 2023?", answers:["Bronce","Plata","Oro","Ninguna"], correct:0, category:"MUNDIAL 2023"},
+      {question:"¿Qué selección es histórica potencia junto a España?", answers:["Bulgaria y Rusia","Canadá y Japón","México y Italia","Brasil y Portugal"], correct:0, category:"CONTEXTO"},
+      {question:"¿Qué apodo recibieron las campeonas olímpicas de 1996?", answers:["Las Niñas de Oro","Las Guerreras","Las Reinas","Las Doradas"], correct:0, category:"JJOO 1996"},
+      {question:"¿Qué distinción estatal recibieron las Niñas de Oro?", answers:["Medalla de Oro de la Real Orden del Mérito Deportivo","Príncipe de Asturias","Real Orden de Isabel la Católica","Cruz de Oro al Mérito Civil"], correct:0, category:"RECONOCIMIENTOS"},
+      {question:"¿Cuál fue el primer oro mundial de España en conjuntos (época previa)?", answers:["Atenas 1991","París 1990","Sevilla 1998","Berlín 1992"], correct:0, category:"HITO 1991"},
+      {question:"¿Qué balance histórico supera España en medallas internacionales?", answers:[">130 medallas","Entre 40 y 60","Entre 60 y 80","Entre 90 y 110"], correct:0, category:"BALANCE"},
+      {question:"¿Qué capitana actual destaca por liderazgo y resiliencia?", answers:["Inés Bergua","Alba Bautista","Carolina Pascual","Artemi Gavezou"], correct:0, category:"PERFIL"},
+      {question:"¿Quién comparte récord español de 8 medallas europeas con Inés Bergua?", answers:["Salma Solaun","Alba Bautista","Carolina Rodríguez","Jennifer Colino"], correct:0, category:"RÉCORD EUROPEO"},
+      {question:"¿Qué aparato ganó España en Sofía 2022 además del bronce AA?", answers:["5 aros (bronce)","3 cintas + 2 pelotas (oro)","Cuerda (plata)","Mazas (oro)"], correct:0, category:"MUNDIAL 2022"},
+      {question:"¿Qué torneo 2025 ganó España en conjunto (clasificación general)?", answers:["Copa del Mundo de Sofía","Torneo de París","Grand Prix de Marbella","Open de Tallin"], correct:0, category:"COPA DEL MUNDO"},
+      {question:"¿Qué gimnasta individual brilló en Brasil 2024 con la selección?", answers:["Natalia García","Polina Berezina","Carolina Rodríguez","Almudena Cid"], correct:0, category:"INTERNACIONAL 2024"},
+      {question:"¿Qué título europeo por conjuntos logró España ya en 1992?", answers:["Oro (Stuttgart)","Plata (Roma)","Bronce (Lisboa)","No hubo medalla"], correct:0, category:"EUROPEO 1992"},
+      {question:"¿Qué ciudad acogió el Mundial 2015 del bronce AA de conjuntos?", answers:["Stuttgart","Sofía","Valencia","Bakú"], correct:0, category:"MUNDIAL 2015"},
+      {question:"¿Qué ejercicio europeo ganó España en 2024 además del AA bronce?", answers:["Mixto (oro)","5 cintas (oro)","Aro (oro)","Pelota (oro)"], correct:0, category:"EUROPEO 2024"},
+      {question:"¿Qué medalla en 5 aros logró España en Budapest 2024?", answers:["Plata","Oro","Bronce","Cuarto puesto"], correct:0, category:"EUROPEO 2024"},
+      {question:"¿Qué generación reimpulsó a España desde 2022?", answers:["Arnau, Bergua, Martínez, Pérez, Solaun","Baldó, Cabanillas, Giménez, Guréndez, Lamarca","Aguilar, Mohedano, Quereda, López, Gavezou","Cid, Pascual, Acedo, Rodríguez, Colino"], correct:0, category:"RENACER 2022"},
+      {question:"¿Qué apodo popularizó el hito de Atlanta 1996 en España?", answers:["Las Niñas de Oro","Las Musas del Tapiz","Las Damas del Aro","Las Campeonas"], correct:0, category:"JJOO 1996"},
+      {question:"¿Cuál fue la posición del conjunto español en la general de París 2024?", answers:["10.º","8.º","6.º","4.º"], correct:0, category:"JJOO 2024"},
+      {question:"¿Qué medalla obtuvo el conjunto español AA en Sofía 2022?", answers:["Bronce","Plata","Oro","Ninguna"], correct:0, category:"MUNDIAL 2022"},
+      {question:"¿Qué ciudad española acogió el bronce mundial de conjuntos AA en 2023?", answers:["Valencia","Sevilla","Madrid","Alicante"], correct:0, category:"MUNDIAL 2023"}
+    ];
+
+    const TOTAL_PER_GAME = 5;      // solo 5 por partida (aleatorias)
+    const POINTS_PER_CORRECT = 10; // puntuación por acierto
+
+    let draw = [];
+    let idx = 0;
+    let good = 0;
+    let pts = 0;
+    let locked = false;
+
+    const startScreen = document.getElementById('startScreen');
+    const quizScreen  = document.getElementById('quizScreen');
+    const endScreen   = document.getElementById('endScreen');
+
+    const catEl   = document.getElementById('cat');
+    const qtextEl = document.getElementById('qtext');
+    const answersEl = document.getElementById('answers');
+    const nextBtn = document.getElementById('next');
+
+    const goodEl = document.getElementById('good');
+    const qnumEl = document.getElementById('qnum');
+    const ptsEl  = document.getElementById('pts');
+    const barEl  = document.getElementById('bar');
+    const summaryEl = document.getElementById('summary');
+
+    function shuffle(a){
+      const arr = a.slice();
+      for(let i=arr.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]] = [arr[j],arr[i]];
+      }
+      return arr;
+    }
+
+    function startQuiz(){
+      good = 0; pts = 0; idx = 0; locked = false;
+      goodEl.textContent = '0'; qnumEl.textContent = '1'; ptsEl.textContent = '0'; barEl.style.width = '0%';
+      draw = shuffle([...Array(QUESTIONS.length).keys()]).slice(0, TOTAL_PER_GAME);
+      startScreen.classList.add('hidden');
+      endScreen.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      renderQuestion();
+    }
+
+    function renderQuestion(){
+      locked = false;
+      nextBtn.style.display = 'none';
+      answersEl.innerHTML = '';
+      const q = QUESTIONS[draw[idx]];
+      catEl.textContent = q.category || 'GENERAL';
+      qtextEl.textContent = q.question;
+
+      const opts = shuffle(q.answers.map((t,i)=>({t,i})));
+      opts.forEach(({t,i})=>{
+        const b = document.createElement('button');
+        b.className = 'answer-btn';
+        b.textContent = t;
+        b.onclick = () => answer(b, i === q.correct);
+        answersEl.appendChild(b);
+      });
+      qnumEl.textContent = String(idx+1);
+      barEl.style.width = `${(idx)*(100/TOTAL_PER_GAME)}%`;
+    }
+
+    function answer(btn, ok){
+      if(locked) return;
+      locked = true;
+      const buttons = Array.from(answersEl.querySelectorAll('.answer-btn'));
+      buttons.forEach(b=>b.disabled = true);
+
+      if(ok){
+        btn.classList.add('correct');
+        good += 1; pts += POINTS_PER_CORRECT; Beeps.correct();
+      }else{
+        btn.classList.add('incorrect'); Beeps.incorrect();
+        const q = QUESTIONS[draw[idx]];
+        buttons.forEach(b=>{
+          if(b.textContent === q.answers[q.correct]) b.classList.add('correct');
+        });
+      }
+      goodEl.textContent = String(good);
+      ptsEl.textContent = String(pts);
+      barEl.style.width = `${(idx+1)*(100/TOTAL_PER_GAME)}%`;
+      nextBtn.style.display = 'inline-block';
+    }
+
+    function nextQuestion(){
+      if(idx < TOTAL_PER_GAME-1){ idx += 1; renderQuestion(); }
+      else endQuiz();
+    }
+
+    function endQuiz(){
+      quizScreen.classList.add('hidden');
+      endScreen.classList.remove('hidden');
+      summaryEl.innerHTML = `Correctas: ${good} / ${TOTAL_PER_GAME} · Puntos: ${pts}`;
+    }
+
+    function restartQuiz(){
+      endScreen.classList.add('hidden');
+      startScreen.classList.remove('hidden');
+    }
+
+    window.startQuiz = startQuiz;
+    window.nextQuestion = nextQuestion;
+    window.restartQuiz = restartQuiz;
+  </script>
+</body>
+</html>

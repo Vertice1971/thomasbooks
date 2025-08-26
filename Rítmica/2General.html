@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <title>🎭 Quiz de Gimnasia Rítmica – Básico</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <style>
+    /* ——— Estilo infantil + accesible, sin fuentes externas ——— */
+    :root{
+      --rosa:#ff6b9d; --carmesí:#c44569; --morado:#6c4af2; --azul:#4facfe;
+      --blanco:#fff; --negro:#222; --sombra:0 20px 60px rgba(0,0,0,.18);
+      --ok1:#00c851; --ok2:#007e33; --ko1:#ff4444; --ko2:#cc0000;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg,#667eea 0%,#764ba2 25%,#f093fb 50%,#f5576c 75%,#4facfe 100%);
+      background-size:400% 400%; animation:gradShift 8s ease infinite;
+      color:#333; display:flex; align-items:center; justify-content:center; padding:14px;
+    }
+    @keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    .wrap{
+      width:min(920px,95vw); background:rgba(255,255,255,.96);
+      backdrop-filter: blur(14px); border-radius:24px; box-shadow:var(--sombra); overflow:hidden;
+      animation:slideIn .7s ease-out;
+    }
+    @keyframes slideIn{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+    .header{
+      background: linear-gradient(135deg,var(--rosa),var(--carmesí));
+      color:var(--blanco); text-align:center; padding:26px 16px; position:relative; overflow:hidden;
+    }
+    .header::before{
+      content:""; position:absolute; inset:0; transform:translateX(-100%);
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+      animation:shine 3s linear infinite;
+    }
+    @keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+    h1{font-weight:800; font-size:clamp(1.6rem,1.2rem + 1.6vw,2.4rem); text-shadow:2px 2px 4px rgba(0,0,0,.25)}
+    .ondertitel{margin:.4rem 0}
+    .ondertitel a{color:#fff;text-decoration:none}
+    .ondertitel a:hover{text-decoration:underline}
+    .contact-info a{color:#fff;opacity:.9;text-decoration:none}
+    .contact-info a:hover{opacity:1;text-decoration:underline}
+
+    .content{padding:28px}
+    .stats{
+      display:flex; gap:12px; justify-content:space-between; align-items:center; flex-wrap:wrap;
+      background:linear-gradient(135deg,#f093fb,#f5576c); color:#fff; border-radius:16px; padding:12px 16px; font-weight:700;
+    }
+    .stat{text-align:center; min-width:110px}
+    .stat .lab{display:block; font-size:.82rem; opacity:.9}
+    .stat .val{font-size:1.2rem}
+
+    .card{
+      position:relative; margin:18px 0; background:#fff; border-radius:20px; padding:22px; box-shadow:0 10px 28px rgba(0,0,0,.1);
+      border:3px solid transparent; background-clip:padding-box; animation:qSlide .45s ease-out;
+    }
+    .card::before{
+      content:""; position:absolute; inset:-3px; border-radius:20px;
+      background:linear-gradient(135deg,var(--rosa),var(--carmesí),#667eea,#764ba2);
+      z-index:-1; animation:borderRoll 4s linear infinite; background-size:400% 100%;
+    }
+    @keyframes borderRoll{0%{background-position:0% 50%}100%{background-position:400% 50%}}
+    @keyframes qSlide{from{transform:translateX(24px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+    .preg{font-size:clamp(1.05rem,1rem + .6vw,1.35rem); font-weight:800; line-height:1.4; color:#333; text-align:center; margin-bottom:18px}
+    .grid{display:grid; gap:12px}
+    .btn{
+      padding:16px 18px; border-radius:14px; border:2px solid #e5e7eb;
+      background:linear-gradient(135deg,#f8f9ff,#f0f2ff); cursor:pointer; font-size:1.05rem; font-weight:700;
+      transition:transform .2s, box-shadow .2s, background .2s, color .2s, border-color .2s;
+    }
+    .btn:hover{
+      background:linear-gradient(135deg,var(--rosa),var(--carmesí)); color:#fff; border-color:var(--rosa);
+      transform:translateY(-2px); box-shadow:0 10px 24px rgba(255,107,157,.30);
+    }
+    .btn.ok{background:linear-gradient(135deg,var(--ok1),var(--ok2)); color:#fff; border-color:transparent}
+    .btn.ko{background:linear-gradient(135deg,var(--ko1),var(--ko2)); color:#fff; border-color:transparent}
+    .btn:disabled{opacity:.98; cursor:default}
+
+    .progress{height:12px; background:#edf0f5; border-radius:20px; overflow:hidden; margin:18px 0}
+    .bar{height:100%; width:0%; background:linear-gradient(90deg,var(--rosa),var(--carmesí)); position:relative; transition:width .6s cubic-bezier(.4,0,.2,1)}
+    .bar::after{
+      content:""; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+      animation:barShine 2s linear infinite;
+    }
+    @keyframes barShine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+    .result{
+      text-align:center; font-size:1.35rem; font-weight:800; color:#fff;
+      background:linear-gradient(135deg,var(--azul),#00f2fe); border-radius:20px; padding:22px; box-shadow:0 10px 28px rgba(79,172,254,.3);
+      animation:resPop .6s ease-out; margin-top:12px;
+    }
+    @keyframes resPop{0%{transform:scale(.85);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+
+    .play{
+      display:inline-block; margin:16px auto 4px; padding:14px 34px; border:none; border-radius:32px;
+      background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; font-size:1.05rem; font-weight:800; cursor:pointer;
+      box-shadow:0 6px 18px rgba(102,126,234,.4); transition:transform .2s, box-shadow .2s;
+      animation:pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse{0%{box-shadow:0 6px 18px rgba(102,126,234,.4)}50%{box-shadow:0 6px 26px rgba(102,126,234,.6)}100%{box-shadow:0 6px 18px rgba(102,126,234,.4)}}
+    .play:hover{transform:translateY(-2px)}
+    .hidden{display:none}
+
+    .feedback{
+      position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.6);
+      padding:18px 28px; border-radius:16px; color:#fff; font-weight:800; font-size:1.15rem; z-index:999;
+      animation:fb 1.4s ease-out forwards; pointer-events:none; box-shadow:0 10px 28px rgba(0,0,0,.2);
+    }
+    .feedback.ok{background:linear-gradient(135deg,var(--ok1),var(--ok2))}
+    .feedback.ko{background:linear-gradient(135deg,var(--ko1),var(--ko2))}
+    @keyframes fb{
+      0%{opacity:0; transform:translate(-50%,-50%) scale(.6)}
+      20%{opacity:1; transform:translate(-50%,-50%) scale(1.05)}
+      80%{opacity:1; transform:translate(-50%,-50%) scale(1)}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(.85)}
+    }
+
+    @media (max-width:760px){
+      .content{padding:18px}
+      .grid{grid-template-columns:1fr}
+    }
+    @media (min-width:761px){
+      .grid{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap" role="application" aria-label="Quiz Gimnasia Rítmica – Básico">
+    <header class="header">
+      <h1>🎭 Quiz de Gimnasia Rítmica 🤸‍♀️</h1>
+      <!-- Bloque obligatorio justo bajo el título -->
+      <p class="ondertitel"><a href="https://www.amazon.nl/dp/B0FMR8KPN4" target="_blank" rel="noopener noreferrer">Geniet van het boek</a></p>
+      <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
+    </header>
+
+    <section class="content">
+      <div class="stats">
+        <div class="stat"><span class="lab">Pregunta</span><span class="val"><span id="qnow">1</span> / <span id="qtot">5</span></span></div>
+        <div class="stat"><span class="lab">Aciertos</span><span class="val" id="hits">0</span></div>
+        <div class="stat"><span class="lab">Puntos</span><span class="val" id="pts">0</span></div>
+      </div>
+
+      <div class="card" id="qcard">
+        <div class="preg" id="qtext">…</div>
+        <div class="grid" id="opts"></div>
+      </div>
+
+      <div class="progress"><div class="bar" id="bar"></div></div>
+
+      <div id="result" class="result hidden"></div>
+      <button id="restart" class="play hidden">🎯 Jugar de nuevo</button>
+      <div style="text-align:center"><button id="start" class="play">Comenzar</button></div>
+    </section>
+  </main>
+
+  <script>
+    // ——— Sonidos autocontenidos (Web Audio API): acierto / fallo ———
+    const Snd = (() => {
+      let ctx;
+      const init=()=>{ if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)(); };
+      function ping(f=880, d=0.1, type='sine', vol=0.06){
+        init(); const o=ctx.createOscillator(), g=ctx.createGain();
+        o.type=type; o.frequency.value=f; g.gain.value=vol;
+        o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime+d);
+      }
+      return {
+        ok(){ ping(880,.09,'sine',.07); setTimeout(()=>ping(1180,.09,'sine',.06),85); },
+        ko(){ ping(220,.17,'sawtooth',.06); }
+      };
+    })();
+
+    // ——— 40 preguntas: lenguaje para 10 años; 5 aleatorias por partida ———
+    const BANK = [
+      {p:"¿Qué es la gimnasia rítmica?",o:["Un deporte con música, baile y aparatos","Un tipo de fútbol","Una danza tradicional"],c:0},
+      {p:"¿En qué superficie se practica la gimnasia rítmica?",o:["En un tapiz especial","En una piscina","En una pista de atletismo"],c:0},
+      {p:"¿Qué aparatos se usan en rítmica?",o:["Cuerda, aro, pelota, mazas y cinta","Raqueta y pelota","Pesa y barra"],c:0},
+      {p:"¿Qué combina la rítmica?",o:["Ballet, danza y gimnasia","Natación y ciclismo","Baloncesto y voleibol"],c:0},
+      {p:"¿Cuántas gimnastas forman un conjunto?",o:["5","2","10"],c:0},
+      {p:"¿Cuánto dura una rutina individual?",o:["75–90 segundos","10 minutos","30 segundos"],c:0},
+      {p:"¿Qué se valora en individual?",o:["Dificultad, ejecución y arte","Solo la fuerza","El vestuario"],c:0},
+      {p:"¿Qué se valora en conjuntos?",o:["Sincronía y trabajo en equipo","El color del tapiz","Gritar más fuerte"],c:0},
+      {p:"¿De qué material puede ser el aro?",o:["Plástico o madera","Metal pesado","Vidrio"],c:0},
+      {p:"¿Qué aparato se usa en pares?",o:["Las mazas","La cinta","El aro"],c:0},
+      {p:"¿Longitud mínima de la cinta?",o:["6 metros","2 metros","10 metros"],c:0},
+      {p:"¿Qué aparato hace espirales en el aire?",o:["La cinta","La cuerda","El aro"],c:0},
+      {p:"¿Qué aparato rueda por suelo o cuerpo?",o:["El aro","Las mazas","La pelota"],c:0},
+      {p:"¿Qué aparato se hace botar y balancear?",o:["La pelota","La cinta","El aro"],c:0},
+      {p:"¿Cuál ya no se usa en élite FIG?",o:["La cuerda","Las mazas","La pelota"],c:0},
+      {p:"¿Cuánto mide el tapiz oficial?",o:["13×13 m","100 m","5×5 m"],c:0},
+      {p:"¿Cómo debe ir el pelo?",o:["Recogido","Con gorra","Suelto con flores"],c:0},
+      {p:"¿Qué está prohibido en vestuario?",o:["Joyas colgantes","Leotardo","Zapatillas especiales"],c:0},
+      {p:"¿Cuándo empiezan y terminan los movimientos?",o:["Con la música","Cuando aplauden","Al azar"],c:0},
+      {p:"En la nota, ¿qué es la D?",o:["Dificultad","Diversión","Danza"],c:0},
+      {p:"En la nota, ¿qué es la E?",o:["Ejecución","Entrada","Equipo"],c:0},
+      {p:"En la nota, ¿qué es la A?",o:["Artística","Alegría","Altura"],c:0},
+      {p:"¿Qué hacen con la nota más alta y más baja?",o:["Se eliminan","Se duplican","Se regalan"],c:0},
+      {p:"Si se cae el aparato…",o:["Hay penalización","Hay más puntos","No pasa nada"],c:0},
+      {p:"Si la gimnasta sale del tapiz…",o:["Hay penalización","Se para la música","Se gana"],c:0},
+      {p:"Repetir la música en una competición…",o:["No está permitido","Da puntos extra","Es obligatorio"],c:0},
+      {p:"Hablar con el entrenador durante el ejercicio…",o:["Penaliza","Da suerte","Es obligatorio"],c:0},
+      {p:"¿Cuál es la competición más importante?",o:["Los Juegos Olímpicos","La liga del cole","NBA"],c:0},
+      {p:"Otras competiciones internacionales:",o:["Mundiales y Europeos","Mundial de fútbol","Champions League"],c:0},
+      {p:"¿Quién pone las notas?",o:["Los jueces","El público","Los entrenadores"],c:0},
+      {p:"¿Cómo deben ser los aparatos en competición?",o:["Homologados por la FIG","Hechos en casa","Muy pesados"],c:0},
+      {p:"¿Qué categoría es la más pequeña?",o:["Benjamín","Júnior","Sénior"],c:0},
+      {p:"¿Qué categoría compite en JJOO?",o:["Sénior","Infantil","Benjamín"],c:0},
+      {p:"¿Qué aparato hace molinetes?",o:["Las mazas","El aro","La pelota"],c:0},
+      {p:"¿Qué aparato dibuja serpentinas?",o:["La cinta","La cuerda","El aro"],c:0},
+      {p:"¿Qué aparato pide coordinación de saltos?",o:["La cuerda","El aro","La pelota"],c:0},
+      {p:"¿Qué aparato se balancea y rueda suave?",o:["La pelota","El aro","La cinta"],c:0},
+      {p:"En conjunto, ¿cuál se puede pasar entre compañeras?",o:["Todos","Solo la pelota","Ninguno"],c:0},
+      {p:"Además de la técnica, ¿qué es muy importante?",o:["La expresión artística","El uniforme","El tamaño del tapiz"],c:0},
+      {p:"¿Cuántas rutinas hace un conjunto por competición?",o:["Dos","Una","Cuatro"],c:0},
+      {p:"La rutina de conjunto dura…",o:["~2 min 30 s","30 s","10 minutos"],c:0},
+    ];
+
+    const TOTAL_PER_GAME = 5;
+    const POINTS_PER_OK = 10;
+
+    const qnowEl = document.getElementById('qnow');
+    const qtotEl = document.getElementById('qtot');
+    const hitsEl = document.getElementById('hits');
+    const ptsEl  = document.getElementById('pts');
+    const barEl  = document.getElementById('bar');
+    const qtextEl= document.getElementById('qtext');
+    const optsEl = document.getElementById('opts');
+    const resultEl=document.getElementById('result');
+    const startBtn=document.getElementById('start');
+    const restartBtn=document.getElementById('restart');
+    const qcard   =document.getElementById('qcard');
+
+    let pick=[], idx=0, hits=0, pts=0, locked=false;
+
+    function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b;}
+
+    function showFeedback(ok=true){
+      const fb=document.createElement('div');
+      fb.className='feedback '+(ok?'ok':'ko');
+      fb.textContent = ok ? '¡Correcto! 🎉' : '¡Ups! 😅';
+      document.body.appendChild(fb);
+      setTimeout(()=>fb.remove(),1400);
+    }
+
+    function startGame(){
+      pick = shuffle([...Array(BANK.length).keys()]).slice(0,TOTAL_PER_GAME);
+      idx=0; hits=0; pts=0; locked=false;
+      qtotEl.textContent = TOTAL_PER_GAME;
+      qnowEl.textContent = '1';
+      hitsEl.textContent = '0';
+      ptsEl.textContent  = '0';
+      barEl.style.width  = '0%';
+      resultEl.classList.add('hidden');
+      restartBtn.classList.add('hidden');
+      startBtn.classList.add('hidden');
+      renderQ();
+    }
+
+    function renderQ(){
+      locked=false; optsEl.innerHTML='';
+      // reinicia animación de la tarjeta
+      qcard.style.animation='none'; setTimeout(()=>qcard.style.animation='qSlide .45s ease-out',10);
+
+      const q = BANK[pick[idx]];
+      qtextEl.textContent = q.p;
+
+      const options = shuffle(q.o.map((t,i)=>({t,i})));
+      options.forEach(({t,i})=>{
+        const b=document.createElement('button');
+        b.className='btn'; b.textContent=t;
+        b.onclick=()=>choose(b, i===q.c, q);
+        b.onkeydown=(e)=>{ if((e.key==='Enter'||e.key===' ')&&!locked){e.preventDefault(); b.click();} };
+        optsEl.appendChild(b);
+      });
+      qnowEl.textContent = String(idx+1);
+      barEl.style.width  = `${(idx)*(100/TOTAL_PER_GAME)}%`;
+    }
+
+    function choose(btn, ok, q){
+      if(locked) return; locked=true;
+      const buttons=[...optsEl.querySelectorAll('.btn')];
+      buttons.forEach(b=>b.disabled=true);
+      if(ok){
+        btn.classList.add('ok'); hits++; pts+=POINTS_PER_OK; Snd.ok(); showFeedback(true);
+      }else{
+        btn.classList.add('ko'); Snd.ko(); showFeedback(false);
+        // mostrar cuál era la correcta
+        buttons.forEach(b=>{
+          if(b.textContent===q.o[q.c]) b.classList.add('ok');
+        });
+      }
+      hitsEl.textContent = String(hits);
+      ptsEl.textContent  = String(pts);
+      barEl.style.width  = `${(idx+1)*(100/TOTAL_PER_GAME)}%`;
+
+      setTimeout(()=> nextStep(), 900);
+    }
+
+    function nextStep(){
+      if(idx < TOTAL_PER_GAME-1){ idx++; renderQ(); }
+      else finish();
+    }
+
+    function finish(){
+      const pct = Math.round( (hits/TOTAL_PER_GAME)*100 );
+      const mood = pct>=80 ? ['🏆','¡Excelente!'] : pct>=60 ? ['🥇','¡Muy bien!'] : pct>=40 ? ['🥈','Bien, a seguir'] : ['📚','¡A practicar!'];
+      resultEl.innerHTML = `
+        <div style="font-size:2.4rem; margin-bottom:8px">${mood[0]}</div>
+        <div style="font-weight:900;margin-bottom:6px">${mood[1]}</div>
+        <div style="font-size:1.2rem;opacity:.95">${hits} de ${TOTAL_PER_GAME} · ${pct}% de aciertos</div>
+      `;
+      resultEl.classList.remove('hidden');
+      restartBtn.classList.remove('hidden');
+      startBtn.classList.add('hidden');
+    }
+
+    startBtn.onclick = startGame;
+    restartBtn.onclick = startGame;
+
+    // Accesibilidad básica con teclado: Enter/Barra al botón “Comenzar”
+    window.addEventListener('keydown', (e)=>{
+      if((e.key==='Enter'||e.key===' ') && !locked && !startBtn.classList.contains('hidden')){
+        e.preventDefault(); startBtn.click();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Juego de Aparatos – Gimnasia Rítmica</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 25%,#f093fb 50%,#f5576c 75%,#4facfe 100%);
+      background-size:400% 400%; animation:gradientShift 12s ease infinite;
+      min-height:100vh; display:flex; align-items:center; justify-content:center; overflow-x:hidden;
+    }
+    @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    .iconito{position:absolute;font-size:2rem;opacity:.2;animation:float linear infinite;pointer-events:none;z-index:1}
+    @keyframes float{from{transform:translateY(100vh) rotate(0)}to{transform:translateY(-10vh) rotate(360deg)}}
+
+    .container{
+      max-width:900px;width:90%;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);
+      border-radius:25px;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden;
+      animation:slideIn .8s ease-out;z-index:2;position:relative;
+    }
+    @keyframes slideIn{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+    .header{background:linear-gradient(135deg,#ff6b9d,#c44569);color:#fff;text-align:center;padding:30px 20px;position:relative;overflow:hidden}
+    .header::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:shine 3s infinite}
+    @keyframes shine{0%{left:-100%}100%{left:100%}}
+    h1{font-size:2.2rem;font-weight:700;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+    .ondertitel{margin:6px 0 2px}
+    .ondertitel a,.contact-info a{color:#fff;text-decoration:none}
+    .ondertitel a:hover,.contact-info a:hover{text-decoration:underline}
+
+    .quiz-content{padding:30px}
+    .stats-bar{
+      display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;padding:15px 20px;border-radius:15px;
+      background:linear-gradient(135deg,#f093fb,#f5576c);color:#fff;font-weight:600;box-shadow:0 5px 15px rgba(240,147,251,.3)
+    }
+    .stat-item{display:flex;flex-direction:column;align-items:center}
+    .stat-label{font-size:.8rem;opacity:.9}
+    .stat-value{font-size:1.2rem;font-weight:700}
+
+    .question-card{
+      background:#fff;border-radius:20px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,.1);margin-bottom:25px;position:relative;
+      border:3px solid transparent;background-clip:padding-box;animation:questionSlide .5s ease-out
+    }
+    .question-card::before{content:'';position:absolute;inset:-3px;background:linear-gradient(135deg,#ff6b9d,#c44569,#667eea,#764ba2);border-radius:20px;z-index:-1;animation:borderRotate 4s linear infinite}
+    @keyframes borderRotate{0%{background-position:0% 50%}100%{background-position:400% 50%}}
+    @keyframes questionSlide{from{transform:translateX(40px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+    .pregunta{font-size:1.4rem;font-weight:600;margin-bottom:25px;text-align:center;color:#333;line-height:1.4}
+    .opciones-grid{display:grid;gap:15px}
+    .opcion{
+      padding:18px 25px;border-radius:15px;border:2px solid #e0e0e0;background:linear-gradient(135deg,#f8f9ff,#f0f2ff);
+      cursor:pointer;font-size:1.1rem;font-weight:500;text-align:center;transition:all .3s ease;position:relative;overflow:hidden
+    }
+    .opcion::before{content:'';position:absolute;inset:0;left:-100%;background:linear-gradient(90deg,transparent,rgba(255,107,157,.1),transparent);transition:left .5s}
+    .opcion:hover{background:linear-gradient(135deg,#ff6b9d,#c44569);color:#fff;border-color:#ff6b9d;transform:translateY(-3px);box-shadow:0 10px 25px rgba(255,107,157,.3)}
+    .opcion:hover::before{left:0}
+    .opcion.correct{background:linear-gradient(135deg,#00c851,#007e33)!important;color:#fff!important;border-color:#00c851!important;transform:scale(.98)!important}
+    .opcion.incorrect{background:linear-gradient(135deg,#ff4444,#cc0000)!important;color:#fff!important;border-color:#ff4444!important;transform:scale(.98)!important}
+    .opcion.disabled{pointer-events:none;opacity:.7}
+
+    .progress-container{margin:25px 0;background:#f0f0f0;border-radius:20px;height:12px;overflow:hidden;position:relative}
+    .progress-bar{height:100%;background:linear-gradient(90deg,#ff6b9d,#c44569);border-radius:20px;width:0;transition:width .8s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+    .progress-bar::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:progressShine 2s infinite}
+    @keyframes progressShine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+    .resultado{
+      text-align:center;font-size:1.4rem;font-weight:700;margin:30px 0;padding:25px;border-radius:20px;
+      background:linear-gradient(135deg,#4facfe,#00f2fe);color:#fff;box-shadow:0 10px 30px rgba(79,172,254,.3);display:none;animation:resultBounce .6s ease-out
+    }
+    @keyframes resultBounce{0%{transform:scale(.8);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+
+    .reiniciar-btn{
+      display:inline-block;margin:20px auto;padding:15px 40px;border:none;border-radius:50px;background:linear-gradient(135deg,#667eea,#764ba2);
+      color:#fff;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all .3s ease;box-shadow:0 5px 15px rgba(102,126,234,.4)
+    }
+    .reiniciar-btn:hover{background:linear-gradient(135deg,#5a6fd8,#6a4c93);transform:translateY(-2px);box-shadow:0 8px 25px rgba(102,126,234,.5)}
+
+    .feedback{
+      position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);padding:20px 40px;border-radius:15px;color:#fff;font-size:1.2rem;font-weight:600;text-align:center;
+      z-index:1000;animation:feedbackPop 1.5s ease-out forwards;pointer-events:none
+    }
+    .feedback.correct{background:linear-gradient(135deg,#00c851,#007e33);box-shadow:0 10px 30px rgba(0,200,81,.4)}
+    .feedback.incorrect{background:linear-gradient(135deg,#ff4444,#cc0000);box-shadow:0 10px 30px rgba(255,68,68,.4)}
+    @keyframes feedbackPop{0%{transform:translate(-50%,-50%) scale(.5);opacity:0}20%{transform:translate(-50%,-50%) scale(1.1);opacity:1}80%{transform:translate(-50%,-50%) scale(1)}100%{transform:translate(-50%,-50%) scale(.8);opacity:0}}
+
+    #confetiCanvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+
+    @media (max-width:768px){
+      .container{width:95%;margin:10px}
+      h1{font-size:1.8rem}
+      .quiz-content{padding:20px}
+      .pregunta{font-size:1.2rem}
+      .opcion{font-size:1rem;padding:15px 20px}
+    }
+  </style>
+</head>
+<body>
+  <!-- Iconitos flotantes -->
+  <div class="iconito" style="left:10%;animation-duration:12s;">🔵</div>
+  <div class="iconito" style="left:30%;animation-duration:15s;animation-delay:-3s;">🎀</div>
+  <div class="iconito" style="left:50%;animation-duration:18s;animation-delay:-6s;">🪀</div>
+  <div class="iconito" style="left:70%;animation-duration:14s;animation-delay:-9s;">🧵</div>
+  <div class="iconito" style="left:85%;animation-duration:20s;animation-delay:-12s;">🤸‍♀️</div>
+
+  <canvas id="confetiCanvas"></canvas>
+
+  <div class="container">
+    <div class="header">
+      <h1>🎀 Juego de Aparatos 🤸‍♀️</h1>
+      <!-- Bloque obligatorio del proyecto -->
+      <p class="ondertitel"><a href="https://www.amazon.nl/dp/B0FMR8KPN4" target="_blank" rel="noopener noreferrer">Geniet van het boek</a></p>
+      <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
+    </div>
+
+    <div class="quiz-content">
+      <div class="stats-bar">
+        <div class="stat-item"><span class="stat-label">Pregunta</span><span class="stat-value"><span id="pregunta-actual">1</span>/<span id="total-preguntas">5</span></span></div>
+        <div class="stat-item"><span class="stat-label">Aciertos</span><span class="stat-value" id="puntos-actuales">0</span></div>
+        <div class="stat-item"><span class="stat-label">Progreso</span><span class="stat-value" id="porcentaje-progreso">0%</span></div>
+      </div>
+
+      <div id="quiz-container">
+        <div class="question-card">
+          <div id="pregunta" class="pregunta"></div>
+          <div id="opciones" class="opciones-grid"></div>
+        </div>
+        <div class="progress-container"><div id="barra" class="progress-bar"></div></div>
+      </div>
+
+      <div id="resultado" class="resultado"></div>
+      <button id="reiniciar" class="reiniciar-btn" style="display:none;">🎯 Jugar de nuevo</button>
+    </div>
+  </div>
+
+  <audio id="sonido-correcto" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+  <audio id="sonido-incorrecto" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+
+  <script>
+    // ===== BANCO: 40 preguntas (correcta indicada por índice 'c' en el orden original) =====
+    const preguntas = [
+      {p:"¿Qué aparato puede ser de plástico o madera y rueda por el suelo?",o:["Aro","Pelota","Cuerda"],c:0},
+      {p:"¿Qué aparato se hace botar y balancear?",o:["Pelota","Mazas","Cinta"],c:0},
+      {p:"¿Qué aparato se usa en pares?",o:["Mazas","Cinta","Aro"],c:0},
+      {p:"¿Qué aparato mide al menos 6 metros de largo?",o:["Cinta","Aro","Cuerda"],c:0},
+      {p:"¿Qué aparato permite hacer espirales en el aire?",o:["Cinta","Aro","Pelota"],c:0},
+      {p:"¿Qué aparato permite serpentinas y molinetes?",o:["Cinta","Cuerda","Pelota"],c:0},
+      {p:"¿Qué aparato se lanza y se pasa en conjunto?",o:["Todos","Solo pelota","Ninguno"],c:0},
+      {p:"¿Qué aparato permite balancear y rodar suavemente?",o:["Pelota","Cinta","Aro"],c:0},
+      {p:"¿Qué aparato ya no se usa en la élite FIG?",o:["Cuerda","Aro","Pelota"],c:0},
+      {p:"¿Qué aparato exige gran coordinación de saltos?",o:["Cuerda","Pelota","Mazas"],c:0},
+      {p:"¿Qué aparato permite hacer ocho en el aire?",o:["Cinta","Aro","Mazas"],c:0},
+      {p:"¿Qué aparato se puede pasar por el cuerpo como un túnel?",o:["Aro","Cuerda","Pelota"],c:0},
+      {p:"¿Qué aparato permite hacer lanzamientos altos?",o:["Pelota","Cinta","Cuerda"],c:0},
+      {p:"¿Qué aparato requiere mayor precisión en las recepciones?",o:["Mazas","Aro","Cinta"],c:0},
+      {p:"¿Qué aparato permite rodar por diferentes partes del cuerpo?",o:["Pelota","Mazas","Cinta"],c:0},
+      {p:"¿Qué aparato se caracteriza por sus movimientos ondulantes?",o:["Cinta","Aro","Cuerda"],c:0},
+      {p:"¿Qué aparato permite hacer rotaciones alrededor del cuerpo?",o:["Aro","Pelota","Mazas"],c:0},
+      {p:"¿Qué aparato se sostiene por la varilla?",o:["Cinta","Aro","Pelota"],c:0},
+      {p:"¿Qué aparato permite hacer equilibrios en diferentes partes del cuerpo?",o:["Pelota","Cinta","Cuerda"],c:0},
+      {p:"¿Qué aparato se caracteriza por movimientos asimétricos?",o:["Mazas","Aro","Pelota"],c:0},
+      {p:"¿Qué aparato debe tener un diámetro específico según la FIG?",o:["Aro","Pelota","Cinta"],c:0},
+      {p:"¿Qué aparato permite crear formas geométricas en el aire?",o:["Cinta","Mazas","Cuerda"],c:0},
+      {p:"¿Qué aparato se puede hacer rotar en diferentes planos?",o:["Aro","Cinta","Pelota"],c:0},
+      {p:"¿Qué aparato permite movimientos de péndulo?",o:["Mazas","Aro","Cinta"],c:0},
+      {p:"¿Qué aparato tiene una superficie que debe ser lisa?",o:["Pelota","Cinta","Mazas"],c:0},
+      {p:"¿Qué aparato permite hacer figuras de serpiente?",o:["Cinta","Aro","Pelota"],c:0},
+      {p:"¿Qué aparato se puede pasar de una mano a otra por detrás del cuerpo?",o:["Aro","Mazas","Pelota"],c:0},
+      {p:"¿Qué aparato permite hacer movimientos en espiral ascendente?",o:["Cinta","Cuerda","Aro"],c:0},
+      {p:"¿Qué aparato se caracteriza por su peso específico?",o:["Mazas","Pelota","Cinta"],c:0},
+      {p:"¿Qué aparato permite hacer rebotes controlados?",o:["Pelota","Aro","Mazas"],c:0},
+      {p:"¿Qué aparato se puede enrollar alrededor del cuerpo?",o:["Cinta","Aro","Mazas"],c:0},
+      {p:"¿Qué aparato permite hacer lanzamientos con rotación?",o:["Aro","Cinta","Pelota"],c:0},
+      {p:"¿Qué aparato se sostiene en el centro de su longitud?",o:["Mazas","Aro","Cinta"],c:0},
+      {p:"¿Qué aparato permite hacer movimientos circulares amplios?",o:["Cinta","Mazas","Pelota"],c:0},
+      {p:"¿Qué aparato requiere mayor coordinación bilateral?",o:["Mazas","Aro","Pelota"],c:0},
+      {p:"¿Qué aparato permite hacer movimientos de látigo?",o:["Cinta","Cuerda","Aro"],c:0},
+      {p:"¿Qué aparato se puede hacer rodar en zigzag?",o:["Aro","Pelota","Mazas"],c:0},
+      {p:"¿Qué aparato permite crear ondas en diferentes direcciones?",o:["Cinta","Aro","Pelota"],c:0},
+      {p:"¿Qué aparato se puede lanzar con efecto?",o:["Pelota","Cinta","Aro"],c:0},
+      {p:"¿Qué aparato permite hacer intercambios rápidos entre manos?",o:["Mazas","Pelota","Cinta"],c:0}
+    ];
+
+    // ===== Estado del juego =====
+    let preguntasSeleccionadas = [];
+    let preguntasUsadas = new Set();
+    let indice = 0;
+    let puntos = 0;
+    let respondiendo = false;
+
+    // Para barajado de opciones:
+    let indiceCorrectoActual = null;   // dónde quedó la correcta tras barajar
+    let botonesActuales = [];          // referencia a los botones mostrados
+
+    // ===== DOM =====
+    const elementos = {
+      pregunta: document.getElementById("pregunta"),
+      opciones: document.getElementById("opciones"),
+      barra: document.getElementById("barra"),
+      resultado: document.getElementById("resultado"),
+      reiniciar: document.getElementById("reiniciar"),
+      sonidoOk: document.getElementById("sonido-correcto"),
+      sonidoBad: document.getElementById("sonido-incorrecto"),
+      actual: document.getElementById("pregunta-actual"),
+      total: document.getElementById("total-preguntas"),
+      puntosEl: document.getElementById("puntos-actuales"),
+      porcentaje: document.getElementById("porcentaje-progreso")
+    };
+
+    // ===== Confeti =====
+    class ConfettiSystem{
+      constructor(){
+        this.canvas=document.getElementById('confetiCanvas');
+        this.ctx=this.canvas.getContext('2d');
+        this.particles=[]; this.animating=false;
+        this.resizeCanvas(); window.addEventListener('resize',()=>this.resizeCanvas());
+      }
+      resizeCanvas(){this.canvas.width=window.innerWidth;this.canvas.height=window.innerHeight;}
+      createParticles(){
+        const colors=['#ff6b9d','#c44569','#4facfe','#00f2fe','#f093fb','#f5576c'];
+        for(let i=0;i<150;i++){
+          this.particles.push({x:Math.random()*this.canvas.width,y:-10,vx:(Math.random()-.5)*8,vy:Math.random()*3+2,rotation:Math.random()*360,rotationSpeed:(Math.random()-.5)*10,size:Math.random()*8+4,color:colors[Math|Math.random()*colors.length],shape:Math.floor(Math.random()*3),life:1,decay:Math.random()*0.02+0.01});
+        }
+      }
+      updateParticles(){
+        for(let i=this.particles.length-1;i>=0;i--){
+          const p=this.particles[i]; p.x+=p.vx; p.y+=p.vy; p.vy+=.15; p.rotation+=p.rotationSpeed; p.life-=p.decay;
+          if(p.life<=0||p.y>this.canvas.height+50) this.particles.splice(i,1);
+        }
+      }
+      drawParticle(p){
+        this.ctx.save(); this.ctx.globalAlpha=p.life; this.ctx.translate(p.x,p.y); this.ctx.rotate(p.rotation*Math.PI/180); this.ctx.fillStyle=p.color;
+        if(p.shape===0){this.ctx.beginPath(); this.ctx.arc(0,0,p.size/2,0,Math.PI*2); this.ctx.fill();}
+        else if(p.shape===1){this.ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size);}
+        else{this.ctx.beginPath(); this.ctx.moveTo(0,-p.size/2); this.ctx.lineTo(-p.size/2,p.size/2); this.ctx.lineTo(p.size/2,p.size/2); this.ctx.closePath(); this.ctx.fill();}
+        this.ctx.restore();
+      }
+      animate(){
+        this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+        this.updateParticles(); for(const p of this.particles) this.drawParticle(p);
+        if(this.particles.length>0) requestAnimationFrame(()=>this.animate()); else this.animating=false;
+      }
+      launch(){ this.createParticles(); if(!this.animating){ this.animating=true; this.animate(); } }
+      stop(){ this.particles=[]; this.animating=false; this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height); }
+    }
+    const confetti = new ConfettiSystem();
+
+    function mostrarFeedback(ok){
+      const fb=document.createElement('div');
+      fb.className=`feedback ${ok?'correct':'incorrect'}`;
+      fb.textContent= ok ? '¡Correcto! 🎉' : 'Incorrecto 😞';
+      document.body.appendChild(fb);
+      setTimeout(()=>{ if(document.body.contains(fb)) fb.remove(); },1500);
+    }
+
+    // ===== Utilidades =====
+    function shuffleArray(arr){
+      const a=arr.slice();
+      for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+      return a;
+    }
+
+    // Selección de 5 preguntas sin repetir hasta agotar banco
+    function seleccionarPreguntasUnicas(){
+      const disponibles = preguntas.map((p,idx)=>({p,idx})).filter(({idx})=>!preguntasUsadas.has(idx));
+      if(disponibles.length<5){ preguntasUsadas.clear(); return shuffleArray(preguntas).slice(0,5); }
+      const sel = shuffleArray(disponibles).slice(0,5);
+      sel.forEach(({idx})=>preguntasUsadas.add(idx));
+      return sel.map(({p})=>p);
+    }
+
+    function actualizarEstadisticas(){
+      elementos.actual.textContent = indice + 1;
+      elementos.puntosEl.textContent = puntos;
+      const pct = Math.round((indice / preguntasSeleccionadas.length) * 100);
+      elementos.porcentaje.textContent = `${pct}%`;
+    }
+
+    function iniciarJuego(){
+      preguntasSeleccionadas = seleccionarPreguntasUnicas();
+      indice=0; puntos=0; respondiendo=false;
+      elementos.resultado.style.display="none";
+      elementos.reiniciar.style.display="none";
+      elementos.total.textContent=preguntasSeleccionadas.length;
+      elementos.barra.style.width='0%';
+      confetti.stop();
+      actualizarEstadisticas();
+      mostrarPregunta();
+    }
+
+    function mostrarPregunta(){
+      if(indice>=preguntasSeleccionadas.length){ finalizarJuego(); return; }
+      respondiendo=false; botonesActuales=[];
+
+      const q = preguntasSeleccionadas[indice];
+      elementos.pregunta.textContent = q.p;
+      elementos.opciones.innerHTML = "";
+
+      // --- Barajar opciones manteniendo referencia de la correcta ---
+      const indices = shuffleArray(q.o.map((_,i)=>i));         // e.g. [2,0,1]
+      indiceCorrectoActual = indices.indexOf(q.c);             // nueva posición de la correcta
+      indices.forEach((iPos, pos)=>{
+        const btn=document.createElement('button');
+        btn.className='opcion';
+        btn.textContent=q.o[iPos];
+        btn.onclick=()=>elegirRespuesta(pos);                  // pos = posición mostrada
+        elementos.opciones.appendChild(btn);
+        botonesActuales.push(btn);
+      });
+
+      const progreso = (indice / preguntasSeleccionadas.length) * 100;
+      elementos.barra.style.width = `${progreso}%`;
+      actualizarEstadisticas();
+    }
+
+    function elegirRespuesta(posSeleccionada){
+      if(respondiendo) return;
+      respondiendo=true;
+
+      const esCorrecta = posSeleccionada === indiceCorrectoActual;
+
+      // Desactivar + marcar visualmente
+      botonesActuales.forEach((btn, i)=>{
+        btn.classList.add('disabled');
+        if(i===posSeleccionada) btn.classList.add(esCorrecta ? 'correct' : 'incorrect');
+        if(!esCorrecta && i===indiceCorrectoActual) btn.classList.add('correct');
+      });
+
+      if(esCorrecta){
+        puntos++;
+        elementos.sonidoOk.play().catch(()=>{});
+        confetti.launch();
+      } else {
+        elementos.sonidoBad.play().catch(()=>{});
+      }
+      mostrarFeedback(esCorrecta);
+
+      setTimeout(()=>{ indice++; mostrarPregunta(); }, 1100);
+    }
+
+    function finalizarJuego(){
+      const porcentaje = Math.round((puntos / preguntasSeleccionadas.length) * 100);
+      const [emoji,msg] = porcentaje>=80?["🏆","¡Excelente!"] : porcentaje>=60?["🥇","¡Muy bien!"] : porcentaje>=40?["🥈","Bien, a seguir"] : ["📚","¡A practicar!"];
+      elementos.barra.style.width='100%';
+      elementos.resultado.innerHTML = `
+        <div style="font-size:2.2rem;margin-bottom:10px">${emoji}</div>
+        <div style="font-weight:900;margin-bottom:6px">${msg}</div>
+        <div style="font-size:1.1rem;opacity:.95">${puntos} de ${preguntasSeleccionadas.length} · ${porcentaje}%</div>
+      `;
+      elementos.resultado.style.display="block";
+      elementos.reiniciar.style.display="inline-block";
+    }
+
+    elementos.reiniciar.onclick = iniciarJuego;
+    window.addEventListener('load', iniciarJuego);
+  </script>
+</body>
+</html>
