@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gimnasia Rítmica Española – Juegos Interactivos</title>
+  <style>
+    :root{
+      --rosa:#ff69b4;
+      --morado:#8a2be2;
+      --dorado:#ffd700;
+      --blanco:#ffffff;
+      --fondo:#fff0f6;
+      --tarjeta:#ffffffee;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"Segoe UI",Arial,sans-serif;
+      min-height:100vh;
+      background:radial-gradient(ellipse at top,var(--fondo),#ffd6ec 60%,#f8c6ff 100%);
+      display:flex;align-items:center;justify-content:center;
+      padding:24px;color:#123;
+    }
+    .decoracion{
+      position:fixed;inset:0;pointer-events:none;
+      background:linear-gradient(180deg,transparent 0 55%,#ffe4f1 55% 100%);
+      z-index:-2;
+    }
+    .decoracion::after{
+      content:"";
+      position:absolute;left:0;right:0;bottom:0;height:45vh;
+      background:
+        repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 2px,transparent 2px 90px),
+        linear-gradient(180deg,#ff9cd6 0%,#ff69b4 100%);
+      opacity:.6;
+    }
+    .container{
+      width:min(1000px,96vw);
+      background:var(--tarjeta);
+      border:4px solid var(--morado);
+      border-radius:22px;
+      box-shadow:0 18px 60px rgba(0,0,0,.25);
+      padding:22px 22px 26px;
+      position:relative;overflow:hidden;
+    }
+    header{
+      text-align:center;
+    }
+    .titulo{
+      font-size:clamp(1.4rem,2.2vw + 1rem,2.2rem);
+      color:var(--morado);font-weight:800;letter-spacing:.3px;
+    }
+    .ondertitel{font-size:.98rem;color:#245;max-width:46ch;margin:auto;}
+    .arena{display:grid;place-items:center;margin:18px 0 8px;position:relative;}
+    .arena-omhulsel{
+      width:300px;height:150px;
+      background:linear-gradient(180deg,#ffe4f1,#ffc6e0);
+      border:3px solid var(--rosa);border-radius:14px;
+      box-shadow:inset 0 0 0 3px #ffffffa6,0 8px 20px rgba(0,0,0,.12);
+      position:relative;
+    }
+    .cinta{
+      position:absolute;width:280px;height:6px;
+      background:linear-gradient(90deg,var(--rosa),var(--dorado),var(--morado));
+      border-radius:3px;top:40%;left:10px;
+      animation:mover-cinta 4s infinite ease-in-out;
+    }
+    @keyframes mover-cinta{
+      0%,100%{transform:rotate(-10deg);}
+      50%{transform:rotate(10deg);}
+    }
+    .pelota{
+      position:absolute;width:22px;height:22px;border-radius:50%;
+      background:var(--dorado);bottom:15px;left:40%;
+      animation:botar 2.5s infinite;
+    }
+    @keyframes botar{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-30px)}
+    }
+    .menu{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(200px,1fr));
+      gap:16px;margin-top:10px;
+    }
+    .tarjeta{
+      background:#fff;border:3px solid var(--morado);border-radius:16px;
+      padding:16px;text-decoration:none;color:#123;
+      box-shadow:0 8px 20px rgba(0,0,0,.08);
+      transition:transform .18s ease,box-shadow .18s ease;
+      position:relative;overflow:hidden;isolation:isolate;
+      outline:none;
+    }
+    .tarjeta:hover{transform:translateY(-4px);box-shadow:0 14px 26px rgba(0,0,0,.14);}
+    .tarjeta .label{font-weight:800;color:var(--morado);font-size:1.1rem;margin-bottom:4px;}
+    .tarjeta .info{font-size:.95rem;color:#345;}
+    .tag{
+      position:absolute;top:10px;right:-28px;rotate:-20deg;
+      background:var(--dorado);color:#222;font-weight:800;font-size:.82rem;
+      padding:6px 40px;border:2px solid #cc8b00;border-radius:999px;
+      box-shadow:0 4px 10px rgba(0,0,0,.15);
+    }
+    footer{margin-top:16px;font-size:.9rem;color:#345;text-align:center;}
+    @media (max-width:800px){.menu{grid-template-columns:repeat(1,1fr)}}
+  </style>
+</head>
+<body>
+  <div class="decoracion" aria-hidden="true"></div>
+
+  <main class="container" role="application" aria-label="Gimnasia Rítmica Española">
+    <header>
+      <h1 class="titulo">Gimnasia Rítmica Española – Juegos Interactivos</h1>
+      <p class="ondertitel" style="font-size:150%;">
+        <a href="https://www.amazon.nl/dp/B0FMR8KPN4" target="_blank" rel="noopener noreferrer">¡Prueba nuestro libro!</a>
+      </p>
+      <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
+    </header>
+
+    <section class="arena" aria-label="Animación Gimnasia Rítmica">
+      <div class="arena-omhulsel">
+        <div class="cinta"></div>
+        <div class="pelota"></div>
+      </div>
+    </section>
+
+    <nav class="menu" aria-label="Menú de juegos">
+      <a class="tarjeta" href="https://vertice1971.github.io/thomasbooks/R%C3%ADtmica/1Espa%C3%B1olaH.html" target="_blank">
+        <span class="tag">Nuevo</span>
+        <div class="label">Historia de la Selección Española</div>
+        <div class="info">Pon a prueba tus conocimientos sobre las estrellas españolas</div>
+      </a>
+      <a class="tarjeta" href="https://vertice1971.github.io/thomasbooks/R%C3%ADtmica/2General.html" target="_blank">
+        <div class="label">¿Conoces a fondo la Rítmica?</div>
+        <div class="info">Demuestra lo que sabes y aprende lo que no sabías</div>
+      </a>
+      <a class="tarjeta" href="https://vertice1971.github.io/thomasbooks/R%C3%ADtmica/3Aparatos.html" target="_blank">
+        <div class="label">Juego de Aparatos</div>
+        <div class="info">Juega con tu aparato favorito</div>
+      </a>
+      <a class="tarjeta" href="https://vertice1971.github.io/thomasbooks/R%C3%ADtmica/4Historia.html" target="_blank">
+        <div class="label">Gimnasia Rítmica Eterna</div>
+        <div class="info">La Historia de las auténticas campeonas de todas las épocas</div>
+      </a>
+    </nav>
+
+  
+  </main>
+</body>
+</html>
