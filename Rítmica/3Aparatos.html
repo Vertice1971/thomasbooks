@@ -3,20 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <title>Juego de Aparatos – Gimnasia Rítmica</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+  <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body{
-      font-family:'Poppins',sans-serif;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
       background:linear-gradient(135deg,#667eea 0%,#764ba2 25%,#f093fb 50%,#f5576c 75%,#4facfe 100%);
       background-size:400% 400%; animation:gradientShift 12s ease infinite;
       min-height:100vh; display:flex; align-items:center; justify-content:center; overflow-x:hidden;
+      color:#1d1d1f;
     }
     @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-    .iconito{position:absolute;font-size:2rem;opacity:.2;animation:float linear infinite;pointer-events:none;z-index:1}
+    /* —— Fondo semitransparente permanente con Portada.png —— */
+    #bgOverlay{
+      position: fixed;
+      inset: 0;
+      background: url("Portada.png") no-repeat center center;
+      background-size: contain;      /* usar 'cover' si se quiere llenar */
+      opacity: .5;
+      z-index: 1;
+      pointer-events: none;          /* no bloquea clics */
+    }
+
+    /* —— Portada inicial de 3 segundos —— */
+    #cover{
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;                 /* por encima de todo */
+    }
+    #cover img{ max-width:100%; max-height:100%; }
+
+    /* —— Garantiza que el contenido quede por delante del fondo —— */
+    .contenido-superior,
+    .quiz-content,
+    .container{
+      position: relative;
+      z-index: 2;
+    }
+
+    .iconito{position:absolute;font-size:2rem;opacity:.2;animation:float linear infinite;pointer-events:none;z-index:2}
     @keyframes float{from{transform:translateY(100vh) rotate(0)}to{transform:translateY(-10vh) rotate(360deg)}}
 
     .container{
@@ -29,7 +61,7 @@
     .header{background:linear-gradient(135deg,#ff6b9d,#c44569);color:#fff;text-align:center;padding:30px 20px;position:relative;overflow:hidden}
     .header::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:shine 3s infinite}
     @keyframes shine{0%{left:-100%}100%{left:100%}}
-    h1{font-size:2.2rem;font-weight:700;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+    h1{font-size:2.2rem;font-weight:800;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
     .ondertitel{margin:6px 0 2px}
     .ondertitel a,.contact-info a{color:#fff;text-decoration:none}
     .ondertitel a:hover,.contact-info a:hover{text-decoration:underline}
@@ -41,7 +73,7 @@
     }
     .stat-item{display:flex;flex-direction:column;align-items:center}
     .stat-label{font-size:.8rem;opacity:.9}
-    .stat-value{font-size:1.2rem;font-weight:700}
+    .stat-value{font-size:1.2rem;font-weight:800}
 
     .question-card{
       background:#fff;border-radius:20px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,.1);margin-bottom:25px;position:relative;
@@ -51,11 +83,11 @@
     @keyframes borderRotate{0%{background-position:0% 50%}100%{background-position:400% 50%}}
     @keyframes questionSlide{from{transform:translateX(40px);opacity:0}to{transform:translateX(0);opacity:1}}
 
-    .pregunta{font-size:1.4rem;font-weight:600;margin-bottom:25px;text-align:center;color:#333;line-height:1.4}
+    .pregunta{font-size:1.35rem;font-weight:800;margin-bottom:25px;text-align:center;color:#333;line-height:1.4}
     .opciones-grid{display:grid;gap:15px}
     .opcion{
       padding:18px 25px;border-radius:15px;border:2px solid #e0e0e0;background:linear-gradient(135deg,#f8f9ff,#f0f2ff);
-      cursor:pointer;font-size:1.1rem;font-weight:500;text-align:center;transition:all .3s ease;position:relative;overflow:hidden
+      cursor:pointer;font-size:1.05rem;font-weight:700;text-align:center;transition:all .25s ease;position:relative;overflow:hidden
     }
     .opcion::before{content:'';position:absolute;inset:0;left:-100%;background:linear-gradient(90deg,transparent,rgba(255,107,157,.1),transparent);transition:left .5s}
     .opcion:hover{background:linear-gradient(135deg,#ff6b9d,#c44569);color:#fff;border-color:#ff6b9d;transform:translateY(-3px);box-shadow:0 10px 25px rgba(255,107,157,.3)}
@@ -70,19 +102,19 @@
     @keyframes progressShine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 
     .resultado{
-      text-align:center;font-size:1.4rem;font-weight:700;margin:30px 0;padding:25px;border-radius:20px;
+      text-align:center;font-size:1.25rem;font-weight:800;margin:30px 0;padding:25px;border-radius:20px;
       background:linear-gradient(135deg,#4facfe,#00f2fe);color:#fff;box-shadow:0 10px 30px rgba(79,172,254,.3);display:none;animation:resultBounce .6s ease-out
     }
     @keyframes resultBounce{0%{transform:scale(.8);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
 
     .reiniciar-btn{
       display:inline-block;margin:20px auto;padding:15px 40px;border:none;border-radius:50px;background:linear-gradient(135deg,#667eea,#764ba2);
-      color:#fff;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all .3s ease;box-shadow:0 5px 15px rgba(102,126,234,.4)
+      color:#fff;font-size:1.05rem;font-weight:800;cursor:pointer;transition:all .25s ease;box-shadow:0 5px 15px rgba(102,126,234,.4)
     }
     .reiniciar-btn:hover{background:linear-gradient(135deg,#5a6fd8,#6a4c93);transform:translateY(-2px);box-shadow:0 8px 25px rgba(102,126,234,.5)}
 
     .feedback{
-      position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);padding:20px 40px;border-radius:15px;color:#fff;font-size:1.2rem;font-weight:600;text-align:center;
+      position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);padding:20px 40px;border-radius:15px;color:#fff;font-size:1.1rem;font-weight:800;text-align:center;
       z-index:1000;animation:feedbackPop 1.5s ease-out forwards;pointer-events:none
     }
     .feedback.correct{background:linear-gradient(135deg,#00c851,#007e33);box-shadow:0 10px 30px rgba(0,200,81,.4)}
@@ -95,28 +127,38 @@
       .container{width:95%;margin:10px}
       h1{font-size:1.8rem}
       .quiz-content{padding:20px}
-      .pregunta{font-size:1.2rem}
+      .pregunta{font-size:1.15rem}
       .opcion{font-size:1rem;padding:15px 20px}
     }
   </style>
 </head>
 <body>
+
+  <!-- —— Portada inicial —— -->
+  <div id="cover">
+    <img src="Portada.png" alt="Portada">
+  </div>
+
+  <!-- —— Fondo semitransparente permanente —— -->
+  <div id="bgOverlay"></div>
+
   <!-- Iconitos flotantes -->
-  <div class="iconito" style="left:10%;animation-duration:12s;">🔵</div>
-  <div class="iconito" style="left:30%;animation-duration:15s;animation-delay:-3s;">🎀</div>
-  <div class="iconito" style="left:50%;animation-duration:18s;animation-delay:-6s;">🪀</div>
-  <div class="iconito" style="left:70%;animation-duration:14s;animation-delay:-9s;">🧵</div>
-  <div class="iconito" style="left:85%;animation-duration:20s;animation-delay:-12s;">🤸‍♀️</div>
+  <div class="iconito contenido-superior" style="left:10%;animation-duration:12s;">🔵</div>
+  <div class="iconito contenido-superior" style="left:30%;animation-duration:15s;animation-delay:-3s;">🎀</div>
+  <div class="iconito contenido-superior" style="left:50%;animation-duration:18s;animation-delay:-6s;">🪀</div>
+  <div class="iconito contenido-superior" style="left:70%;animation-duration:14s;animation-delay:-9s;">🧵</div>
+  <div class="iconito contenido-superior" style="left:85%;animation-duration:20s;animation-delay:-12s;">🤸‍♀️</div>
 
-  <canvas id="confetiCanvas"></canvas>
+  <canvas id="confetiCanvas" class="contenido-superior"></canvas>
 
-  <div class="container">
+  <div class="container contenido-superior">
     <div class="header">
       <h1>🎀 Juego de Aparatos 🤸‍♀️</h1>
-      <!-- Bloque obligatorio del proyecto -->
-<p class="ondertitel" style="font-size:150%;">
+      <!-- Bloque obligatorio del proyecto (debajo del título) -->
+      <p class="ondertitel">
         <a href="https://www.amazon.es/dp/B0FNWZFJFP" target="_blank" rel="noopener noreferrer">¡Prueba nuestro libro!</a>
-      </p>      <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
+      </p>
+      <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
     </div>
 
     <div class="quiz-content">
@@ -139,10 +181,33 @@
     </div>
   </div>
 
-  <audio id="sonido-correcto" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-  <audio id="sonido-incorrecto" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
-
   <script>
+    // —— Oculta la portada tras 3 s (puedes ajustar 3000) ——
+    window.addEventListener('load', function(){
+      setTimeout(function(){
+        var cover = document.getElementById('cover');
+        if (cover) cover.style.display = 'none';
+      }, 3000);
+    });
+
+    // —— Sonidos autocontenidos (Web Audio API) en lugar de audios externos ——
+    const Snd = (() => {
+      let ctx;
+      function init(){ if(!ctx) ctx = new (window.AudioContext||window.webkitAudioContext)(); }
+      function beep(freq=880, dur=0.12, type='sine', gain=0.06){
+        init();
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = type; o.frequency.value = freq;
+        g.gain.value = gain;
+        o.connect(g); g.connect(ctx.destination);
+        o.start(); o.stop(ctx.currentTime + dur);
+      }
+      return {
+        ok(){ beep(880,0.10,'sine',0.07); setTimeout(()=>beep(1175,0.10,'sine',0.06),90); },
+        ko(){ beep(220,0.18,'sawtooth',0.06); }
+      };
+    })();
+
     // ===== BANCO: 40 preguntas (correcta indicada por índice 'c' en el orden original) =====
     const preguntas = [
       {p:"¿Qué aparato puede ser de plástico o madera y rueda por el suelo?",o:["Aro","Pelota","Cuerda"],c:0},
@@ -205,8 +270,6 @@
       barra: document.getElementById("barra"),
       resultado: document.getElementById("resultado"),
       reiniciar: document.getElementById("reiniciar"),
-      sonidoOk: document.getElementById("sonido-correcto"),
-      sonidoBad: document.getElementById("sonido-incorrecto"),
       actual: document.getElementById("pregunta-actual"),
       total: document.getElementById("total-preguntas"),
       puntosEl: document.getElementById("puntos-actuales"),
@@ -225,7 +288,19 @@
       createParticles(){
         const colors=['#ff6b9d','#c44569','#4facfe','#00f2fe','#f093fb','#f5576c'];
         for(let i=0;i<150;i++){
-          this.particles.push({x:Math.random()*this.canvas.width,y:-10,vx:(Math.random()-.5)*8,vy:Math.random()*3+2,rotation:Math.random()*360,rotationSpeed:(Math.random()-.5)*10,size:Math.random()*8+4,color:colors[Math|Math.random()*colors.length],shape:Math.floor(Math.random()*3),life:1,decay:Math.random()*0.02+0.01});
+          this.particles.push({
+            x:Math.random()*this.canvas.width,
+            y:-10,
+            vx:(Math.random()-.5)*8,
+            vy:Math.random()*3+2,
+            rotation:Math.random()*360,
+            rotationSpeed:(Math.random()-.5)*10,
+            size:Math.random()*8+4,
+            color:colors[Math|Math.random()*colors.length],
+            shape:Math.floor(Math.random()*3),
+            life:1,
+            decay:Math.random()*0.02+0.01
+          });
         }
       }
       updateParticles(){
@@ -302,7 +377,7 @@
       elementos.pregunta.textContent = q.p;
       elementos.opciones.innerHTML = "";
 
-      // --- Barajar opciones manteniendo referencia de la correcta ---
+      // — Barajar opciones manteniendo referencia de la correcta —
       const indices = shuffleArray(q.o.map((_,i)=>i));         // e.g. [2,0,1]
       indiceCorrectoActual = indices.indexOf(q.c);             // nueva posición de la correcta
       indices.forEach((iPos, pos)=>{
@@ -334,10 +409,10 @@
 
       if(esCorrecta){
         puntos++;
-        elementos.sonidoOk.play().catch(()=>{});
+        Snd.ok();
         confetti.launch();
       } else {
-        elementos.sonidoBad.play().catch(()=>{});
+        Snd.ko();
       }
       mostrarFeedback(esCorrecta);
 
@@ -349,9 +424,9 @@
       const [emoji,msg] = porcentaje>=80?["🏆","¡Excelente!"] : porcentaje>=60?["🥇","¡Muy bien!"] : porcentaje>=40?["🥈","Bien, a seguir"] : ["📚","¡A practicar!"];
       elementos.barra.style.width='100%';
       elementos.resultado.innerHTML = `
-        <div style="font-size:2.2rem;margin-bottom:10px">${emoji}</div>
+        <div style="font-size:2.1rem;margin-bottom:10px">${emoji}</div>
         <div style="font-weight:900;margin-bottom:6px">${msg}</div>
-        <div style="font-size:1.1rem;opacity:.95">${puntos} de ${preguntasSeleccionadas.length} · ${porcentaje}%</div>
+        <div style="font-size:1.05rem;opacity:.95">${puntos} de ${preguntasSeleccionadas.length} · ${porcentaje}%</div>
       `;
       elementos.resultado.style.display="block";
       elementos.reiniciar.style.display="inline-block";

@@ -22,6 +22,41 @@
     }
     @keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
+    /* ——— 5.2. Capa de imagen semitransparente permanente ——— */
+    #bgOverlay{
+      position: fixed;
+      inset: 0;
+      background: url("Portada.png") no-repeat center center;
+      background-size: contain;   /* usar 'cover' si se quiere llenar */
+      opacity: .5;
+      z-index: 1;
+      pointer-events: none;       /* no bloquea clics */
+    }
+
+    /* ——— 5.2. Portada inicial a pantalla completa ——— */
+    #cover{
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;              /* por encima de todo */
+    }
+    #cover img{
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    /* ——— 5.2. Garantiza que el contenido quede por delante del fondo ——— */
+    .contenido-superior,
+    .quiz-container,
+    .main-container,
+    .wrap{
+      position: relative;
+      z-index: 2;
+    }
+
     .wrap{
       width:min(920px,95vw); background:rgba(255,255,255,.96);
       backdrop-filter: blur(14px); border-radius:24px; box-shadow:var(--sombra); overflow:hidden;
@@ -132,13 +167,24 @@
   </style>
 </head>
 <body>
-  <main class="wrap" role="application" aria-label="Quiz Gimnasia Rítmica – Básico">
+
+  <!-- ——— 5.1. Portada inicial ——— -->
+  <div id="cover">
+    <img src="Portada.png" alt="Portada">
+  </div>
+
+  <!-- ——— 5.1. Fondo semitransparente permanente ——— -->
+  <div id="bgOverlay"></div>
+
+  <main class="wrap contenido-superior" role="application" aria-label="Quiz Gimnasia Rítmica – Básico">
     <header class="header">
       <h1>🎭 Quiz de Gimnasia Rítmica 🤸‍♀️</h1>
-      <!-- Bloque obligatorio justo bajo el título -->
-      <p class="ondertitel" style="font-size:150%;">
-        <a href="https://www.amazon.es/dp/B0FNWZFJFP" target="_blank" rel="noopener noreferrer">¡Prueba nuestro libro!</a>
-      </p>
+
+      <!-- Frase breve explicativa bajo el título (preferencia del proyecto) -->
+      <p style="margin:.4rem 0 .6rem">Responde preguntas básicas sobre tapiz, aparatos, normas FIG y competiciones. Cinco ítems aleatorios por partida.</p>
+
+      <!-- Bloque fijo exigido por el proyecto (punto 3): justo bajo el título -->
+      <p class="ondertitel"><a href="https://www.amazon.es/dp/B0FNWZFJFP" target="_blank" rel="noopener noreferrer">¡Prueba nuestro libro!</a></p>
       <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
     </header>
 
@@ -163,6 +209,14 @@
   </main>
 
   <script>
+    // ——— 5.3. Oculta la portada tras 3 s ———
+    window.addEventListener('load', function(){
+      setTimeout(function(){
+        var cover = document.getElementById('cover');
+        if (cover) cover.style.display = 'none';
+      }, 3000);
+    });
+
     // ——— Sonidos autocontenidos (Web Audio API): acierto / fallo ———
     const Snd = (() => {
       let ctx;

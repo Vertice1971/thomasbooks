@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campeonas de Gimnasia Rítmica</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Georgia', serif;
@@ -26,6 +22,32 @@
             0% { background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #f8b500 100%); }
             100% { background: linear-gradient(135deg, #a8e6cf 0%, #ff8a80 50%, #ffd54f 100%); }
         }
+
+        /* ——— Fondo semitransparente permanente (proyecto 5.2) ——— */
+        #bgOverlay{
+          position: fixed;
+          inset: 0;
+          background: url("Portada.png") no-repeat center center;
+          background-size: contain;   /* usar 'cover' si se quiere llenar */
+          opacity: .5;
+          z-index: 1;
+          pointer-events: none;       /* no bloquea clics */
+        }
+
+        /* ——— Portada inicial 3 s (proyecto 5.1) ——— */
+        #cover{
+          position: fixed;
+          inset: 0;
+          background: #fff;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;              /* por encima de todo */
+        }
+        #cover img{ max-width:100%; max-height:100%; }
+
+        /* ——— Garantiza que el contenido quede por delante del fondo ——— */
+        .contenido-superior{ position: relative; z-index: 2; }
 
         .quiz-container {
             background: rgba(255, 255, 255, 0.95);
@@ -56,10 +78,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        .content {
-            position: relative;
-            z-index: 1;
-        }
+        .content { position: relative; z-index: 1; }
 
         h1 {
             text-align: center;
@@ -70,37 +89,15 @@
             animation: bounce 2s ease-in-out infinite alternate;
         }
 
-        @keyframes bounce {
-            0% { transform: translateY(0px); }
-            100% { transform: translateY(-5px); }
-        }
+        @keyframes bounce { 0%{transform:translateY(0)} 100%{transform:translateY(-5px)} }
 
         /* Bloque obligatorio del proyecto (estilo modesto) */
-        .intro-prog {
-            text-align:center;
-            color:#555;
-            font-size:1rem;
-            margin: 6px 0 10px;
-        }
-        .ondertitel{
-            text-align:center;
-            font-size:.95rem;
-            margin-bottom:4px;
-        }
-        .ondertitel a{
-            color:#225;
-            text-decoration:none;
-        }
+        .intro-prog { text-align:center; color:#555; font-size:1rem; margin: 6px 0 10px; }
+        .ondertitel{ text-align:center; font-size:.95rem; margin-bottom:4px; }
+        .ondertitel a{ color:#225; text-decoration:none; }
         .ondertitel a:hover{ text-decoration:underline; }
-        .contact-info{
-            text-align:center;
-            font-size:.95rem;
-            margin-bottom:18px;
-        }
-        .contact-info a{
-            color:#225;
-            text-decoration:none;
-        }
+        .contact-info{ text-align:center; font-size:.95rem; margin-bottom:18px; }
+        .contact-info a{ color:#225; text-decoration:none; }
         .contact-info a:hover{ text-decoration:underline; }
 
         .subtitle {
@@ -111,14 +108,8 @@
             font-size: 1.1em;
         }
 
-        .start-screen, .game-screen, .results-screen {
-            display: none;
-            text-align: center;
-        }
-
-        .start-screen.active, .game-screen.active, .results-screen.active {
-            display: block;
-        }
+        .start-screen, .game-screen, .results-screen { display: none; text-align: center; }
+        .start-screen.active, .game-screen.active, .results-screen.active { display: block; }
 
         .start-btn, .restart-btn {
             background: linear-gradient(45deg, #ff6b9d, #c44569);
@@ -134,38 +125,13 @@
             letter-spacing: 1px;
             font-weight: bold;
         }
+        .start-btn:hover, .restart-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 20px rgba(196,69,105,0.6); }
 
-        .start-btn:hover, .restart-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(196,69,105,0.6);
-        }
+        .question-container { margin-bottom: 25px; }
+        .question-number { color: #c44569; font-weight: bold; font-size: 1.1em; margin-bottom: 15px; }
+        .question { font-size: 1.3em; color: #333; margin-bottom: 20px; font-weight: bold; line-height: 1.4; }
 
-        .question-container {
-            margin-bottom: 25px;
-        }
-
-        .question-number {
-            color: #c44569;
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 15px;
-        }
-
-        .question {
-            font-size: 1.3em;
-            color: #333;
-            margin-bottom: 20px;
-            font-weight: bold;
-            line-height: 1.4;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
+        .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
         .option {
             background: linear-gradient(45deg, #a8e6cf, #88d8c0);
             border: none;
@@ -178,59 +144,17 @@
             color: #2d5a27;
             font-weight: 600;
         }
+        .option:hover { transform: translateX(10px) scale(1.02); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .option.correct { background: linear-gradient(45deg, #4caf50, #66bb6a); color: white; animation: correctPulse 0.6s ease; }
+        .option.incorrect { background: linear-gradient(45deg, #f44336, #e57373); color: white; animation: incorrectShake 0.6s ease; }
 
-        .option:hover {
-            transform: translateX(10px) scale(1.02);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
+        @keyframes correctPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+        @keyframes incorrectShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-10px)} 75%{transform:translateX(10px)} }
 
-        .option.correct {
-            background: linear-gradient(45deg, #4caf50, #66bb6a);
-            color: white;
-            animation: correctPulse 0.6s ease;
-        }
+        .score { text-align: center; font-size: 1.2em; color: #c44569; margin-bottom: 20px; font-weight: bold; }
 
-        .option.incorrect {
-            background: linear-gradient(45deg, #f44336, #e57373);
-            color: white;
-            animation: incorrectShake 0.6s ease;
-        }
-
-        @keyframes correctPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes incorrectShake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        .score {
-            text-align: center;
-            font-size: 1.2em;
-            color: #c44569;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background: #ddd;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ff6b9d, #c44569);
-            width: 0%;
-            transition: width 0.3s ease;
-            border-radius: 5px;
-        }
+        .progress-bar { width: 100%; height: 10px; background: #ddd; border-radius: 5px; margin-bottom: 20px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #ff6b9d, #c44569); width: 0%; transition: width 0.3s ease; border-radius: 5px; }
 
         .next-btn {
             background: linear-gradient(45deg, #f8b500, #ffa000);
@@ -245,56 +169,32 @@
             margin: 0 auto;
             font-weight: bold;
         }
+        .next-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,160,0,0.4); }
 
-        .next-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255,160,0,0.4);
-        }
+        .final-score { font-size: 2em; color: #c44569; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+        .congratulations { font-size: 1.4em; color: #4caf50; margin-bottom: 15px; font-weight: bold; }
 
-        .final-score {
-            font-size: 2em;
-            color: #c44569;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .congratulations {
-            font-size: 1.4em;
-            color: #4caf50;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .sparkles {
-            font-size: 2em;
-            animation: sparkle 1s ease-in-out infinite alternate;
-        }
-
-        @keyframes sparkle {
-            0% { transform: scale(1) rotate(0deg); }
-            100% { transform: scale(1.2) rotate(180deg); }
-        }
+        .sparkles { font-size: 2em; animation: sparkle 1s ease-in-out infinite alternate; }
+        @keyframes sparkle { 0%{transform:scale(1) rotate(0deg)} 100%{transform:scale(1.2) rotate(180deg)} }
 
         @media (max-width: 600px) {
-            .quiz-container {
-                padding: 20px;
-                margin: 10px;
-            }
-            
-            h1 {
-                font-size: 1.8em;
-            }
-            
-            .question {
-                font-size: 1.1em;
-            }
+            .quiz-container { padding: 20px; margin: 10px; }
+            h1 { font-size: 1.8em; }
+            .question { font-size: 1.1em; }
         }
     </style>
 </head>
 <body>
-    <div class="quiz-container">
+
+    <!-- ——— Portada inicial (3 s) ——— -->
+    <div id="cover"><img src="Portada.png" alt="Portada"></div>
+    <!-- ——— Fondo semitransparente permanente ——— -->
+    <div id="bgOverlay"></div>
+
+    <div class="quiz-container contenido-superior">
         <div class="content">
             <h1><span class="sparkles">✨</span> Historias de Gimnasia Rítmica <span class="sparkles">✨</span></h1>
+
             <!-- Bloque obligatorio del proyecto (debajo del título) -->
             <p class="ondertitel" style="font-size:150%;">
                 <a href="https://www.amazon.es/dp/B0FNWZFJFP" target="_blank" rel="noopener noreferrer">¡Prueba nuestro libro!</a>
@@ -312,12 +212,9 @@
             </div>
 
             <div class="game-screen">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
                 <div class="score" id="score">Puntuación: 0/5</div>
-                
+
                 <div class="question-container">
                     <div class="question-number" id="questionNumber">Pregunta 1 de 5</div>
                     <div class="question" id="question"></div>
@@ -336,207 +233,55 @@
     </div>
 
     <script>
+        // ——— Oculta la portada tras 3 s (proyecto 5.3) ———
+        window.addEventListener('load', function(){
+          setTimeout(function(){
+            var cover = document.getElementById('cover');
+            if (cover) cover.style.display = 'none';
+          }, 3000);
+        });
+
         const questions = [
-            {
-                question: "¿Quién es considerada la 'Reina de la Gimnasia Rítmica' y ganó 6 medallas olímpicas?",
-                options: ["Nadia Comăneci", "Alina Kabaeva", "Evgeniya Kanaeva"],
-                correct: 2
-            },
-            {
-                question: "¿Qué gimnasta rusa ganó 2 oros olímpicos consecutivos en Londres 2012 y Río 2016?",
-                options: ["Margarita Mamun", "Evgeniya Kanaeva", "Dina Averina"],
-                correct: 1
-            },
-            {
-                question: "¿Cuál es el nombre de la gimnasta búlgara que dominó la disciplina en los años 80?",
-                options: ["Maria Gigova", "Dilyana Georgieva", "Bianka Panova"],
-                correct: 0
-            },
-            {
-                question: "¿Quién fue la primera campeona olímpica de gimnasia rítmica en Los Ángeles 1984?",
-                options: ["Lori Fung", "Regina Weber", "Doina Stăiculescu"],
-                correct: 0
-            },
-            {
-                question: "¿Qué gimnasta bielorrusa fue campeona mundial múltiple en los años 90?",
-                options: ["Yulia Raskina", "Oxana Kostina", "Ekaterina Serebrianskaya"],
-                correct: 0
-            },
-            {
-                question: "¿Quién ganó el oro olímpico en Atlanta 1996?",
-                options: ["Ekaterina Serebrianskaya", "Yanina Batyrchina", "Amina Zaripova"],
-                correct: 0
-            },
-            {
-                question: "¿Qué gimnasta rusa es conocida por su elegancia con la cinta?",
-                options: ["Anna Bessonova", "Irina Tchachina", "Vera Shtelbaums"],
-                correct: 1
-            },
-            {
-                question: "¿Cuál fue la última campeona olímpica individual antes del dominio ruso moderno?",
-                options: ["Yulia Barsukova", "Alina Kabaeva", "Ekaterina Serebrianskaya"],
-                correct: 0
-            },
-            {
-                question: "¿Qué gimnasta ucraniana fue subcampeona olímpica en múltiples ocasiones?",
-                options: ["Anna Bessonova", "Ganna Rizatdinova", "Melitina Staniouta"],
-                correct: 0
-            },
-            {
-                question: "¿Quién ganó el oro olímpico en Río 2016?",
-                options: ["Margarita Mamun", "Yana Kudryavtseva", "Son Yeon-jae"],
-                correct: 0
-            },
-            {
-                question: "¿Qué gimnasta española ha tenido mayor éxito internacional?",
-                options: ["Carolina Rodríguez", "Almudena Cid", "Sandra Aguilar"],
-                correct: 1
-            },
-            {
-                question: "¿Cuál de estas gimnastas es conocida como una de las gemelas Averina?",
-                options: ["Arina Averina", "Linoy Ashram", "Boryana Kaleyn"],
-                correct: 0
-            },
-            {
-                question: "¿Qué gimnasta israelí ganó oro olímpico en Tokio 2020?",
-                options: ["Linoy Ashram", "Nicol Zelikman", "Neta Rivkin"],
-                correct: 0
-            },
-            {
-                question: "¿Quién es considerada una leyenda de la gimnasia rítmica soviética?",
-                options: ["Galima Shugurova", "Irina Deriugina", "Lilia Ignatova"],
-                correct: 1
-            },
-            {
-                question: "¿Qué gimnasta coreana fue medallista olímpica?",
-                options: ["Son Yeon-jae", "Shin Soo-ji", "Lee Jae-kyung"],
-                correct: 0
-            },
-            {
-                question: "¿Cuál fue la primera campeona mundial de gimnasia rítmica (1963)?",
-                options: ["Ludmila Savinkova", "Tatyana Kravtchenko", "Elena Leuşteanu"],
-                correct: 0
-            },
-            {
-                question: "¿Qué gimnasta italiana tuvo gran éxito en los años 2000?",
-                options: ["Julieta Cantaluppi", "Fabrizia D'Ottavio", "Raffaella Lollobrigida"],
-                correct: 1
-            },
-            {
-                question: "¿Quién dominó la gimnasia rítmica en los Mundiales de los años 2000?",
-                options: ["Alina Kabaeva", "Irina Tchachina", "Anna Bessonova"],
-                correct: 0
-            },
-            {
-                question: "¿Qué gimnasta francesa fue campeona europea?",
-                options: ["Delphine Ledoux", "Kseniya Moustafaeva", "Aurore Puppin"],
-                correct: 1
-            },
-            {
-                question: "¿Cuál de estas gimnastas compitió por Azerbaiyán?",
-                options: ["Aliya Garayeva", "Marina Durunda", "Zohra Aghamirova"],
-                correct: 0
-            },
-            {
-                question: "¿Qué gimnasta búlgara moderna ha tenido éxito internacional?",
-                options: ["Boryana Kaleyn", "Neviana Vladinova", "Katrin Taseva"],
-                correct: 1
-            },
-            {
-                question: "¿Quién fue campeona mundial individual en 2019?",
-                options: ["Dina Averina", "Linoy Ashram", "Boryana Kaleyn"],
-                correct: 0
-            },
-            {
-                question: "¿Qué gimnasta bielorrusa fue medallista mundial?",
-                options: ["Katsiaryna Halkina", "Melitina Staniouta", "Anastasiya Salos"],
-                correct: 1
-            },
-            {
-                question: "¿Cuál fue la primera gimnasta no europea en ganar oro olímpico?",
-                options: ["Lori Fung", "Son Yeon-jae", "Shin Soo-ji"],
-                correct: 0
-            },
-            {
-                question: "¿Qué gimnasta rumana tuvo éxito en los años 80?",
-                options: ["Doina Stăiculescu", "Alexandra Timoshenko", "Bianka Panova"],
-                correct: 0
-            },
-            {
-                question: "¿Quién fue la última campeona soviética antes de la disolución de la URSS?",
-                options: ["Oksana Skaldina", "Alexandra Timoshenko", "Oxana Kostina"],
-                correct: 2
-            },
-            {
-                question: "¿Qué gimnasta griega tuvo participaciones destacadas en Juegos Olímpicos?",
-                options: ["Varvara Filiou", "Maria Gigova", "Christina Tsitsigianni"],
-                correct: 0
-            },
-            {
-                question: "¿Cuál de estas gimnastas representó a Estados Unidos?",
-                options: ["Julie Zetlin", "Nastia Liukin", "Valeria Maksyuta"],
-                correct: 0
-            },
-            {
-                question: "¿Qué gimnasta alemana fue campeona europea?",
-                options: ["Regina Weber", "Jana Berezko-Marggrander", "Carmen Rischer"],
-                correct: 1
-            },
-            {
-                question: "¿Quién es conocida por revitalizar la gimnasia rítmica japonesa?",
-                options: ["Kaho Minagawa", "Sumire Kita", "Sakura Hayakawa"],
-                correct: 0
-            },
-            {
-                question: "¿Qué gimnasta mexicana participó en múltiples Juegos Olímpicos?",
-                options: ["Karla Díaz", "Rut Castillo", "Alejandra Orozco"],
-                correct: 1
-            },
-            {
-                question: "¿Cuál de estas gimnastas compitió por Polonia?",
-                options: ["Katarzyna Faber", "Joanna Mitrosz", "Natalia Lavrova"],
-                correct: 1
-            },
-            {
-                question: "¿Qué gimnasta checa tuvo éxito en competiciones europeas?",
-                options: ["Věra Šašková", "Klára Škubníková", "Andrea Marešová"],
-                correct: 1
-            },
-            {
-                question: "¿Quién fue una pionera de la gimnasia rítmica moderna?",
-                options: ["Isadora Duncan", "Mila Kondrashova", "Galima Shugurova"],
-                correct: 1
-            },
-            {
-                question: "¿Qué gimnasta argentina tuvo participaciones olímpicas destacadas?",
-                options: ["Silvana Sorichetti", "Alejandra Quereda", "Carolina Pascual"],
-                correct: 0
-            },
-            {
-                question: "¿Cuál de estas gimnastas representó a Hungría?",
-                options: ["Fanni Pigniczki", "Andrea Oprean", "Eszter Jurek"],
-                correct: 2
-            },
-            {
-                question: "¿Qué gimnasta canadiense siguió los pasos de Lori Fung?",
-                options: ["Alexandra Orlando", "Patricia Bezzoubenko", "Carmen Whelan"],
-                correct: 1
-            },
-            {
-                question: "¿Quién fue campeona mundial júnior múltiple antes de su éxito sénior?",
-                options: ["Yana Kudryavtseva", "Margarita Mamun", "Dina Averina"],
-                correct: 0
-            },
-            {
-                question: "¿Qué gimnasta turca tuvo participaciones internacionales destacadas?",
-                options: ["Ezgi Başar", "Serra Çelik", "Elif Çolak"],
-                correct: 0
-            },
-            {
-                question: "¿Cuál de estas gimnastas es conocida por su trabajo con el aro?",
-                options: ["Evgeniya Kanaeva", "Daria Svatkovskaya", "Aleksandra Soldatova"],
-                correct: 2
-            }
+            { question: "¿Quién es considerada la 'Reina de la Gimnasia Rítmica' y ganó 6 medallas olímpicas?", options: ["Nadia Comăneci", "Alina Kabaeva", "Evgeniya Kanaeva"], correct: 2 },
+            { question: "¿Qué gimnasta rusa ganó 2 oros olímpicos consecutivos en Londres 2012 y Río 2016?", options: ["Margarita Mamun", "Evgeniya Kanaeva", "Dina Averina"], correct: 1 },
+            { question: "¿Cuál es el nombre de la gimnasta búlgara que dominó la disciplina en los años 80?", options: ["Maria Gigova", "Dilyana Georgieva", "Bianka Panova"], correct: 0 },
+            { question: "¿Quién fue la primera campeona olímpica de gimnasia rítmica en Los Ángeles 1984?", options: ["Lori Fung", "Regina Weber", "Doina Stăiculescu"], correct: 0 },
+            { question: "¿Qué gimnasta bielorrusa fue campeona mundial múltiple en los años 90?", options: ["Yulia Raskina", "Oxana Kostina", "Ekaterina Serebrianskaya"], correct: 0 },
+            { question: "¿Quién ganó el oro olímpico en Atlanta 1996?", options: ["Ekaterina Serebrianskaya", "Yanina Batyrchina", "Amina Zaripova"], correct: 0 },
+            { question: "¿Qué gimnasta rusa es conocida por su elegancia con la cinta?", options: ["Anna Bessonova", "Irina Tchachina", "Vera Shtelbaums"], correct: 1 },
+            { question: "¿Cuál fue la última campeona olímpica individual antes del dominio ruso moderno?", options: ["Yulia Barsukova", "Alina Kabaeva", "Ekaterina Serebrianskaya"], correct: 0 },
+            { question: "¿Qué gimnasta ucraniana fue subcampeona olímpica en múltiples ocasiones?", options: ["Anna Bessonova", "Ganna Rizatdinova", "Melitina Staniouta"], correct: 0 },
+            { question: "¿Quién ganó el oro olímpico en Río 2016?", options: ["Margarita Mamun", "Yana Kudryavtseva", "Son Yeon-jae"], correct: 0 },
+            { question: "¿Qué gimnasta española ha tenido mayor éxito internacional?", options: ["Carolina Rodríguez", "Almudena Cid", "Sandra Aguilar"], correct: 1 },
+            { question: "¿Cuál de estas gimnastas es conocida como una de las gemelas Averina?", options: ["Arina Averina", "Linoy Ashram", "Boryana Kaleyn"], correct: 0 },
+            { question: "¿Qué gimnasta israelí ganó oro olímpico en Tokio 2020?", options: ["Linoy Ashram", "Nicol Zelikman", "Neta Rivkin"], correct: 0 },
+            { question: "¿Quién es considerada una leyenda de la gimnasia rítmica soviética?", options: ["Galima Shugurova", "Irina Deriugina", "Lilia Ignatova"], correct: 1 },
+            { question: "¿Qué gimnasta coreana fue medallista olímpica?", options: ["Son Yeon-jae", "Shin Soo-ji", "Lee Jae-kyung"], correct: 0 },
+            { question: "¿Cuál fue la primera campeona mundial de gimnasia rítmica (1963)?", options: ["Ludmila Savinkova", "Tatyana Kravtchenko", "Elena Leuşteanu"], correct: 0 },
+            { question: "¿Qué gimnasta italiana tuvo gran éxito en los años 2000?", options: ["Julieta Cantaluppi", "Fabrizia D'Ottavio", "Raffaella Lollobrigida"], correct: 1 },
+            { question: "¿Quién dominó la gimnasia rítmica en los Mundiales de los años 2000?", options: ["Alina Kabaeva", "Irina Tchachina", "Anna Bessonova"], correct: 0 },
+            { question: "¿Qué gimnasta francesa fue campeona europea?", options: ["Delphine Ledoux", "Kseniya Moustafaeva", "Aurore Puppin"], correct: 1 },
+            { question: "¿Cuál de estas gimnastas compitió por Azerbaiyán?", options: ["Aliya Garayeva", "Marina Durunda", "Zohra Aghamirova"], correct: 0 },
+            { question: "¿Qué gimnasta búlgara moderna ha tenido éxito internacional?", options: ["Boryana Kaleyn", "Neviana Vladinova", "Katrin Taseva"], correct: 1 },
+            { question: "¿Quién fue campeona mundial individual en 2019?", options: ["Dina Averina", "Linoy Ashram", "Boryana Kaleyn"], correct: 0 },
+            { question: "¿Qué gimnasta bielorrusa fue medallista mundial?", options: ["Katsiaryna Halkina", "Melitina Staniouta", "Anastasiya Salos"], correct: 1 },
+            { question: "¿Cuál fue la primera gimnasta no europea en ganar oro olímpico?", options: ["Lori Fung", "Son Yeon-jae", "Shin Soo-ji"], correct: 0 },
+            { question: "¿Qué gimnasta rumana tuvo éxito en los años 80?", options: ["Doina Stăiculescu", "Alexandra Timoshenko", "Bianka Panova"], correct: 0 },
+            { question: "¿Quién fue la última campeona soviética antes de la disolución de la URSS?", options: ["Oksana Skaldina", "Alexandra Timoshenko", "Oxana Kostina"], correct: 2 },
+            { question: "¿Qué gimnasta griega tuvo participaciones destacadas en Juegos Olímpicos?", options: ["Varvara Filiou", "Maria Gigova", "Christina Tsitsigianni"], correct: 0 },
+            { question: "¿Cuál de estas gimnastas representó a Estados Unidos?", options: ["Julie Zetlin", "Nastia Liukin", "Valeria Maksyuta"], correct: 0 },
+            { question: "¿Qué gimnasta alemana fue campeona europea?", options: ["Regina Weber", "Jana Berezko-Marggrander", "Carmen Rischer"], correct: 1 },
+            { question: "¿Quién es conocida por revitalizar la gimnasia rítmica japonesa?", options: ["Kaho Minagawa", "Sumire Kita", "Sakura Hayakawa"], correct: 0 },
+            { question: "¿Qué gimnasta mexicana participó en múltiples Juegos Olímpicos?", options: ["Karla Díaz", "Rut Castillo", "Alejandra Orozco"], correct: 1 },
+            { question: "¿Cuál de estas gimnastas compitió por Polonia?", options: ["Katarzyna Faber", "Joanna Mitrosz", "Natalia Lavrova"], correct: 1 },
+            { question: "¿Qué gimnasta checa tuvo éxito en competiciones europeas?", options: ["Věra Šašková", "Klára Škubníková", "Andrea Marešová"], correct: 1 },
+            { question: "¿Quién fue una pionera de la gimnasia rítmica moderna?", options: ["Isadora Duncan", "Mila Kondrashova", "Galima Shugurova"], correct: 1 },
+            { question: "¿Qué gimnasta argentina tuvo participaciones olímpicas destacadas?", options: ["Silvana Sorichetti", "Alejandra Quereda", "Carolina Pascual"], correct: 0 },
+            { question: "¿Cuál de estas gimnastas representó a Hungría?", options: ["Fanni Pigniczki", "Andrea Oprean", "Eszter Jurek"], correct: 2 },
+            { question: "¿Qué gimnasta canadiense siguió los pasos de Lori Fung?", options: ["Alexandra Orlando", "Patricia Bezzoubenko", "Carmen Whelan"], correct: 1 },
+            { question: "¿Quién fue campeona mundial júnior múltiple antes de su éxito sénior?", options: ["Yana Kudryavtseva", "Margarita Mamun", "Dina Averina"], correct: 0 },
+            { question: "¿Qué gimnasta turca tuvo participaciones internacionales destacadas?", options: ["Ezgi Başar", "Serra Çelik", "Elif Çolak"], correct: 0 },
+            { question: "¿Cuál de estas gimnastas es conocida por su trabajo con el aro?", options: ["Evgeniya Kanaeva", "Daria Svatkovskaya", "Aleksandra Soldatova"], correct: 2 }
         ];
 
         let currentQuestions = [];
@@ -550,22 +295,17 @@
 
         function initAudio() {
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            
+
             // Sonido de acierto (frecuencias alegres)
             correctSound = () => {
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
+                oscillator.connect(gainNode); gainNode.connect(audioContext.destination);
                 oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
                 oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
                 oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
-                
                 gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
-                
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.4);
             };
@@ -574,17 +314,12 @@
             incorrectSound = () => {
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
+                oscillator.connect(gainNode); gainNode.connect(audioContext.destination);
                 oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
                 oscillator.frequency.setValueAtTime(150, audioContext.currentTime + 0.1);
                 oscillator.frequency.setValueAtTime(100, audioContext.currentTime + 0.2);
-                
                 gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-                
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.5);
             };
@@ -592,7 +327,7 @@
 
         function getRandomQuestions() {
             const shuffled = [...questions];
-            // Algoritmo Fisher-Yates para mezcla realmente aleatoria
+            // Fisher-Yates
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -609,20 +344,19 @@
 
             document.querySelector('.start-screen').classList.remove('active');
             document.querySelector('.game-screen').classList.add('active');
-            
             showQuestion();
         }
 
         function showQuestion() {
             const question = currentQuestions[currentQuestionIndex];
             selectedAnswer = false;
-            
+
             document.getElementById('questionNumber').textContent = `Pregunta ${currentQuestionIndex + 1} de 5`;
             document.getElementById('question').textContent = question.question;
             document.getElementById('score').textContent = `Puntuación: ${score}/5`;
             document.getElementById('nextBtn').style.display = 'none';
-            
-            // Actualizar barra de progreso
+
+            // Progreso
             const progress = ((currentQuestionIndex) / 5) * 100;
             document.getElementById('progressFill').style.width = progress + '%';
 
@@ -640,13 +374,13 @@
 
         function selectOption(selectedIndex) {
             if (selectedAnswer) return;
-            
+
             selectedAnswer = true;
             const question = currentQuestions[currentQuestionIndex];
             const options = document.querySelectorAll('.option');
-            
+
             options[selectedIndex].classList.add(selectedIndex === question.correct ? 'correct' : 'incorrect');
-            
+
             if (selectedIndex === question.correct) {
                 score++;
                 correctSound();
@@ -654,11 +388,9 @@
                 options[question.correct].classList.add('correct');
                 incorrectSound();
             }
-            
+
             // Deshabilitar todas las opciones
-            options.forEach(option => {
-                option.style.pointerEvents = 'none';
-            });
+            options.forEach(option => { option.style.pointerEvents = 'none'; });
 
             document.getElementById('score').textContent = `Puntuación: ${score}/5`;
             document.getElementById('nextBtn').style.display = 'block';
@@ -666,35 +398,25 @@
 
         function nextQuestion() {
             currentQuestionIndex++;
-            
-            if (currentQuestionIndex < 5) {
-                showQuestion();
-            } else {
-                showResults();
-            }
+            if (currentQuestionIndex < 5) { showQuestion(); }
+            else { showResults(); }
         }
 
         function showResults() {
             document.querySelector('.game-screen').classList.remove('active');
             document.querySelector('.results-screen').classList.add('active');
-            
+
             document.getElementById('finalScore').textContent = `${score}/5`;
-            
+
             let congratulationsText = '';
-            if (score === 5) {
-                congratulationsText = '¡Increíble! ¡Eres una experta en gimnasia rítmica! 🏆';
-            } else if (score >= 4) {
-                congratulationsText = '¡Excelente! ¡Conoces muy bien este deporte! 🥇';
-            } else if (score >= 3) {
-                congratulationsText = '¡Muy bien! ¡Sigues aprendiendo! 🥈';
-            } else if (score >= 2) {
-                congratulationsText = '¡Buen intento! ¡Cada vez sabes más! 🥉';
-            } else {
-                congratulationsText = '¡Sigue practicando! ¡Cada pregunta es una oportunidad de aprender! 💪';
-            }
-            
+            if (score === 5) { congratulationsText = '¡Increíble! ¡Eres una experta en gimnasia rítmica! 🏆'; }
+            else if (score >= 4) { congratulationsText = '¡Excelente! ¡Conoces muy bien este deporte! 🥇'; }
+            else if (score >= 3) { congratulationsText = '¡Muy bien! ¡Sigues aprendiendo! 🥈'; }
+            else if (score >= 2) { congratulationsText = '¡Buen intento! ¡Cada vez sabes más! 🥉'; }
+            else { congratulationsText = '¡Sigue practicando! ¡Cada pregunta es una oportunidad de aprender! 💪'; }
+
             document.getElementById('congratulations').textContent = congratulationsText;
-            
+
             // Completar barra de progreso
             document.getElementById('progressFill').style.width = '100%';
         }

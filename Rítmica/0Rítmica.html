@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gimnasia Rítmica Española – Juegos Interactivos</title>
+  <title>El sueño de la Gimnasia Rítmica. España y sus medallas</title>
   <style>
     :root{
       --rosa:#ff69b4;
@@ -21,6 +21,41 @@
       display:flex;align-items:center;justify-content:center;
       padding:24px;color:#123;
     }
+
+    /* Capa de imagen semitransparente permanente */
+    #bgOverlay{
+      position: fixed;
+      inset: 0;
+      background: url("Portada.png") no-repeat center center;
+      background-size: contain;
+      opacity: .5;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Portada inicial a pantalla completa */
+    #cover{
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    #cover img{
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    /* Garantiza que el contenido quede por delante del fondo */
+    .contenido-superior,
+    .quiz-container,
+    .main-container{
+      position: relative;
+      z-index: 2;
+    }
+
     .decoracion{
       position:fixed;inset:0;pointer-events:none;
       background:linear-gradient(180deg,transparent 0 55%,#ffe4f1 55% 100%);
@@ -51,6 +86,12 @@
       color:var(--morado);font-weight:800;letter-spacing:.3px;
     }
     .ondertitel{font-size:.98rem;color:#245;max-width:46ch;margin:auto;}
+    .ondertitel a{color:#245;text-decoration:none}
+    .ondertitel a:hover{text-decoration:underline}
+    .contact-info{margin-top:4px}
+    .contact-info a{color:#245;text-decoration:none}
+    .contact-info a:hover{text-decoration:underline}
+
     .arena{display:grid;place-items:center;margin:18px 0 8px;position:relative;}
     .arena-omhulsel{
       width:300px;height:150px;
@@ -105,14 +146,21 @@
   </style>
 </head>
 <body>
+
+  <!-- Portada inicial -->
+  <div id="cover">
+    <img src="Portada.png" alt="Portada">
+  </div>
+
+  <!-- Fondo semitransparente permanente -->
+  <div id="bgOverlay"></div>
+
   <div class="decoracion" aria-hidden="true"></div>
 
-  <main class="container" role="application" aria-label="Gimnasia Rítmica Española">
+  <main class="container contenido-superior" role="application" aria-label="Gimnasia Rítmica Española">
     <header>
-      <h1 class="titulo">Gimnasia Rítmica Española – Juegos Interactivos</h1>
-      <p class="ondertitel" style="font-size:150%;">
-        <a href="https://www.amazon.es/dp/B0FNWZFJFP" target="_blank" rel="noopener noreferrer">¡Prueba nuestro libro!</a>
-      </p>
+      <h1 class="titulo">El sueño de la Gimnasia Rítmica. España y sus medallas</h1>
+      <p class="ondertitel"><a href="https://www.amazon.es/dp/B0FNWZFJFP" target="_blank" rel="noopener noreferrer">¡Prueba nuestro libro!</a></p>
       <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
     </header>
 
@@ -142,8 +190,16 @@
         <div class="info">La Historia de las auténticas campeonas de todas las épocas</div>
       </a>
     </nav>
-
-  
   </main>
+
+  <script>
+    // Oculta la portada tras 3 s
+    window.addEventListener('load', function(){
+      setTimeout(function(){
+        var cover = document.getElementById('cover');
+        if (cover) cover.style.display = 'none';
+      }, 3000);
+    });
+  </script>
 </body>
 </html>
