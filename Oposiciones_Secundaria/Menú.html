@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Oposiciones Secundaria</title>
+  <style>
+    :root{
+      --fondo:#f4f4f4;
+      --principal:#2c3e50;
+      --secundario:#7f8c8d;
+      --borde:#bdc3c7;
+      --enlace:#34495e;
+      --resalte:#e67e22;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"Georgia",serif;
+      min-height:100vh;
+      background:linear-gradient(135deg,#fafafa,#ececec);
+      display:flex;align-items:center;justify-content:center;
+      padding:24px;color:var(--principal);
+    }
+
+    /* Portada inicial */
+    #cover{
+      position:fixed;inset:0;
+      background:#fff;
+      display:flex;justify-content:center;align-items:center;
+      z-index:9999;
+    }
+    #cover img{max-width:100%;max-height:100%}
+
+    /* Fondo semitransparente permanente */
+    #bgOverlay{
+      position:fixed;inset:0;
+      background:url("Portada.png") no-repeat center center;
+      background-size:contain;
+      opacity:.5;
+      z-index:1;
+      pointer-events:none;
+    }
+
+    .container{
+      width:min(900px,95vw);
+      background:#fffefc;
+      border:3px solid var(--borde);
+      border-radius:18px;
+      box-shadow:0 12px 40px rgba(0,0,0,.15);
+      padding:28px;
+      position:relative;z-index:2;
+    }
+    header{
+      margin-bottom:18px;
+      text-align:center;
+    }
+    .titulo{
+      font-size:2rem;
+      font-weight:bold;
+      color:var(--principal);
+    }
+    .ondertitel{
+      font-size:.95rem;
+      margin-top:6px;
+    }
+    .ondertitel a{
+      color:var(--enlace);
+      text-decoration:underline; /* subrayado permanente */
+    }
+    .contact-info{margin-top:4px}
+    .contact-info a{color:var(--secundario);text-decoration:none}
+    .contact-info a:hover{text-decoration:underline}
+
+    nav.menu{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(200px,1fr));
+      gap:18px;
+      margin-top:22px;
+    }
+    .opcion{
+      background:#fff;
+      border:2px solid var(--borde);
+      border-radius:14px;
+      padding:18px;
+      text-decoration:none;
+      color:var(--principal);
+      box-shadow:0 6px 16px rgba(0,0,0,.06);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .opcion:hover{
+      transform:translateY(-3px);
+      box-shadow:0 10px 24px rgba(0,0,0,.12);
+      border-color:var(--resalte);
+    }
+    .opcion .label{
+      font-size:1.1rem;
+      font-weight:bold;
+      margin-bottom:6px;
+    }
+    .opcion .info{font-size:.95rem;color:var(--secundario)}
+
+    footer{
+      text-align:center;
+      font-size:.85rem;
+      margin-top:24px;
+      color:var(--secundario);
+    }
+    @media(max-width:700px){nav.menu{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+  <!-- Portada inicial -->
+  <div id="cover">
+    <img src="Portada.png" alt="Portada">
+  </div>
+
+  <!-- Fondo semitransparente -->
+  <div id="bgOverlay"></div>
+
+  <main class="container contenido-superior">
+    <header>
+      <h1 class="titulo">Oposiciones Secundaria</h1>
+      <p class="ondertitel"><a href="https://www.amazon.nl/dp/B0FMR8KPN4" target="_blank" rel="noopener noreferrer">Enlace al diseño y defensa de la Programación Didáctica</a></p>
+      <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
+    </header>
+
+    <nav class="menu">
+      <a class="opcion" href="Juego1.html" target="_blank">
+        <div class="label">Didáctica General</div>
+        <div class="info">Conceptos básicos de enseñanza</div>
+      </a>
+      <a class="opcion" href="Juego2.html" target="_blank">
+        <div class="label">Psicología Educativa</div>
+        <div class="info">Principios para la práctica docente</div>
+      </a>
+      <a class="opcion" href="Juego3.html" target="_blank">
+        <div class="label">Legislación</div>
+        <div class="info">Normativa educativa esencial</div>
+      </a>
+      <a class="opcion" href="Juego4.html" target="_blank">
+        <div class="label">Evaluación</div>
+        <div class="info">Instrumentos y criterios básicos</div>
+      </a>
+    </nav>
+
+    <footer>
+      Menú académico · Thomas Books
+    </footer>
+  </main>
+
+  <script>
+    window.addEventListener('load',function(){
+      setTimeout(function(){
+        var cover=document.getElementById('cover');
+        if(cover) cover.style.display='none';
+      },3000);
+    });
+  </script>
+</body>
+</html>
