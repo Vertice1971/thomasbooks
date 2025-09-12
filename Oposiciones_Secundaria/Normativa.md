@@ -9,6 +9,7 @@ Este documento ofrece una guía normativa completa para preparar oposiciones al 
 ## **A) Repositorio normativo de referencia para las Oposiciones de Secundaria**
 Este documento recoge la normativa educativa esencial de ámbito estatal y en su caso autonómico aplicable al diseño de programaciones didácticas en ESO y Bachillerato según la LOMLOE. Cada norma aparece identificada con una breve descripción y un único enlace activo en el propio título, para facilitar su uso como consulta directa o repositorio base.
 
+- [Menú inicial con acceso a todos los recursos online gratuitos](https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Men%C3%BA.html)
 - [Manual para el Diseño y Defensa de la Programación Didáctica](https://www.amazon.es/dp/B0FQTNWMTP)
 - [Simulación de fases del proceso selectivo](https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Oposiciones%20app/)
 - [Temarios de especialidades (1993)](https://www.boe.es/boe/dias/1993/09/21/pdfs/A27400-27438.pdf)  
