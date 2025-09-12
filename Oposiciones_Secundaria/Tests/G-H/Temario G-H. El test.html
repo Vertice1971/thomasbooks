@@ -218,7 +218,72 @@
 /* ===== Utilidades ===== */
 function barajar(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
 
-/* ===== Carga de temarios (PREGUNTAS con enunciado/correcta/incorrectas) ===== */
+/* ===== Sistema de sonido (WebAudio) ===== */
+class SistemaSonido{
+    constructor(){
+        this.ctx = null;
+        this.master = null;
+        this.enabled = true;
+        this.initialized = false;
+        this.volume = 0.15; // más audible
+        this._unlocked = false;
+    }
+    init(){
+        if(this.initialized) return;
+        try{
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            this.master = this.ctx.createGain();
+            this.master.gain.value = this.volume;
+            this.master.connect(this.ctx.destination);
+            this.initialized = true;
+        }catch(e){ /* sin sonido si falla */ }
+    }
+    ensure(){
+        if(!this.initialized) this.init();
+        if(this.ctx && this.ctx.state === "suspended") this.ctx.resume();
+    }
+    unlockOnce(){
+        if(this._unlocked) return;
+        this._unlocked = true;
+        this.ensure();
+    }
+    tone(freq=440, dur=0.18, type="square"){
+        if(!this.enabled) return;
+        this.ensure();
+        if(!this.ctx) return;
+        const t0 = this.ctx.currentTime + 0.01;
+        const o = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        o.type = type;
+        o.frequency.setValueAtTime(freq, t0);
+        o.connect(g); g.connect(this.master);
+        g.gain.setValueAtTime(1, t0);
+        g.gain.exponentialRampToValueAtTime(0.0008, t0 + dur);
+        o.start(t0);
+        o.stop(t0 + dur);
+    }
+    reproducirAcierto(){
+        // intervalos ascendentes, más claros
+        this.tone(880, 0.16, "square");
+        setTimeout(()=>this.tone(1245, 0.18, "square"), 120);
+    }
+    reproducirError(){
+        // tono grave breve
+        this.tone(220, 0.22, "triangle");
+    }
+    mute(on){ this.enabled = !on; }
+}
+const sonido = new SistemaSonido();
+
+/* Desbloqueo por interacción del usuario (autoplay policy) */
+["pointerdown","keydown"].forEach(ev=>{
+    window.addEventListener(ev, ()=>sonido.unlockOnce(), { once:false, passive:true });
+});
+document.addEventListener("visibilitychange", ()=>{
+    if(document.visibilityState==="visible") sonido.ensure();
+});
+
+/* ===== Carga de temarios ===== */
 let BANCO = [];
 
 function cargarTemario(nombreArchivo){
@@ -250,12 +315,12 @@ function convertirPreguntas(arr){
         const idxs = opciones.map((_,i)=>i);
         barajar(idxs);
         const opsBarajadas = idxs.map(i=>opciones[i]);
-        const indiceCorrecta = idxs.indexOf(0); // 0 porque 'correcta' estaba en primera posición
+        const indiceCorrecta = idxs.indexOf(0);
         return {
             pregunta: p.enunciado,
             opciones: opsBarajadas,
             correcta: indiceCorrecta,
-            explicacion: ""        // sin explicaciones en juego (opción eliminada)
+            explicacion: ""
         };
     });
 }
@@ -311,9 +376,9 @@ function mostrar(section){
     section.classList.add("aparece");
 }
 
-/* ===== Preparación desde BANCO (sin dificultad, sin temporizador, sin opción explicaciones) ===== */
+/* ===== Preparación desde BANCO ===== */
 function prepararJuego(opts){
-    const conjunto = barajar([...BANCO]); // Siempre se barajan las preguntas
+    const conjunto = barajar([...BANCO]);
     const n = Math.max(5, Math.min(opts.cantidad, conjunto.length));
     const seleccion = conjunto.slice(0, n).map(clonarYBarajarOpciones);
 
@@ -325,7 +390,7 @@ function prepararJuego(opts){
     ui.puntos.textContent = "0";
     ui.barra.style.width = "0%";
 
-    setCabeceraTituloFromSelect();   // ← actualizar cabecera con el tema elegido
+    setCabeceraTituloFromSelect();
     pintarPregunta();
     mostrar(ui.juego);
 }
@@ -356,7 +421,10 @@ function pintarPregunta(){
         btn.className = "opcion";
         btn.setAttribute("data-idx", idx);
         btn.innerHTML = `<span class="letra">${letras[idx]||"?"}</span><span>${texto}</span>`;
-        btn.addEventListener("click", ()=>seleccionar(idx));
+        btn.addEventListener("click", ()=>{
+            sonido.unlockOnce(); // gesto del usuario
+            seleccionar(idx);
+        });
         ui.opciones.appendChild(btn);
     });
 
@@ -389,7 +457,15 @@ function comprobar(){
         btn.style.cursor="default";
     });
 
-    if(acierto){ estado.puntos++; ui.puntos.textContent = String(estado.puntos); }
+    if(sel !== null){
+        if(acierto){
+            estado.puntos++;
+            ui.puntos.textContent = String(estado.puntos);
+            sonido.reproducirAcierto();
+        }else{
+            sonido.reproducirError();
+        }
+    }
 
     ui.btns.comprobar.classList.add("oculto");
     const ultima = estado.actual === estado.preguntas.length - 1;
@@ -449,14 +525,16 @@ async function iniciarDesdeTemario(archivo, opts){
 }
 
 ui.btns.comenzar.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
     await iniciarDesdeTemario(ui.tema.value, {
         cantidad: Number(ui.cantidad.value || 12)
     });
 });
 
 ui.btns.aprender.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
     await cargarTemario(ui.tema.value);
-    setCabeceraTituloFromSelect();               // ← mostrar título también en modo estudio
+    setCabeceraTituloFromSelect();
     entrarEstudio(barajar([...BANCO]));
 });
 
@@ -467,13 +545,14 @@ ui.btns.saltar.addEventListener("click", saltar);
 ui.btns.terminar.addEventListener("click", terminar);
 
 ui.btns.repetir.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
     await iniciarDesdeTemario(ui.tema.value, {
         cantidad: estado.preguntas.length
     });
 });
 
 ui.btns.inicio.addEventListener("click", ()=>{
-    resetCabecera();                               // ← recuperar texto amarillo inicial
+    resetCabecera();
     mostrar(ui.inicio);
 });
 ui.btns.estudio.addEventListener("click", ()=>entrarEstudio(estado.preguntas));
