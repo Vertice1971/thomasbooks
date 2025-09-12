@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 <meta charset="utf-8" />
@@ -37,40 +38,54 @@
     .fantasma{background:transparent}
     .oculto{display:none !important}
 
-    .panel-config label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
-    .panel-config input[type="number"], .panel-config select{
-        width:100%;padding:10px 12px;border-radius:10px;border:1px solid #283346;background:#0f1319;color:var(--text);outline:none;
-    }
-    .panel-config input[type="checkbox"]{transform:scale(1.2);margin-right:8px}
-    .grupo{margin-bottom:14px}
 
-    .estado{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-    .progreso{width:100%;height:10px;background:#121923;border-radius:999px;overflow:hidden;border:1px solid #233047}
-    .barra{height:100%;width:0%;background:linear-gradient(90deg,#ffd23f,#ffb703);transition:width .3s ease}
-    .contador-puntos{min-width:120px;text-align:center;padding:8px 10px;border-radius:10px;border:1px solid #283346;background:#0f1319}
+.panel-config label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
+.panel-config input[type="number"], .panel-config select{
+    width:100%;padding:10px 12px;border-radius:10px;border:1px solid #283346;background:#0f1319;color:var(--text);outline:none;
+}
+.panel-config input[type="checkbox"]{transform:scale(1.2);margin-right:8px}
+.grupo{margin-bottom:14px}
 
-    .pregunta{font-size:20px;line-height:1.35;margin:6px 0 12px 0;font-weight:700}
-    .opciones{display:grid;gap:10px}
-    .opcion{
-        padding:12px 14px;border-radius:12px;border:1px solid #2b3649;background:#0e141b;cursor:pointer;display:flex;gap:10px;align-items:flex-start;text-align:left
-    }
-    .opcion:hover{border-color:#3c4f6c}
-    .opcion.correcta{background:rgba(52,199,89,.12);border-color:rgba(52,199,89,.6)}
-    .opcion.incorrecta{background:rgba(255,69,58,.10);border-color:rgba(255,69,58,.55)}
-    .opcion .letra{
-        width:28px;height:28px;display:inline-grid;place-items:center;border-radius:8px;border:1px solid #344055;background:#121826;color:var(--muted);font-weight:700;flex:0 0 auto
-    }
+.estado{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.progreso{width:100%;height:10px;background:#121923;border-radius:999px;overflow:hidden;border:1px solid #233047}
+.barra{height:100%;width:0%;background:linear-gradient(90deg,#ffd23f,#ffb703);transition:width .3s ease}
+.contador-puntos{min-width:120px;text-align:center;padding:8px 10px;border-radius:10px;border:1px solid #283346;background:#0f1319}
 
-    .pie{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.pregunta{font-size:20px;line-height:1.35;margin:6px 0 12px 0;font-weight:700}
+.opciones{display:grid;gap:10px}
+.opcion{
+    padding:12px 14px;border-radius:12px;border:1px solid #2b3649;background:#0e141b;cursor:pointer;display:flex;gap:10px;align-items:flex-start;text-align:left
+}
+.opcion:hover{border-color:#3c4f6c}
+.opcion.correcta{background:rgba(52,199,89,.12);border-color:rgba(52,199,89,.6)}
+.opcion.incorrecta{background:rgba(255,69,58,.10);border-color:rgba(255,69,58,.55)}
+.opcion .letra{
+    width:28px;height:28px;display:inline-grid;place-items:center;border-radius:8px;border:1px solid #344055;background:#121826;color:var(--muted);font-weight:700;flex:0 0 auto
+}
 
-    .resultado{font-size:18px;margin:0;color:var(--muted)}
-    .medalla{font-weight:800;color:var(--accent)}
-    .seleccionable{user-select:none}
+.pie{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 
-    @media (prefers-reduced-motion:no-preference){
-        .aparece{animation:aparece .25s ease both}
-        @keyframes aparece{from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)}}
-    }
+.resultado{font-size:18px;margin:0;color:var(--muted)}
+.medalla{font-weight:800;color:var(--accent)}
+.seleccionable{user-select:none}
+
+/* Enlace permanente subrayado */
+.enlace-contenedor{margin-top:18px}
+.enlace-constante{
+    color:var(--accent);
+    text-decoration:underline !important;
+    text-underline-offset:3px;
+    font-weight:700;
+}
+.enlace-constante:hover,
+.enlace-constante:focus{filter:brightness(1.05)}
+
+@media (prefers-reduced-motion:no-preference){
+    .aparece{animation:aparece .25s ease both}
+    @keyframes aparece{from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)}}
+}
+
+
 </style>
 </head>
 <body>
@@ -82,135 +97,144 @@
         <p class="sub" style="font-size: 0.85em;">tomcue@iesjuandelacierva.com</p>
     </header>
 
-    <section id="pantalla-inicio" class="tarjeta aparece">
-        <div class="fila">
-            <div class="col panel-config">
-                <div class="grupo">
-                    <label for="tema">Temario</label>
-                    <select id="tema">
-                        <option value="01-La-experiencia-filosofica-y-sus-formas-las-concepciones-de-la-filosofia.js">1 - La experiencia filosófica y sus formas. Las concepciones de la filosofía</option>
-                        <option value="02-La-funcion-de-la-filosofia-en-el-conjunto-de-la-cultura-la-relacion-de-la-filosofia-con-el-saber-cientifico-y-otros-saberes.js">2 - La función de la filosofía en el conjunto de la cultura. La relación de la filosofía con el saber científico y otros saberes</option>
-                        <option value="03-La-comunicacion-humana-y-el-lenguaje-lenguajes-naturales-y-lenguajes-formales.js">3 - La comunicación humana y el lenguaje. Lenguajes naturales y lenguajes formales</option>
-                        <option value="04-Sentido-y-referencia-teorias-del-significado.js">4 - Sentido y referencia. Teorías del significado</option>
-                        <option value="05-De-la-logica-clasica-a-la-logica-simbolica.js">5 - De la lógica clásica a la lógica simbólica</option>
-                        <option value="06-El-calculo-de-proposiciones-y-el-calculo-de-predicados.js">6 - El cálculo de proposiciones y el cálculo de predicados</option>
-                        <option value="07-La-logica-como-sistema-formal-axiomatico-los-limites-de-los-sistemas-formales-axiomaticos.js">7 - La lógica como sistema formal axiomático. Los límites de los sistemas formales axiomáticos</option>
-                        <option value="08-La-verdad-en-las-matematicas-y-en-las-ciencias-empiricas-naturales-y-sociales.js">8 - La verdad en las matemáticas y en las ciencias empíricas (naturales y sociales)</option>
-                        <option value="09-Naturaleza-de-las-teorias-leyes-y-modelos-cientificos-el-contexto-de-la-justificacion-y-el-contexto-del-descubrimiento.js">9 - Naturaleza de las teorías, leyes y modelos científicos. El contexto de la justificación y el contexto del descubrimiento</option>
-                        <option value="10-Determinismo-e-indeterminismo-la-construccion-cientifica-de-la-realidad-el-postulado-de-la-objetividad.js">10 - Determinismo e indeterminismo. La construcción científica de la realidad. El postulado de la objetividad</option>
-                        <option value="11-Conocimiento-y-lenguaje-el-problema-de-los-conceptos-universales.js">11 - Conocimiento y lenguaje. El problema de los conceptos universales</option>
-                        <option value="12-Los-elementos-a-priori-en-el-conocimiento.js">12 - Los elementos a priori en el conocimiento</option>
-                        <option value="13-Los-limites-del-conocimiento-humano-y-el-problema-de-lo-irracional.js">13 - Los límites del conocimiento humano y el problema de lo irracional</option>
-                        <option value="14-La-metafisica-como-problema.js">14 - La metafísica como problema</option>
-                        <option value="15-Formacion-y-sentido-de-la-idea-de-ente.js">15 - Formación y sentido de la idea de ente</option>
-                        <option value="16-Los-primeros-principios-y-su-valor-ontologico.js">16 - Los primeros principios y su valor ontológico</option>
-                        <option value="17-Las-categorias-y-los-diversos-sistemas-categoriales.js">17 - Las categorías y los diversos sistemas categoriales</option>
-                        <option value="18-Los-distintos-planteamientos-en-torno-al-concepto-de-sustancia-valoracion-critica-del-principio-de-causalidad.js">18 - Los distintos planteamientos en torno al concepto de sustancia. Valoración crítica del principio de causalidad</option>
-                        <option value="19-La-realidad-personal-y-el-problema-de-la-libertad.js">19 - La realidad personal y el problema de la libertad</option>
-                        <option value="20-El-debate-en-torno-a-las-relaciones-entre-la-fe-y-la-razon.js">20 - El debate en torno a las relaciones entre la fe y la razón</option>
-                        <option value="21-Ontologismo-agnosticismo-y-ateismo.js">21 - Ontologismo, agnosticismo y ateísmo</option>
-                        <option value="22-La-reflexion-filosofica-sobre-la-belleza.js">22 - La reflexión filosófica sobre la belleza</option>
-                        <option value="23-La-evolucion-y-sus-implicaciones-filosoficas.js">23 - La evolución y sus implicaciones filosóficas</option>
-                        <option value="24-La-antropologia-como-campo-de-estudio.js">24 - La Antropología como campo de estudio</option>
-                        <option value="25-La-antropogenesis-naturaleza-y-cultura.js">25 - La antropogénesis. Naturaleza y cultura</option>
-                        <option value="26-Las-distintas-concepciones-de-la-psicologia-como-ciencia.js">26 - Las distintas concepciones de la Psicología como ciencia</option>
-                        <option value="27-La-actividad-perceptiva-y-representativa-en-la-persona-humana.js">27 - La actividad perceptiva y representativa en la persona humana</option>
-                        <option value="28-El-caracter-simbolico-del-ser-humano-pensamiento-y-lenguaje-el-cognitivismo.js">28 - El carácter simbólico del ser humano. Pensamiento y lenguaje. El cognitivismo</option>
-                        <option value="29-La-motivacion-humana-y-la-vida-afectiva.js">29 - La motivación humana y la vida afectiva</option>
-                        <option value="30-El-aprendizaje-y-la-conducta-humana.js">30 - El aprendizaje y la conducta humana</option>
-                        <option value="31-Las-distintas-concepciones-de-sociologia-como-ciencia.js">31 - Las distintas concepciones de Sociología como ciencia</option>
-                        <option value="32-Origen-y-naturaleza-de-la-sociedad.js">32 - Origen y naturaleza de la sociedad</option>
-                        <option value="33-Formas-de-organizacion-politica.js">33 - Formas de organización política</option>
-                        <option value="34-Fundamentos-filosoficos-del-derecho-y-la-justicia.js">34 - Fundamentos filosóficos del derecho y la justicia</option>
-                        <option value="35-Conflicto-y-cambio-social-factores-y-tipos.js">35 - Conflicto y cambio social: factores y tipos</option>
-                        <option value="36-El-desarrollo-de-la-tecnica-y-sus-implicaciones-en-la-sociedad-contemporanea.js">36 - El desarrollo de la técnica y sus implicaciones en la sociedad contemporánea</option>
-                        <option value="37-Bases-antropologicas-de-la-conducta-moral.js">37 - Bases antropológicas de la conducta moral</option>
-                        <option value="38-La-genesis-de-los-valores-morales-naturaleza-y-convencion.js">38 - La génesis de los valores morales. Naturaleza y convención</option>
-                        <option value="39-El-lenguaje-moral-forma-y-justificacion-de-los-juicios-morales.js">39 - El lenguaje moral. Forma y justificación de los juicios morales</option>
-                        <option value="40-Bien-y-valor.js">40 - Bien y valor</option>
-                        <option value="41-Eticas-materiales-y-eticas-formales.js">41 - Éticas materiales y éticas formales</option>
-                        <option value="42-Etica-y-politica.js">42 - Ética y política</option>
-                        <option value="43-Principales-problemas-eticos-en-la-actividad-cientifica-y-tecnica-y-en-la-convivencia-social-de-nuestro-tiempo.js">43 - Principales problemas éticos en la actividad científica y técnica y en la convivencia social de nuestro tiempo</option>
-                        <option value="44-Etica-y-derecho-los-derechos-humanos.js">44 - Ética y derecho. Los Derechos Humanos</option>
-                        <option value="45-El-estado-de-bienestar-libertad-y-alienacion-en-las-sociedades-tecnificadas.js">45 - El Estado de Bienestar. Libertad y alienación en las sociedades tecnificadas</option>
-                        <option value="46-La-historia-de-la-filosofia-como-problema-filosofico.js">46 - La historia de la filosofía como problema filosófico</option>
-                        <option value="47-Los-modelos-de-explicacion-racional-en-los-presocraticos.js">47 - Los modelos de explicación racional en los presocráticos</option>
-                        <option value="48-El-debate-etico-politico-en-socrates-y-los-sofistas.js">48 - El debate ético-político en Sócrates y los sofistas</option>
-                        <option value="49-La-justicia-en-la-polis-como-objetivo-de-la-filosofia-de-platon.js">49 - La justicia en la polis como objetivo de la filosofía de Platón</option>
-                        <option value="50-La-naturaleza-en-aristoteles.js">50 - La naturaleza en Aristóteles</option>
-                        <option value="51-El-desarrollo-de-la-ciencia-en-el-pensamiento-helenistico.js">51 - El desarrollo de la ciencia en el pensamiento helenístico</option>
-                        <option value="52-La-sintesis-escolastica-de-santo-tomas-de-aquino.js">52 - La síntesis escolástica de Santo Tomás de Aquino</option>
-                        <option value="53-El-nominalismo-y-la-ciencia-del-siglo-xiv.js">53 - El nominalismo y la ciencia del siglo XIV</option>
-                        <option value="54-La-revolucion-cientifica-galileo-y-newton.js">54 - La revolución científica. Galileo y Newton</option>
-                        <option value="55-El-metodo-cartesiano.js">55 - El método cartesiano</option>
-                        <option value="56-El-sujeto-etico-politico-en-spinoza.js">56 - El sujeto ético-político en Spinoza</option>
-                        <option value="57-Ciencia-y-conocimiento-en-leibniz.js">57 - Ciencia y conocimiento en Leibniz</option>
-                        <option value="58-El-empirismo-y-las-ciencias-morales-locke-y-hume.js">58 - El empirismo y las ciencias morales. Locke y Hume</option>
-                        <option value="59-El-uso-teorico-de-la-razon-en-kant.js">59 - El uso teórico de la razón en Kant</option>
-                        <option value="60-El-uso-practico-de-la-razon-en-kant.js">60 - El uso práctico de la razón en Kant</option>
-                        <option value="61-La-filosofia-de-hegel-sujeto-sistema-y-estado.js">61 - La filosofía de Hegel. Sujeto, sistema y Estado</option>
-                        <option value="62-El-positivismo-y-el-avance-cientifico-del-siglo-xix.js">62 - El positivismo y el avance científico del siglo XIX</option>
-                        <option value="63-La-critica-de-marx-al-capitalismo-y-su-influjo-en-la-historia-del-pensamiento-occidental.js">63 - La crítica de Marx al capitalismo y su influjo en la historia del pensamiento occidental</option>
-                        <option value="64-Nietzsche-y-la-crisis-de-la-cultura-occidental.js">64 - Nietzsche y la crisis de la cultura occidental</option>
-                        <option value="65-La-fenomenologia-de-husserl.js">65 - La fenomenología de Husserl</option>
-                        <option value="66-Freud-el-psicoanalisis-y-la-critica-de-la-cultura-occidental.js">66 - Freud: el psicoanálisis y la crítica de la cultura occidental</option>
-                        <option value="67-El-problema-del-ser-en-heidegger-y-en-la-filosofia-de-la-existencia.js">67 - El problema del ser en Heidegger y en la filosofía de la existencia</option>
-                        <option value="68-L-wittgenstein-y-b-russell-la-corriente-analitica-de-la-filosofia.js">68 - L. Wittgenstein y B. Russell: la corriente analítica de la filosofía</option>
-                        <option value="69-Razon-y-sociedad-en-la-escuela-de-frankfurt-y-en-k-r-popper.js">69 - Razón y sociedad en la Escuela de Fráncfort y en K. R. Popper</option>
-                        <option value="70-Ortega-y-la-filosofia-del-exilio-espanol.js">70 - Ortega y la filosofía del exilio español</option>
-                        <option value="71-La-filosofia-de-fin-de-siglo-hermeneutica-y-posmodernidad.js">71 - La filosofía de fin de siglo. Hermenéutica y posmodernidad</option>
-                    </select>
-                </div>
-                <div class="grupo">
-                    <label for="cantidad">Número de preguntas</label>
-                    <input id="cantidad" type="number" min="5" max="40" value="10" />
-                </div>
+
+<section id="pantalla-inicio" class="tarjeta aparece">
+    <div class="fila">
+        <div class="col panel-config">
+            <div class="grupo">
+                <label for="tema">Temario</label>
+                <select id="tema">
+                    <option value="01-La-experiencia-filosofica-y-sus-formas-las-concepciones-de-la-filosofia.js">1 - La experiencia filosófica y sus formas. Las concepciones de la filosofía</option>
+                    <option value="02-La-funcion-de-la-filosofia-en-el-conjunto-de-la-cultura-la-relacion-de-la-filosofia-con-el-saber-cientifico-y-otros-saberes.js">2 - La función de la filosofía en el conjunto de la cultura. La relación de la filosofía con el saber científico y otros saberes</option>
+                    <option value="03-La-comunicacion-humana-y-el-lenguaje-lenguajes-naturales-y-lenguajes-formales.js">3 - La comunicación humana y el lenguaje. Lenguajes naturales y lenguajes formales</option>
+                    <option value="04-Sentido-y-referencia-teorias-del-significado.js">4 - Sentido y referencia. Teorías del significado</option>
+                    <option value="05-De-la-logica-clasica-a-la-logica-simbolica.js">5 - De la lógica clásica a la lógica simbólica</option>
+                    <option value="06-El-calculo-de-proposiciones-y-el-calculo-de-predicados.js">6 - El cálculo de proposiciones y el cálculo de predicados</option>
+                    <option value="07-La-logica-como-sistema-formal-axiomatico-los-limites-de-los-sistemas-formales-axiomaticos.js">7 - La lógica como sistema formal axiomático. Los límites de los sistemas formales axiomáticos</option>
+                    <option value="08-La-verdad-en-las-matematicas-y-en-las-ciencias-empiricas-naturales-y-sociales.js">8 - La verdad en las matemáticas y en las ciencias empíricas (naturales y sociales)</option>
+                    <option value="09-Naturaleza-de-las-teorias-leyes-y-modelos-cientificos-el-contexto-de-la-justificacion-y-el-contexto-del-descubrimiento.js">9 - Naturaleza de las teorías, leyes y modelos científicos. El contexto de la justificación y el contexto del descubrimiento</option>
+                    <option value="10-Determinismo-e-indeterminismo-la-construccion-cientifica-de-la-realidad-el-postulado-de-la-objetividad.js">10 - Determinismo e indeterminismo. La construcción científica de la realidad. El postulado de la objetividad</option>
+                    <option value="11-Conocimiento-y-lenguaje-el-problema-de-los-conceptos-universales.js">11 - Conocimiento y lenguaje. El problema de los conceptos universales</option>
+                    <option value="12-Los-elementos-a-priori-en-el-conocimiento.js">12 - Los elementos a priori en el conocimiento</option>
+                    <option value="13-Los-limites-del-conocimiento-humano-y-el-problema-de-lo-irracional.js">13 - Los límites del conocimiento humano y el problema de lo irracional</option>
+                    <option value="14-La-metafisica-como-problema.js">14 - La metafísica como problema</option>
+                    <option value="15-Formacion-y-sentido-de-la-idea-de-ente.js">15 - Formación y sentido de la idea de ente</option>
+                    <option value="16-Los-primeros-principios-y-su-valor-ontologico.js">16 - Los primeros principios y su valor ontológico</option>
+                    <option value="17-Las-categorias-y-los-diversos-sistemas-categoriales.js">17 - Las categorías y los diversos sistemas categoriales</option>
+                    <option value="18-Los-distintos-planteamientos-en-torno-al-concepto-de-sustancia-valoracion-critica-del-principio-de-causalidad.js">18 - Los distintos planteamientos en torno al concepto de sustancia. Valoración crítica del principio de causalidad</option>
+                    <option value="19-La-realidad-personal-y-el-problema-de-la-libertad.js">19 - La realidad personal y el problema de la libertad</option>
+                    <option value="20-El-debate-en-torno-a-las-relaciones-entre-la-fe-y-la-razon.js">20 - El debate en torno a las relaciones entre la fe y la razón</option>
+                    <option value="21-Ontologismo-agnosticismo-y-ateismo.js">21 - Ontologismo, agnosticismo y ateísmo</option>
+                    <option value="22-La-reflexion-filosofica-sobre-la-belleza.js">22 - La reflexión filosófica sobre la belleza</option>
+                    <option value="23-La-evolucion-y-sus-implicaciones-filosoficas.js">23 - La evolución y sus implicaciones filosóficas</option>
+                    <option value="24-La-antropologia-como-campo-de-estudio.js">24 - La Antropología como campo de estudio</option>
+                    <option value="25-La-antropogenesis-naturaleza-y-cultura.js">25 - La antropogénesis. Naturaleza y cultura</option>
+                    <option value="26-Las-distintas-concepciones-de-la-psicologia-como-ciencia.js">26 - Las distintas concepciones de la Psicología como ciencia</option>
+                    <option value="27-La-actividad-perceptiva-y-representativa-en-la-persona-humana.js">27 - La actividad perceptiva y representativa en la persona humana</option>
+                    <option value="28-El-caracter-simbolico-del-ser-humano-pensamiento-y-lenguaje-el-cognitivismo.js">28 - El carácter simbólico del ser humano. Pensamiento y lenguaje. El cognitivismo</option>
+                    <option value="29-La-motivacion-humana-y-la-vida-afectiva.js">29 - La motivación humana y la vida afectiva</option>
+                    <option value="30-El-aprendizaje-y-la-conducta-humana.js">30 - El aprendizaje y la conducta humana</option>
+                    <option value="31-Las-distintas-concepciones-de-sociologia-como-ciencia.js">31 - Las distintas concepciones de Sociología como ciencia</option>
+                    <option value="32-Origen-y-naturaleza-de-la-sociedad.js">32 - Origen y naturaleza de la sociedad</option>
+                    <option value="33-Formas-de-organizacion-politica.js">33 - Formas de organización política</option>
+                    <option value="34-Fundamentos-filosoficos-del-derecho-y-la-justicia.js">34 - Fundamentos filosóficos del derecho y la justicia</option>
+                    <option value="35-Conflicto-y-cambio-social-factores-y-tipos.js">35 - Conflicto y cambio social: factores y tipos</option>
+                    <option value="36-El-desarrollo-de-la-tecnica-y-sus-implicaciones-en-la-sociedad-contemporanea.js">36 - El desarrollo de la técnica y sus implicaciones en la sociedad contemporánea</option>
+                    <option value="37-Bases-antropologicas-de-la-conducta-moral.js">37 - Bases antropológicas de la conducta moral</option>
+                    <option value="38-La-genesis-de-los-valores-morales-naturaleza-y-convencion.js">38 - La génesis de los valores morales. Naturaleza y convención</option>
+                    <option value="39-El-lenguaje-moral-forma-y-justificacion-de-los-juicios-morales.js">39 - El lenguaje moral. Forma y justificación de los juicios morales</option>
+                    <option value="40-Bien-y-valor.js">40 - Bien y valor</option>
+                    <option value="41-Eticas-materiales-y-eticas-formales.js">41 - Éticas materiales y éticas formales</option>
+                    <option value="42-Etica-y-politica.js">42 - Ética y política</option>
+                    <option value="43-Principales-problemas-eticos-en-la-actividad-cientifica-y-tecnica-y-en-la-convivencia-social-de-nuestro-tiempo.js">43 - Principales problemas éticos en la actividad científica y técnica y en la convivencia social de nuestro tiempo</option>
+                    <option value="44-Etica-y-derecho-los-derechos-humanos.js">44 - Ética y derecho. Los Derechos Humanos</option>
+                    <option value="45-El-estado-de-bienestar-libertad-y-alienacion-en-las-sociedades-tecnificadas.js">45 - El Estado de Bienestar. Libertad y alienación en las sociedades tecnificadas</option>
+                    <option value="46-La-historia-de-la-filosofia-como-problema-filosofico.js">46 - La historia de la filosofía como problema filosófico</option>
+                    <option value="47-Los-modelos-de-explicacion-racional-en-los-presocraticos.js">47 - Los modelos de explicación racional en los presocráticos</option>
+                    <option value="48-El-debate-etico-politico-en-socrates-y-los-sofistas.js">48 - El debate ético-político en Sócrates y los sofistas</option>
+                    <option value="49-La-justicia-en-la-polis-como-objetivo-de-la-filosofia-de-platon.js">49 - La justicia en la polis como objetivo de la filosofía de Platón</option>
+                    <option value="50-La-naturaleza-en-aristoteles.js">50 - La naturaleza en Aristóteles</option>
+                    <option value="51-El-desarrollo-de-la-ciencia-en-el-pensamiento-helenistico.js">51 - El desarrollo de la ciencia en el pensamiento helenístico</option>
+                    <option value="52-La-sintesis-escolastica-de-santo-tomas-de-aquino.js">52 - La síntesis escolástica de Santo Tomás de Aquino</option>
+                    <option value="53-El-nominalismo-y-la-ciencia-del-siglo-xiv.js">53 - El nominalismo y la ciencia del siglo XIV</option>
+                    <option value="54-La-revolucion-cientifica-galileo-y-newton.js">54 - La revolución científica. Galileo y Newton</option>
+                    <option value="55-El-metodo-cartesiano.js">55 - El método cartesiano</option>
+                    <option value="56-El-sujeto-etico-politico-en-spinoza.js">56 - El sujeto ético-político en Spinoza</option>
+                    <option value="57-Ciencia-y-conocimiento-en-leibniz.js">57 - Ciencia y conocimiento en Leibniz</option>
+                    <option value="58-El-empirismo-y-las-ciencias-morales-locke-y-hume.js">58 - El empirismo y las ciencias morales. Locke y Hume</option>
+                    <option value="59-El-uso-teorico-de-la-razon-en-kant.js">59 - El uso teórico de la razón en Kant</option>
+                    <option value="60-El-uso-practico-de-la-razon-en-kant.js">60 - El uso práctico de la razón en Kant</option>
+                    <option value="61-La-filosofia-de-hegel-sujeto-sistema-y-estado.js">61 - La filosofía de Hegel. Sujeto, sistema y Estado</option>
+                    <option value="62-El-positivismo-y-el-avance-cientifico-del-siglo-xix.js">62 - El positivismo y el avance científico del siglo XIX</option>
+                    <option value="63-La-critica-de-marx-al-capitalismo-y-su-influjo-en-la-historia-del-pensamiento-occidental.js">63 - La crítica de Marx al capitalismo y su influjo en la historia del pensamiento occidental</option>
+                    <option value="64-Nietzsche-y-la-crisis-de-la-cultura-occidental.js">64 - Nietzsche y la crisis de la cultura occidental</option>
+                    <option value="65-La-fenomenologia-de-husserl.js">65 - La fenomenología de Husserl</option>
+                    <option value="66-Freud-el-psicoanalisis-y-la-critica-de-la-cultura-occidental.js">66 - Freud: el psicoanálisis y la crítica de la cultura occidental</option>
+                    <option value="67-El-problema-del-ser-en-heidegger-y-en-la-filosofia-de-la-existencia.js">67 - El problema del ser en Heidegger y en la filosofía de la existencia</option>
+                    <option value="68-L-wittgenstein-y-b-russell-la-corriente-analitica-de-la-filosofia.js">68 - L. Wittgenstein y B. Russell: la corriente analítica de la filosofía</option>
+                    <option value="69-Razon-y-sociedad-en-la-escuela-de-frankfurt-y-en-k-r-popper.js">69 - Razón y sociedad en la Escuela de Fráncfort y en K. R. Popper</option>
+                    <option value="70-Ortega-y-la-filosofia-del-exilio-espanol.js">70 - Ortega y la filosofía del exilio español</option>
+                    <option value="71-La-filosofia-de-fin-de-siglo-hermeneutica-y-posmodernidad.js">71 - La filosofía de fin de siglo. Hermenéutica y posmodernidad</option>
+                </select>
             </div>
-            <div class="col">
-                <p style="color:var(--muted);margin-top:0">Selecciona "Comenzar" para hacer el test o "Modo estudio" para repasar todas las respuestas.</p>
-                <div style="display:flex;gap:10px;flex-wrap:wrap">
-                    <button id="btn-comenzar" class="primario">Comenzar</button>
-                    <button id="btn-aprender" title="Muestra todas las preguntas del temario en modo estudio">Modo estudio</button>
-                </div>
+            <div class="grupo">
+                <label for="cantidad">Número de preguntas</label>
+                <input id="cantidad" type="number" min="5" max="40" value="10" />
             </div>
         </div>
-    </section>
-
-    <section id="pantalla-juego" class="tarjeta oculto">
-        <div class="estado">
-            <div class="contador-puntos"><strong id="xIndex">1</strong>/<span id="xTotal">12</span> · Puntos: <strong id="xPuntos">0</strong></div>
-            <div class="progreso" aria-hidden="true"><div id="barra" class="barra" style="width:0%"></div></div>
-        </div>
-
-        <div id="enunciado" class="pregunta"></div>
-        <div id="opciones" class="opciones"></div>
-
-        <div class="pie">
-            <div>
-                <button id="btn-anterior" class="fantasma">Anterior</button>
-                <button id="btn-saltar">Saltar</button>
-            </div>
-            <div>
-                <button id="btn-comprobar" class="primario">Comprobar</button>
-                <button id="btn-siguiente" class="exito oculto">Siguiente</button>
-                <button id="btn-terminar" class="peligro oculto">Terminar</button>
+        <div class="col">
+            <p style="color:var(--muted);margin-top:0">Selecciona "Comenzar" para hacer el test o "Modo estudio" para repasar todas las respuestas.</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <button id="btn-comenzar" class="primario">Comenzar</button>
+                <button id="btn-aprender" title="Muestra todas las preguntas del temario en modo estudio">Modo estudio</button>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section id="pantalla-final" class="tarjeta oculto">
-        <p class="resultado" id="resumen"></p>
-        <div class="fila" style="margin-top:12px">
-            <button id="btn-repetir" class="primario">Repetir configuración</button>
-            <button id="btn-inicio">Volver al inicio</button>
-            <button id="btn-estudio">Repasar preguntas</button>
+    <div class="enlace-contenedor">
+        <a class="enlace-constante" href="https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Men%C3%BA.html" target="_blank" rel="noopener">
+            Enlace al Menú inicial con acceso a todos los recursos online gratuitos
+        </a>
+    </div>
+</section>
+
+<section id="pantalla-juego" class="tarjeta oculto">
+    <div class="estado">
+        <div class="contador-puntos"><strong id="xIndex">1</strong>/<span id="xTotal">12</span> · Puntos: <strong id="xPuntos">0</strong></div>
+        <div class="progreso" aria-hidden="true"><div id="barra" class="barra" style="width:0%"></div></div>
+    </div>
+
+    <div id="enunciado" class="pregunta"></div>
+    <div id="opciones" class="opciones"></div>
+
+    <div class="pie">
+        <div>
+            <button id="btn-anterior" class="fantasma">Anterior</button>
+            <button id="btn-saltar">Saltar</button>
         </div>
-    </section>
+        <div>
+            <button id="btn-comprobar" class="primario">Comprobar</button>
+            <button id="btn-siguiente" class="exito oculto">Siguiente</button>
+            <button id="btn-terminar" class="peligro oculto">Terminar</button>
+        </div>
+    </div>
+</section>
 
-    <section id="pantalla-estudio" class="tarjeta oculto">
-        <div id="lista-estudio"></div>
-        <div class="pie"><button id="btn-salir-estudio">Salir</button></div>
-    </section>
+<section id="pantalla-final" class="tarjeta oculto">
+    <p class="resultado" id="resumen"></p>
+    <div class="fila" style="margin-top:12px">
+        <button id="btn-repetir" class="primario">Repetir configuración</button>
+        <button id="btn-inicio">Volver al inicio</button>
+        <button id="btn-estudio">Repasar preguntas</button>
+    </div>
+</section>
+
+<section id="pantalla-estudio" class="tarjeta oculto">
+    <div id="lista-estudio"></div>
+    <div class="pie"><button id="btn-salir-estudio">Salir</button></div>
+</section>
+
+
 </div>
 
 <script>
@@ -224,7 +248,7 @@ class SistemaSonido{
         this.master = null;
         this.enabled = true;
         this.initialized = false;
-        this.volume = 0.15; // más audible
+        this.volume = 0.15;
         this._unlocked = false;
     }
     init(){
@@ -235,7 +259,7 @@ class SistemaSonido{
             this.master.gain.value = this.volume;
             this.master.connect(this.ctx.destination);
             this.initialized = true;
-        }catch(e){ /* sin sonido si falla */ }
+        }catch(e){}
     }
     ensure(){
         if(!this.initialized) this.init();
@@ -262,19 +286,16 @@ class SistemaSonido{
         o.stop(t0 + dur);
     }
     reproducirAcierto(){
-        // intervalos ascendentes, más claros
         this.tone(880, 0.16, "square");
         setTimeout(()=>this.tone(1245, 0.18, "square"), 120);
     }
     reproducirError(){
-        // tono grave breve
         this.tone(220, 0.22, "triangle");
     }
     mute(on){ this.enabled = !on; }
 }
 const sonido = new SistemaSonido();
 
-/* Desbloqueo por interacción del usuario (autoplay policy) */
 ["pointerdown","keydown"].forEach(ev=>{
     window.addEventListener(ev, ()=>sonido.unlockOnce(), { once:false, passive:true });
 });
@@ -421,7 +442,7 @@ function pintarPregunta(){
         btn.setAttribute("data-idx", idx);
         btn.innerHTML = `<span class="letra">${letras[idx]||"?"}</span><span>${texto}</span>`;
         btn.addEventListener("click", ()=>{
-            sonido.unlockOnce(); // gesto del usuario
+            sonido.unlockOnce();
             seleccionar(idx);
         });
         ui.opciones.appendChild(btn);
@@ -570,5 +591,6 @@ document.addEventListener("keydown", (e)=>{
 /* Inicio */
 mostrar(ui.inicio);
 </script>
+
 </body>
 </html>
