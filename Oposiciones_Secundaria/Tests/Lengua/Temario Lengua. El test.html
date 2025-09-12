@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Trivia Lengua – Temarios</title>
+<style>
+    :root{
+        --bg:#0a0c10; --card:#11151c; --text:#e7edf3; --muted:#9fb0c3;
+        --accent:#ffd23f; --accent2:#34c759; --danger:#ff453a; --focus:#2563eb;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+        margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+        background:linear-gradient(180deg,#0a0c10 0%, #0d1117 100%);
+        color:var(--text);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    }
+    .contenedor{max-width:920px;margin:0 auto;padding:24px}
+    header{margin-bottom:16px}
+    h1{margin:0;font-weight:800;letter-spacing:.3px}
+    .sub{margin:8px 0 0 0;color:var(--muted)}
+    .tarjeta{
+        background:var(--card);border:1px solid #1d2530;border-radius:16px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    .fila{display:flex;gap:16px;flex-wrap:wrap}
+    .col{flex:1 1 280px}
+    button{
+        background:#1a2330;color:var(--text);border:1px solid #283346;padding:12px 16px;border-radius:12px;
+        font-weight:700;cursor:pointer;transition:.15s transform ease,.15s background ease,.15s border-color ease,.15s opacity ease;
+    }
+    button:hover{transform:translateY(-1px);border-color:#3a4a63}
+    button:active{transform:translateY(0)}
+    .primario{background:var(--accent);color:#111;border-color:#b69500}
+    .exito{background:var(--accent2);color:#041;border-color:#1f7a3a}
+    .peligro{background:var(--danger);color:#2b0302;border-color:#c21e16}
+    .fantasma{background:transparent}
+    .oculto{display:none !important}
+
+    .panel-config label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
+    .panel-config input[type="number"], .panel-config select{
+        width:100%;padding:10px 12px;border-radius:10px;border:1px solid #283346;background:#0f1319;color:var(--text);outline:none;
+    }
+    .panel-config input[type="checkbox"]{transform:scale(1.2);margin-right:8px}
+    .grupo{margin-bottom:14px}
+
+    .estado{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    .progreso{width:100%;height:10px;background:#121923;border-radius:999px;overflow:hidden;border:1px solid #233047}
+    .barra{height:100%;width:0%;background:linear-gradient(90deg,#ffd23f,#ffb703);transition:width .3s ease}
+    .contador-puntos{min-width:120px;text-align:center;padding:8px 10px;border-radius:10px;border:1px solid #283346;background:#0f1319}
+
+    .pregunta{font-size:20px;line-height:1.35;margin:6px 0 12px 0;font-weight:700}
+    .opciones{display:grid;gap:10px}
+    .opcion{
+        padding:12px 14px;border-radius:12px;border:1px solid #2b3649;background:#0e141b;cursor:pointer;display:flex;gap:10px;align-items:flex-start;text-align:left
+    }
+    .opcion:hover{border-color:#3c4f6c}
+    .opcion.correcta{background:rgba(52,199,89,.12);border-color:rgba(52,199,89,.6)}
+    .opcion.incorrecta{background:rgba(255,69,58,.10);border-color:rgba(255,69,58,.55)}
+    .opcion .letra{
+        width:28px;height:28px;display:inline-grid;place-items:center;border-radius:8px;border:1px solid #344055;background:#121826;color:var(--muted);font-weight:700;flex:0 0 auto
+    }
+
+    .pie{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+
+    .resultado{font-size:18px;margin:0;color:var(--muted)}
+    .medalla{font-weight:800;color:var(--accent)}
+    .seleccionable{user-select:none}
+
+    @media (prefers-reduced-motion:no-preference){
+        .aparece{animation:aparece .25s ease both}
+        @keyframes aparece{from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)}}
+    }
+</style>
+</head>
+<body>
+<div class="contenedor">
+    <header>
+        <h1>Oposiciones Secundaria: Lengua Española y Literatura</h1>
+        <h2>Conforme al temario vigente establecido en la Orden de 9 de septiembre de 1993</h2>
+        <p id="cabecera-estado" class="sub" style="color: rgb(247, 227, 3);">Elige el tema y la cantidad de preguntas</p>
+        <p class="sub" style="font-size: 0.85em;">tomcue@iesjuandelacierva.com</p>
+    </header>
+
+    <section id="pantalla-inicio" class="tarjeta aparece">
+        <div class="fila">
+            <div class="col panel-config">
+                <div class="grupo">
+                    <label for="tema">Temario</label>
+                    <select id="tema">
+                        <option value="01-lenguaje-y-comunicacion-competencia-linguistica-y-competencia-comuniaativa.js">1 - Lenguaje y comunicación. Competencia lingüística y competencia comunicativa</option>
+                        <option value="02-teorias-linguisticas-actuales.js">2 - Teorías lingüísticas actuales</option>
+                        <option value="03-lenguaje-y-pensamiento.js">3 - Lenguaje y pensamiento</option>
+                        <option value="04-lenguaje-verbal-y-lenguajes-no-verbales-en-la-comunicacion-humana-relaciones.js">4 - Lenguaje verbal y lenguajes no verbales en la comunicación humana. Relaciones</option>
+                        <option value="05-los-medios-de-comunicacion-hoy-informacion-opinion-y-persuasion-la-publicidad.js">5 - Los medios de comunicación hoy: información, opinión y persuasión. La publicidad</option>
+                        <option value="06-el-proceso-de-comunicacion-la-situacion-comunicativa.js">6 - El proceso de comunicación. La situación comunicativa</option>
+                        <option value="07-las-lenguas-de-espana-formacion-y-evolucion-sus-variedades-dialectales.js">7 - Las lenguas de España: formación y evolución. Sus variedades dialectales</option>
+                        <option value="08-bilinguismo-y-diglosia-lenguas-en-contacto-la-normalizacion-linguistica.js">8 - Bilingüismo y diglosia. Lenguas en contacto. La normalización lingüística</option>
+                        <option value="09-el-espanol-de-america-el-espanol-en-el-mundo-situacion-y-perspectivas-de-difusion.js">9 - El español de América. El español en el mundo: situación y perspectivas de difusión</option>
+                        <option value="10-la-lengua-como-sistema-la-norma-linguistica-las-variedades-sociales-y-funcionales-de-la-lengua.js">10 - La lengua como sistema. La norma lingüística. Las variedades sociales y funcionales de la lengua</option>
+                        <option value="11-fonetica-y-fonologia-el-sistema-fonologico-del-espanol-y-sus-variantes-mas-significativas.js">11 - Fonética y fonología. El sistema fonológico del español y sus variantes más significativas</option>
+                        <option value="12-la-estructura-de-la-palabra-flexion-derivacion-y-composicion-la-organizacion-del-lexico-espanol.js">12 - La estructura de la palabra: flexión, derivación y composición. La organización del léxico español</option>
+                        <option value="13-relaciones-semanticas-entre-las-palabras-hiponimia-sinonimia-polisemia-homonimia-y-antonimia-los-cambios-de-sentido.js">13 - Relaciones semánticas entre las palabras: hiponimia, sinonimia, polisemia, homonimia y antonimia. Los cambios de sentido</option>
+                        <option value="14-el-sintagma-nominal.js">14 - El sintagma nominal</option>
+                        <option value="15-el-sintagma-verbal.js">15 - El sintagma verbal</option>
+                        <option value="16-relaciones-sintacticas-sujeto-y-predicado.js">16 - Relaciones sintácticas: sujeto y predicado</option>
+                        <option value="17-la-oracion-constituyentes-estructura-y-modalidades-la-proposicion.js">17 - La oración: constituyentes, estructura y modalidades. La proposición</option>
+                        <option value="18-elementos-linguisticos-para-la-expresion-de-la-cantidad-la-cualidad-y-el-grado.js">18 - Elementos lingüísticos para la expresión de la cantidad, la cualidad y el grado</option>
+                        <option value="19-elementos-linguisticos-para-la-expresion-del-tiempo-el-espacio-y-el-modo.js">19 - Elementos lingüísticos para la expresión del tiempo, el espacio y el modo</option>
+                        <option value="20-expresion-de-la-asercion-la-objecion-la-opinion-el-deseo-y-la-exhortacion.js">20 - Expresión de la aserción, la objeción, la opinión, el deseo y la exhortación</option>
+                        <option value="21-expresion-de-la-duda-la-hipotesis-y-el-contraste.js">21 - Expresión de la duda, la hipótesis y el contraste</option>
+                        <option value="22-expresion-de-la-causa-la-consecuencia-y-la-finalidad.js">22 - Expresión de la causa, la consecuencia y la finalidad</option>
+                        <option value="23-el-texto-como-unidad-comunicativa-su-adecuacion-al-contexto-el-discurso.js">23 - El texto como unidad comunicativa. Su adecuación al contexto. El discurso</option>
+                        <option value="24-coherencia-textual-deixis-anafora-y-catafora-la-progresion-tematica.js">24 - Coherencia textual: deixis, anáfora y catáfora. La progresión temática</option>
+                        <option value="25-cohesion-textual-estructuras-conectores-relacionantes-y-marcas-de-organizacion.js">25 - Cohesión textual: estructuras, conectores, relacionantes y marcas de organización</option>
+                        <option value="26-el-texto-narrativo-estructuras-y-caracteristicas.js">26 - El texto narrativo: estructuras y características</option>
+                        <option value="27-el-texto-descriptivo-estructuras-y-caracteristicas.js">27 - El texto descriptivo: estructuras y características</option>
+                        <option value="28-el-texto-expositivo-estructuras-y-caracteristicas.js">28 - El texto expositivo: estructuras y características</option>
+                        <option value="29-el-texto-dialogico-estructuras-y-caracteristicas.js">29 - El texto dialógico: estructuras y características</option>
+                        <option value="30-el-texto-argumentativo-estructura-y-tecnicas.js">30 - El texto argumentativo: estructura y técnicas</option>
+                        <option value="31-la-comprension-y-expresion-de-textos-orales-bases-linguisticas-psicologicas-y-pedagogicas.js">31 - La comprensión y expresión de textos orales: bases lingüísticas, psicológicas y pedagógicas</option>
+                        <option value="32-la-comprension-y-expresion-de-textos-escritos-bases-linguisticas-psicologicas-y-pedagogicas.js">32 - La comprensión y expresión de textos escritos: bases lingüísticas, psicológicas y pedagógicas</option>
+                        <option value="33-el-discurso-literario-como-producto-linguistico-estetico-y-social-los-recursos-expresivos-de-la-literatura-estilistica-y-retorica.js">33 - El discurso literario como producto lingüístico, estético y social. Los recursos expresivos de la literatura: estilística y retórica</option>
+                        <option value="34-analisis-y-critica-literaria-metodos-intrumentos-y-tecnicas.js">34 - Análisis y crítica literaria: métodos, instrumentos y técnicas</option>
+                        <option value="35-didactica-de-la-literatura-la-educacion-literaria.js">35 - Didáctica de la literatura. La educación literaria</option>
+                        <option value="36-el-genero-literario-teoria-de-los-generos.js">36 - El género literario. Teoría de los géneros</option>
+                        <option value="37-los-generos-narrativos.js">37 - Los géneros narrativos</option>
+                        <option value="38-la-lirica-y-sus-convenciones.js">38 - La lírica y sus convenciones</option>
+                        <option value="39-el-teatro-texto-dramatico-y-espectaculo.js">39 - El teatro: texto dramático y espectáculo</option>
+                        <option value="40-el-ensayo-el-periodismo-y-su-irrupcion-en-la-literatura.js">40 - El ensayo. El periodismo y su irrupción en la literatura</option>
+                        <option value="41-las-fuentes-y-los-origenes-de-la-literatura-occidental-la-biblia-los-clasicos-greco-latinos.js">41 - Las fuentes y los orígenes de la literatura occidental: la Biblia, los clásicos grecolatinos</option>
+                        <option value="42-la-epica-medieval-los-cantares-de-gesta-el-cantar-de-mio-cid.js">42 - La épica medieval: los cantares de gesta. El Cantar de Mio Cid</option>
+                        <option value="43-el-mester-de-clerecia-gonzalo-de-berceo-el-arcipreste-de-hita.js">43 - El Mester de Clerecía. Gonzalo de Berceo. El Arcipreste de Hita</option>
+                        <option value="44-la-prosa-medieval-la-escuela-de-traductores-de-toledo-alfonso-x-el-sabio-y-don-juan-manuel.js">44 - La prosa medieval: la Escuela de Traductores de Toledo. Alfonso X el Sabio y Don Juan Manuel</option>
+                        <option value="45-lirica-culta-y-lirica-popular-en-el-siglo-xv-los-cancioneros-jorge-manrique-el-romancero.js">45 - Lírica culta y lírica popular en el siglo XV: los cancioneros, Jorge Manrique, el romancero</option>
+                        <option value="46-la-celestina.js">46 - La Celestina</option>
+                        <option value="47-la-lirica-renacentista-las-formas-y-el-espiritu-italianos-en-la-poesia-espanola-garcilaso-de-la-vega.js">47 - La lírica renacentista: las formas y el espíritu italianos en la poesía española. Garcilaso de la Vega</option>
+                        <option value="48-la-lirica-renacentista-en-fray-luis-de-leon-san-juan-de-la-cruz-y-santa-teresa.js">48 - La lírica renacentista en Fray Luis de León, San Juan de la Cruz y Santa Teresa</option>
+                        <option value="49-la-novela-en-los-siglos-de-oro-el-lazarillo-de-tormes-la-novela-picaresca.js">49 - La novela en los Siglos de Oro: El Lazarillo de Tormes. La novela picaresca</option>
+                        <option value="50-el-quijote.js">50 - El Quijote</option>
+                        <option value="51-la-lirica-en-el-barroco-gongora-quevedo-y-lope-de-vega.js">51 - La lírica en el Barroco: Góngora, Quevedo y Lope de Vega</option>
+                        <option value="52-creacion-del-teatro-nacional-lope-de-vega.js">52 - Creación del teatro nacional: Lope de Vega</option>
+                        <option value="53-evolucion-del-teatro-barroco-calderon-de-la-barca-y-tirso-de-molina.js">53 - Evolución del teatro barroco: Calderón de la Barca y Tirso de Molina</option>
+                        <option value="54-los-teatros-nacionales-de-inglaterra-y-francia-en-el-barroco-relaciones-y-diferencias-con-el-teatro-espanol.js">54 - Los teatros nacionales de Inglaterra y Francia en el Barroco: relaciones y diferencias con el teatro español</option>
+                        <option value="55-la-literatura-espanola-en-el-siglo-xviii.js">55 - La literatura española en el siglo XVIII</option>
+                        <option value="56-formas-originales-del-ensayo-literario-evolucion-en-los-siglos-xviii-y-xix-el-ensayo-en-el-siglo-xx.js">56 - Formas originales del ensayo literario. Evolución en los siglos XVIII y XIX. El ensayo en el siglo XX</option>
+                        <option value="57-el-movimiento-romantico-y-sus-repercusiones-en-espana.js">57 - El movimiento romántico y sus repercusiones en España</option>
+                        <option value="58-realismo-y-naturalismo-en-la-novela-del-siglo-xix.js">58 - Realismo y Naturalismo en la novela del siglo XIX</option>
+                        <option value="59-el-realismo-en-la-novela-de-benito-perez-galdos.js">59 - El Realismo en la novela de Benito Pérez Galdós</option>
+                        <option value="60-modernismo-y-98-como-fenomeno-historico-social-y-estetico.js">60 - Modernismo y 98 como fenómeno histórico, social y estético</option>
+                        <option value="61-la-renovacion-de-la-lirica-espanola-final-del-siglo-xix-y-principios-del-xx.js">61 - La renovación de la lírica española a final del siglo XIX y principios del XX</option>
+                        <option value="62-las-vanguardias-literarias-europeas-y-espanola-relaciones.js">62 - Las vanguardias literarias europeas y española: relaciones</option>
+                        <option value="63-la-lirica-en-el-grupo-poetico-del-27.js">63 - La lírica en el Grupo Poético del 27</option>
+                        <option value="64-la-novela-espanola-en-la-primera-mitad-del-siglo-xx.js">64 - La novela española en la primera mitad del siglo XX</option>
+                        <option value="65-nuevas-formas-del-teatro-espanol-en-la-primera-mitad-del-siglo-xx-valle-inclan-garcia-lorca.js">65 - Nuevas formas del teatro español en la primera mitad del siglo XX: Valle-Inclán, García Lorca</option>
+                        <option value="66-nuevos-modelos-narrativos-en-espana-a-partir-de-1940.js">66 - Nuevos modelos narrativos en España a partir de 1940</option>
+                        <option value="67-la-narrativa-hispanoamericana-en-el-siglo-xx.js">67 - La narrativa hispanoamericana en el siglo XX</option>
+                        <option value="68-la-poesia-espanola-a-partir-de-1940.js">68 - La poesía española a partir de 1940</option>
+                        <option value="69-la-poesia-hispanoamericana-en-el-siglo-xx.js">69 - La poesía hispanoamericana en el siglo XX</option>
+                        <option value="70-el-teatro-espanol-a-partir-de-1940.js">70 - El teatro español a partir de 1940</option>
+                        <option value="71-recuperacion-de-la-literatura-de-tradicion-oral-topicos-y-formas.js">71 - Recuperación de la literatura de tradición oral: tópicos y formas</option>
+                        <option value="72-la-literatura-en-lengua-catalana-gallega-y-vasca-obras-mas-relevantes-y-situacion-actual.js">72 - La literatura en lengua catalana, gallega y vasca: obras más relevantes y situación actual</option>
+                        
+                    </select>
+                </div>
+                <div class="grupo">
+                    <label for="cantidad">Número de preguntas</label>
+                    <input id="cantidad" type="number" min="5" max="40" value="10" />
+                </div>
+            </div>
+            <div class="col">
+                <p style="color:var(--muted);margin-top:0">Selecciona "Comenzar" para hacer el test o "Modo estudio" para repasar todas las respuestas.</p>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <button id="btn-comenzar" class="primario">Comenzar</button>
+                    <button id="btn-aprender" title="Muestra todas las preguntas del temario en modo estudio">Modo estudio</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pantalla-juego" class="tarjeta oculto">
+        <div class="estado">
+            <div class="contador-puntos"><strong id="xIndex">1</strong>/<span id="xTotal">12</span> · Puntos: <strong id="xPuntos">0</strong></div>
+            <div class="progreso" aria-hidden="true"><div id="barra" class="barra" style="width:0%"></div></div>
+        </div>
+
+        <div id="enunciado" class="pregunta"></div>
+        <div id="opciones" class="opciones"></div>
+
+        <div class="pie">
+            <div>
+                <button id="btn-anterior" class="fantasma">Anterior</button>
+                <button id="btn-saltar">Saltar</button>
+            </div>
+            <div>
+                <button id="btn-comprobar" class="primario">Comprobar</button>
+                <button id="btn-siguiente" class="exito oculto">Siguiente</button>
+                <button id="btn-terminar" class="peligro oculto">Terminar</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="pantalla-final" class="tarjeta oculto">
+        <p class="resultado" id="resumen"></p>
+        <div class="fila" style="margin-top:12px">
+            <button id="btn-repetir" class="primario">Repetir configuración</button>
+            <button id="btn-inicio">Volver al inicio</button>
+            <button id="btn-estudio">Repasar preguntas</button>
+        </div>
+    </section>
+
+    <section id="pantalla-estudio" class="tarjeta oculto">
+        <div id="lista-estudio"></div>
+        <div class="pie"><button id="btn-salir-estudio">Salir</button></div>
+    </section>
+</div>
+
+<script>
+/* ===== Utilidades ===== */
+function barajar(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+/* ===== Sistema de sonido (WebAudio) ===== */
+class SistemaSonido{
+    constructor(){
+        this.ctx = null;
+        this.master = null;
+        this.enabled = true;
+        this.initialized = false;
+        this.volume = 0.15; // más audible
+        this._unlocked = false;
+    }
+    init(){
+        if(this.initialized) return;
+        try{
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            this.master = this.ctx.createGain();
+            this.master.gain.value = this.volume;
+            this.master.connect(this.ctx.destination);
+            this.initialized = true;
+        }catch(e){ /* sin sonido si falla */ }
+    }
+    ensure(){
+        if(!this.initialized) this.init();
+        if(this.ctx && this.ctx.state === "suspended") this.ctx.resume();
+    }
+    unlockOnce(){
+        if(this._unlocked) return;
+        this._unlocked = true;
+        this.ensure();
+    }
+    tone(freq=440, dur=0.18, type="square"){
+        if(!this.enabled) return;
+        this.ensure();
+        if(!this.ctx) return;
+        const t0 = this.ctx.currentTime + 0.01;
+        const o = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        o.type = type;
+        o.frequency.setValueAtTime(freq, t0);
+        o.connect(g); g.connect(this.master);
+        g.gain.setValueAtTime(1, t0);
+        g.gain.exponentialRampToValueAtTime(0.0008, t0 + dur);
+        o.start(t0);
+        o.stop(t0 + dur);
+    }
+    reproducirAcierto(){
+        // intervalos ascendentes, más claros
+        this.tone(880, 0.16, "square");
+        setTimeout(()=>this.tone(1245, 0.18, "square"), 120);
+    }
+    reproducirError(){
+        // tono grave breve
+        this.tone(220, 0.22, "triangle");
+    }
+    mute(on){ this.enabled = !on; }
+}
+const sonido = new SistemaSonido();
+
+/* Desbloqueo por interacción del usuario (autoplay policy) */
+["pointerdown","keydown"].forEach(ev=>{
+    window.addEventListener(ev, ()=>sonido.unlockOnce(), { once:false, passive:true });
+});
+document.addEventListener("visibilitychange", ()=>{
+    if(document.visibilityState==="visible") sonido.ensure();
+});
+
+/* ===== Carga de temarios ===== */
+let BANCO = [];
+
+function cargarTemario(nombreArchivo){
+    return new Promise((resolve, reject)=>{
+        delete window.PREGUNTAS;
+        const prev = document.getElementById("temario-script");
+        if(prev) prev.remove();
+
+        const s = document.createElement("script");
+        s.id = "temario-script";
+        s.async = true;
+        s.src = `temarios/${nombreArchivo}?t=${Date.now()}`;
+        s.onload = ()=>{
+            if(typeof window.PREGUNTAS === "undefined" || !Array.isArray(window.PREGUNTAS)){
+                reject(new Error("El temario no define PREGUNTAS válidas."));
+                return;
+            }
+            BANCO = convertirPreguntas(window.PREGUNTAS);
+            resolve(BANCO);
+        };
+        s.onerror = ()=>reject(new Error("No se pudo cargar el temario."));
+        document.body.appendChild(s);
+    });
+}
+
+function convertirPreguntas(arr){
+    return arr.map(p=>{
+        const opciones = [p.correcta, ...(p.incorrectas||[])];
+        const idxs = opciones.map((_,i)=>i);
+        barajar(idxs);
+        const opsBarajadas = idxs.map(i=>opciones[i]);
+        const indiceCorrecta = idxs.indexOf(0);
+        return {
+            pregunta: p.enunciado,
+            opciones: opsBarajadas,
+            correcta: indiceCorrecta,
+            explicacion: ""
+        };
+    });
+}
+
+/* ===== Estado/UI ===== */
+const ui = {
+    inicio:      document.getElementById("pantalla-inicio"),
+    juego:       document.getElementById("pantalla-juego"),
+    final:       document.getElementById("pantalla-final"),
+    estudio:     document.getElementById("pantalla-estudio"),
+    tema:        document.getElementById("tema"),
+    cantidad:    document.getElementById("cantidad"),
+    enunciado:   document.getElementById("enunciado"),
+    opciones:    document.getElementById("opciones"),
+    idx:         document.getElementById("xIndex"),
+    total:       document.getElementById("xTotal"),
+    puntos:      document.getElementById("xPuntos"),
+    barra:       document.getElementById("barra"),
+    resumen:     document.getElementById("resumen"),
+    listaEstudio:document.getElementById("lista-estudio"),
+    cabecera:    document.getElementById("cabecera-estado"),
+    btns:{
+        comenzar: document.getElementById("btn-comenzar"),
+        aprender: document.getElementById("btn-aprender"),
+        anterior: document.getElementById("btn-anterior"),
+        saltar:   document.getElementById("btn-saltar"),
+        comprobar:document.getElementById("btn-comprobar"),
+        siguiente:document.getElementById("btn-siguiente"),
+        terminar: document.getElementById("btn-terminar"),
+        repetir:  document.getElementById("btn-repetir"),
+        inicio:   document.getElementById("btn-inicio"),
+        estudio:  document.getElementById("btn-estudio"),
+        salirEst: document.getElementById("btn-salir-estudio")
+    }
+};
+
+let estado = {
+    preguntas: [], orden: [], actual: 0, puntos: 0, seleccion: null
+};
+
+/* ===== Cabecera dinámica ===== */
+const CABECERA_INICIAL = ui.cabecera.textContent;
+function setCabeceraTituloFromSelect(){
+    const opt = ui.tema.options[ui.tema.selectedIndex];
+    if(opt) ui.cabecera.textContent = opt.textContent;
+}
+function resetCabecera(){ ui.cabecera.textContent = CABECERA_INICIAL; }
+
+/* ===== Navegación ===== */
+function mostrar(section){
+    for(const s of [ui.inicio, ui.juego, ui.final, ui.estudio]) s.classList.add("oculto");
+    section.classList.remove("oculto");
+    section.classList.add("aparece");
+}
+
+/* ===== Preparación desde BANCO ===== */
+function prepararJuego(opts){
+    const conjunto = barajar([...BANCO]);
+    const n = Math.max(5, Math.min(opts.cantidad, conjunto.length));
+    const seleccion = conjunto.slice(0, n).map(clonarYBarajarOpciones);
+
+    estado.preguntas = seleccion;
+    estado.orden = [...Array(estado.preguntas.length).keys()];
+    estado.actual = 0; estado.puntos = 0; estado.seleccion = null;
+
+    ui.total.textContent = String(estado.preguntas.length);
+    ui.puntos.textContent = "0";
+    ui.barra.style.width = "0%";
+
+    setCabeceraTituloFromSelect();
+    pintarPregunta();
+    mostrar(ui.juego);
+}
+
+function clonarYBarajarOpciones(qo){
+    const copia = JSON.parse(JSON.stringify(qo));
+    const idxs = copia.opciones.map((_,i)=>i);
+    barajar(idxs);
+    const ops = idxs.map(i=>copia.opciones[i]);
+    const corr = idxs.indexOf(copia.correcta);
+    copia.opciones = ops; copia.correcta = corr;
+    return copia;
+}
+
+/* ===== Pintado ===== */
+function pintarPregunta(){
+    const i = estado.actual;
+    const q = estado.preguntas[i];
+    ui.idx.textContent = String(i+1);
+    ui.enunciado.textContent = q.pregunta;
+    ui.opciones.innerHTML = "";
+    ui.btns.siguiente.classList.add("oculto"); ui.btns.terminar.classList.add("oculto");
+    ui.btns.comprobar.classList.remove("oculto");
+
+    const letras = "ABCD".split("");
+    q.opciones.forEach((texto, idx)=>{
+        const btn = document.createElement("button");
+        btn.className = "opcion";
+        btn.setAttribute("data-idx", idx);
+        btn.innerHTML = `<span class="letra">${letras[idx]||"?"}</span><span>${texto}</span>`;
+        btn.addEventListener("click", ()=>{
+            sonido.unlockOnce(); // gesto del usuario
+            seleccionar(idx);
+        });
+        ui.opciones.appendChild(btn);
+    });
+
+    actualizarProgreso(); estado.seleccion = null;
+}
+
+function seleccionar(idx){
+    if(ui.btns.comprobar.classList.contains("oculto")) return;
+    estado.seleccion = idx;
+    [...ui.opciones.children].forEach(el=>el.style.outline="none");
+    const el = ui.opciones.querySelector(`[data-idx="${idx}"]`);
+    el.style.outline = `2px solid var(--focus)`;
+    el.scrollIntoView({block:"nearest", behavior:"smooth"});
+}
+
+function actualizarProgreso(){
+    const pct = (estado.actual/estado.preguntas.length)*100;
+    ui.barra.style.width = `${pct}%`;
+}
+
+/* ===== Comprobación/flujo ===== */
+function comprobar(){
+    const q = estado.preguntas[estado.actual];
+    const sel = estado.seleccion;
+    const acierto = sel === q.correcta;
+
+    [...ui.opciones.children].forEach((btn, idx)=>{
+        if(idx===q.correcta) btn.classList.add("correcta");
+        if(sel!==null && idx===sel && sel!==q.correcta) btn.classList.add("incorrecta");
+        btn.style.cursor="default";
+    });
+
+    if(sel !== null){
+        if(acierto){
+            estado.puntos++;
+            ui.puntos.textContent = String(estado.puntos);
+            sonido.reproducirAcierto();
+        }else{
+            sonido.reproducirError();
+        }
+    }
+
+    ui.btns.comprobar.classList.add("oculto");
+    const ultima = estado.actual === estado.preguntas.length - 1;
+    if(ultima){ ui.btns.terminar.classList.remove("oculto"); }
+    else{ ui.btns.siguiente.classList.remove("oculto"); }
+}
+
+function siguiente(){
+    estado.actual++;
+    pintarPregunta();
+}
+function anterior(){
+    if(estado.actual===0) return;
+    estado.actual--;
+    pintarPregunta();
+}
+function saltar(){
+    estado.seleccion = null;
+    comprobar();
+}
+
+/* ===== Final ===== */
+function terminar(){
+    mostrar(ui.final);
+    const n = estado.preguntas.length, p = estado.puntos, r = p/n;
+    const med = r>=0.85 ? "Oro" : r>=0.65 ? "Plata" : r>=0.45 ? "Bronce" : "Finalista";
+    ui.resumen.innerHTML = `Resultado: <span class="medalla">${med}</span>. Aciertos ${p}/${n}.`;
+}
+
+/* ===== Estudio ===== */
+function entrarEstudio(pregs = BANCO){
+    ui.listaEstudio.innerHTML = "";
+    const frag = document.createDocumentFragment();
+    const letras = "ABCD".split("");
+    pregs.forEach((q,i)=>{
+        const card = document.createElement("div");
+        card.className = "tarjeta"; card.style.marginBottom = "12px";
+        const h = document.createElement("div"); h.className = "pregunta"; h.textContent = `${i+1}. ${q.pregunta}`;
+        const lista = document.createElement("div"); lista.className = "opciones";
+        q.opciones.forEach((op,idx)=>{
+            const p = document.createElement("div");
+            p.className = "opcion " + (idx===q.correcta?"correcta":"");
+            p.innerHTML = `<span class="letra">${letras[idx]}</span><span>${op}</span>`;
+            lista.appendChild(p);
+        });
+        const ex = document.createElement("div"); ex.className = "explicacion"; ex.textContent = q.explicacion || "";
+        card.append(h, lista, ex); frag.appendChild(card);
+    });
+    ui.listaEstudio.appendChild(frag);
+    mostrar(ui.estudio);
+}
+
+/* ===== Eventos ===== */
+async function iniciarDesdeTemario(archivo, opts){
+    await cargarTemario(archivo);
+    prepararJuego(opts);
+}
+
+ui.btns.comenzar.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
+    await iniciarDesdeTemario(ui.tema.value, {
+        cantidad: Number(ui.cantidad.value || 12)
+    });
+});
+
+ui.btns.aprender.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
+    await cargarTemario(ui.tema.value);
+    setCabeceraTituloFromSelect();
+    entrarEstudio(barajar([...BANCO]));
+});
+
+ui.btns.comprobar.addEventListener("click", comprobar);
+ui.btns.siguiente.addEventListener("click", siguiente);
+ui.btns.anterior.addEventListener("click", anterior);
+ui.btns.saltar.addEventListener("click", saltar);
+ui.btns.terminar.addEventListener("click", terminar);
+
+ui.btns.repetir.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
+    await iniciarDesdeTemario(ui.tema.value, {
+        cantidad: estado.preguntas.length
+    });
+});
+
+ui.btns.inicio.addEventListener("click", ()=>{
+    resetCabecera();
+    mostrar(ui.inicio);
+});
+ui.btns.estudio.addEventListener("click", ()=>entrarEstudio(estado.preguntas));
+ui.btns.salirEst.addEventListener("click", ()=>mostrar(ui.final));
+
+document.addEventListener("keydown", (e)=>{
+    if(ui.juego.classList.contains("oculto")) return;
+    if(e.key==="Enter") {
+        if(!ui.btns.comprobar.classList.contains("oculto")) comprobar();
+        else if(!ui.btns.siguiente.classList.contains("oculto")) siguiente();
+    }
+    if(e.key==="ArrowRight" && !ui.btns.siguiente.classList.contains("oculto")) siguiente();
+    if(e.key==="ArrowLeft") anterior();
+});
+
+/* Inicio */
+mostrar(ui.inicio);
+</script>
+</body>
+</html>
