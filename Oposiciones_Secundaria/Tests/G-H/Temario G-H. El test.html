@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 <meta charset="utf-8" />
@@ -37,40 +38,54 @@
     .fantasma{background:transparent}
     .oculto{display:none !important}
 
-    .panel-config label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
-    .panel-config input[type="number"], .panel-config select{
-        width:100%;padding:10px 12px;border-radius:10px;border:1px solid #283346;background:#0f1319;color:var(--text);outline:none;
-    }
-    .panel-config input[type="checkbox"]{transform:scale(1.2);margin-right:8px}
-    .grupo{margin-bottom:14px}
 
-    .estado{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-    .progreso{width:100%;height:10px;background:#121923;border-radius:999px;overflow:hidden;border:1px solid #233047}
-    .barra{height:100%;width:0%;background:linear-gradient(90deg,#ffd23f,#ffb703);transition:width .3s ease}
-    .contador-puntos{min-width:120px;text-align:center;padding:8px 10px;border-radius:10px;border:1px solid #283346;background:#0f1319}
+.panel-config label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
+.panel-config input[type="number"], .panel-config select{
+    width:100%;padding:10px 12px;border-radius:10px;border:1px solid #283346;background:#0f1319;color:var(--text);outline:none;
+}
+.panel-config input[type="checkbox"]{transform:scale(1.2);margin-right:8px}
+.grupo{margin-bottom:14px}
 
-    .pregunta{font-size:20px;line-height:1.35;margin:6px 0 12px 0;font-weight:700}
-    .opciones{display:grid;gap:10px}
-    .opcion{
-        padding:12px 14px;border-radius:12px;border:1px solid #2b3649;background:#0e141b;cursor:pointer;display:flex;gap:10px;align-items:flex-start;text-align:left
-    }
-    .opcion:hover{border-color:#3c4f6c}
-    .opcion.correcta{background:rgba(52,199,89,.12);border-color:rgba(52,199,89,.6)}
-    .opcion.incorrecta{background:rgba(255,69,58,.10);border-color:rgba(255,69,58,.55)}
-    .opcion .letra{
-        width:28px;height:28px;display:inline-grid;place-items:center;border-radius:8px;border:1px solid #344055;background:#121826;color:var(--muted);font-weight:700;flex:0 0 auto
-    }
+.estado{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.progreso{width:100%;height:10px;background:#121923;border-radius:999px;overflow:hidden;border:1px solid #233047}
+.barra{height:100%;width:0%;background:linear-gradient(90deg,#ffd23f,#ffb703);transition:width .3s ease}
+.contador-puntos{min-width:120px;text-align:center;padding:8px 10px;border-radius:10px;border:1px solid #283346;background:#0f1319}
 
-    .pie{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.pregunta{font-size:20px;line-height:1.35;margin:6px 0 12px 0;font-weight:700}
+.opciones{display:grid;gap:10px}
+.opcion{
+    padding:12px 14px;border-radius:12px;border:1px solid #2b3649;background:#0e141b;cursor:pointer;display:flex;gap:10px;align-items:flex-start;text-align:left
+}
+.opcion:hover{border-color:#3c4f6c}
+.opcion.correcta{background:rgba(52,199,89,.12);border-color:rgba(52,199,89,.6)}
+.opcion.incorrecta{background:rgba(255,69,58,.10);border-color:rgba(255,69,58,.55)}
+.opcion .letra{
+    width:28px;height:28px;display:inline-grid;place-items:center;border-radius:8px;border:1px solid #344055;background:#121826;color:var(--muted);font-weight:700;flex:0 0 auto
+}
 
-    .resultado{font-size:18px;margin:0;color:var(--muted)}
-    .medalla{font-weight:800;color:var(--accent)}
-    .seleccionable{user-select:none}
+.pie{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 
-    @media (prefers-reduced-motion:no-preference){
-        .aparece{animation:aparece .25s ease both}
-        @keyframes aparece{from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)}}
-    }
+.resultado{font-size:18px;margin:0;color:var(--muted)}
+.medalla{font-weight:800;color:var(--accent)}
+.seleccionable{user-select:none}
+
+/* Enlace permanente subrayado */
+.enlace-contenedor{margin-top:18px}
+.enlace-constante{
+    color:var(--accent);
+    text-decoration:underline !important;
+    text-underline-offset:3px;
+    font-weight:700;
+}
+.enlace-constante:hover,
+.enlace-constante:focus{filter:brightness(1.05)}
+
+@media (prefers-reduced-motion:no-preference){
+    .aparece{animation:aparece .25s ease both}
+    @keyframes aparece{from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)}}
+}
+
+
 </style>
 </head>
 <body>
@@ -82,136 +97,146 @@
         <p class="sub" style="font-size: 0.85em;">tomcue@iesjuandelacierva.com</p>
     </header>
 
-    <section id="pantalla-inicio" class="tarjeta aparece">
-        <div class="fila">
-            <div class="col panel-config">
-                <div class="grupo">
-                    <label for="tema">Temario</label>
-                    <select id="tema">
-                        <option value="01-La-concepcion-del-espacio-geografico-corrientes-actuales-del-pensamiento-geografico.js">1 - La concepción del espacio geográfico. Corrientes actuales del pensamiento geográfico</option>
-                        <option value="02-Metodologia-del-trabajo-geografico-tecnicas-de-trabajo.js">2 - Metodología del trabajo geográfico. Técnicas de trabajo</option>
-                        <option value="03-La-diversidad-del-medio-geografico-en-el-planeta-la-interaccion-de-factores-ecogeograficos.js">3 - La diversidad del medio geográfico en el planeta. La interacción de factores ecogeográficos</option>
-                        <option value="04-Climas-y-zonas-bioclimaticas-el-tiempo-y-el-clima-como-condicionantes-de-las-actividades-humanas.js">4 - Climas y zonas bioclimáticas. El tiempo y el clima como condicionantes de las actividades humanas</option>
-                        <option value="05-La-accion-humana-sobre-el-medio-problematica-actual.js">5 - La acción humana sobre el medio. Problemática actual</option>
-                        <option value="06-La-poblacion-mundial-modelos-demograficos-y-desigualdades-espaciales.js">6 - La población mundial: modelos demográficos y desigualdades espaciales</option>
-                        <option value="07-El-espacio-rural-actividades-agrarias-situacion-y-perspectivas-en-espana-y-en-el-mundo.js">7 - El espacio rural. Actividades agrarias: situación y perspectivas en España y en el mundo</option>
-                        <option value="08-El-espacio-y-la-actividad-industrial-materias-primas-y-fuentes-de-energia.js">8 - El espacio y la actividad industrial. Materias primas y fuentes de energía</option>
-                        <option value="09-Las-actividades-terciarias-en-las-economias-desarrolladas.js">9 - Las actividades terciarias en las economías desarrolladas</option>
-                        <option value="10-El-proceso-de-urbanizacion-en-el-planeta-repercusiones-ambientales-y-socioeconomicas.js">10 - El proceso de urbanización en el planeta. Repercusiones ambientales y socioeconómicas</option>
-                        <option value="11-Los-paises-de-la-comunidad-europea-aspectos-fisicos-sociales-y-economicos.js">11 - Los países de la Comunidad Europea: aspectos físicos, sociales y económicos</option>
-                        <option value="12-China-sociedad-y-economia.js">12 - China: sociedad y economía</option>
-                        <option value="13-Japon-y-el-area-del-pacifico-desarrollo-industrial-y-comercial.js">13 - Japón y el área del Pacífico: desarrollo industrial y comercial</option>
-                        <option value="14-Africa-territorio-y-sociedades-africa-mediterranea-y-africa-subsahariana-contrastes-fisicos-socioeconomicos-y-culturales.js">14 - África: territorio y sociedades. África Mediterránea y África Subsahariana: contrastes físicos, socioeconómicos y culturales</option>
-                        <option value="15-Canada-y-eeuu-aspectos-fisicos-y-humanos.js">15 - Canadá y EE.UU.: aspectos físicos y humanos</option>
-                        <option value="16-Los-paises-iberoamericanos-problematica-economica-y-social.js">16 - Los países iberoamericanos: problemática económica y social</option>
-                        <option value="17-La-peninsula-iberica-relieve-clima-y-vegetacion-diversidad-regional-de-la-espana-peninsular-e-insular.js">17 - La península Ibérica: relieve, clima y vegetación. Diversidad regional de la España Peninsular e Insular</option>
-                        <option value="18-La-actual-ordenacion-territorial-del-estado-espanol-raices-historicas.js">18 - La actual ordenación territorial del Estado español. Raíces históricas</option>
-                        <option value="19-La-poblacion-espanola-comportamiento-demografico-fenomenos-migratorios.js">19 - La población española. Comportamiento demográfico. Fenómenos migratorios</option>
-                        <option value="20-El-conocimiento-historico-tiempo-historico-y-categorias-temporales-el-historiador-y-las-fuentes-explicacion-y-comprension-en-la-historia.js">20 - El conocimiento histórico. Tiempo histórico y categorías temporales. El historiador y las fuentes. Explicación y comprensión en la historia</option>
-                        <option value="21-Grandes-lineas-de-investigacion-historica-en-los-siglos-xix-y-xx.js">21 - Grandes líneas de investigación histórica en los siglos XIX y XX</option>
-                        <option value="22-Proceso-de-hominizacion-y-cultura-material-la-aportacion-de-la-antropologia-historica.js">22 - Proceso de hominización y cultura material. La aportación de la antropología histórica</option>
-                        <option value="23-Del-neolitico-a-las-sociedades-urbanas-del-proximo-oriente-fuentes-arqueologicas.js">23 - Del neolítico a las sociedades urbanas del Próximo Oriente. Fuentes arqueológicas</option>
-                        <option value="24-La-peninsula-iberica-hasta-la-dominacion-romana.js">24 - La península Ibérica hasta la dominación romana</option>
-                        <option value="25-La-civilizacion-grecolatina.js">25 - La civilización grecolatina</option>
-                        <option value="26-Origenes-y-desarrollo-del-feudalismo-la-economia-senorial-debate-historiografico.js">26 - Orígenes y desarrollo del feudalismo. La economía señorial. Debate historiográfico</option>
-                        <option value="27-Nacimiento-y-expansion-del-islam.js">27 - Nacimiento y expansión del islam</option>
-                        <option value="28-Al-andalus-politica-sociedad-y-cultura.js">28 - Al-Andalus: política, sociedad y cultura</option>
-                        <option value="29-La-expansion-de-los-reinos-cristianos-en-la-peninsula-iberica.js">29 - La expansión de los reinos cristianos en la península Ibérica</option>
-                        <option value="30-La-formacion-de-las-monarquias-feudales-en-europa.js">30 - La formación de las monarquías feudales en la Europa</option>
-                        <option value="31-Los-reinos-peninsulares-en-los-siglos-xiv-y-xv-conflictos-sociales-diversidad-cultural.js">31 - Los reinos peninsulares en los siglos XIV y XV. Conflictos sociales. Diversidad cultural</option>
-                        <option value="32-La-cultura-renacentista-los-enfrentamientos-politico-religiosos-del-siglo-xvi.js">32 - La cultura renacentista. Los enfrentamientos político-religiosos del siglo XVI</option>
-                        <option value="33-La-monarquia-hispanica-bajo-los-austrias-aspectos-politicos-economicos-y-culturales.js">33 - La Monarquía hispánica bajo los Austrias: aspectos políticos, económicos y culturales</option>
-                        <option value="34-Conquista-colonizacion-y-administracion-de-la-america-hispanica-en-los-siglos-xvi-al-xviii.js">34 - Conquista, colonización y administración de la América Hispánica en los siglos XVI al XVIII</option>
-                        <option value="35-El-pensamiento-politico-moderno-del-humanismo-a-la-ilustracion.js">35 - El pensamiento político moderno: del Humanismo a la Ilustración</option>
-                        <option value="36-Crecimiento-economico-estructuras-y-mentalidades-sociales-en-europa-del-siglo-xviii-las-transformaciones-politicas-en-espana-del-siglo-xviii.js">36 - Crecimiento económico, estructuras y mentalidades sociales en la Europa del siglo XVIII. Las transformaciones políticas en la España del S. XVIII</option>
-                        <option value="37-El-debate-historiografico-sobre-la-revolucion-francesa-el-origen-de-los-estados-modernos.js">37 - El debate historiográfico sobre la Revolución francesa. occidental. El origen de los estados modernos</option>
-                        <option value="38-Revolucion-industrial-e-industrializacion.js">38 - Revolución industrial e industrialización</option>
-                        <option value="39-La-construccion-del-estado-liberal-y-primeros-intentos-democratizadores-en-espana-del-siglo-xix.js">39 - La construcción del estado liberal y primeros intentos democratizadores en la España del siglo XIX</option>
-                        <option value="40-Transformaciones-agrarias-y-proceso-de-industrializacion-en-espana-del-siglo-xix.js">40 - Transformaciones agrarias y proceso de industrialización en la España del siglo XIX</option>
-                        <option value="41-Nacionalismo-y-liberalismo-en-europa-del-siglo-xix.js">41 - Nacionalismo y liberalismo en la Europa del S. XIX</option>
-                        <option value="42-Imperialismo-y-expansion-colonial-los-conflictos-internacionales-antes-de-1914.js">42 - Imperialismo y expansión colonial. Los conflictos internacionales antes de 1914</option>
-                        <option value="43-Pensamiento-politico-y-economico-en-el-siglo-xix.js">43 - Pensamiento político y económico en el siglo XIX</option>
-                        <option value="44-El-proceso-de-independencia-de-america-latina.js">44 - El proceso de independencia de América Latina</option>
-                        <option value="45-Las-transformaciones-del-extremo-oriente-desde-1886-a-1949.js">45 - Las transformaciones del Extremo Oriente desde 1886 a 1949</option>
-                        <option value="46-Los-estados-balcanicos-en-el-siglo-xx.js">46 - Los Estados balcánicos en el siglo XX</option>
-                        <option value="47-La-primera-guerra-mundial-y-las-relaciones-internacionales-en-el-periodo-de-entreguerras-la-crisis-de-1929.js">47 - La primera guerra mundial y las relaciones internacionales en el período de entreguerras. La crisis de 1929</option>
-                        <option value="48-Fascismo-y-neofascismo-caracteres-y-circunstancias-en-que-se-desarrollan.js">48 - Fascismo y neofascismo: caracteres y circunstancias en que se desarrollan</option>
-                        <option value="49-Espana-la-ii-republica-y-la-guerra-civil.js">49 - España: la II República y la guerra civil</option>
-                        <option value="50-Las-revoluciones-rusas-creacion-desarrollo-y-crisis-de-la-urss-repercusiones-internacionales.js">50 - Las revoluciones rusas: creación, desarrollo y crisis de la URSS. Repercusiones internacionales</option>
-                        <option value="51-Repercusiones-de-la-segunda-guerra-mundial-las-relaciones-internacionales-despues-de-1945-la-politica-de-bloques-la-onu.js">51 - Repercusiones de la segunda guerra mundial. Las relaciones internacionales después de 1945. La política de bloques. La ONU</option>
-                        <option value="52-La-descolonizacion-de-asia-y-africa-los-problemas-del-tercer-mundo.js">52 - La descolonización de Asia y África: los problemas del Tercer Mundo</option>
-                        <option value="53-La-dictadura-franquista-regimen-politico-evolucion-social-y-economica.js">53 - La dictadura franquista: régimen político, evolución social y económica</option>
-                        <option value="54-La-construccion-de-la-comunidad-europea.js">54 - La construcción de la Comunidad Europea</option>
-                        <option value="55-Teoria-y-funcion-del-arte-analisis-e-interpretacion-de-la-obra-de-arte.js">55 - Teoría y función del arte. Análisis e interpretación de la obra de arte</option>
-                        <option value="56-El-arte-clasico-grecia-y-roma.js">56 - El arte clásico: Grecia y Roma</option>
-                        <option value="57-El-arte-romanico.js">57 - El arte románico</option>
-                        <option value="58-El-arte-islamico.js">58 - El arte islámico</option>
-                        <option value="59-El-arte-gotico.js">59 - El arte gótico</option>
-                        <option value="60-El-arte-del-renacimiento-italiano-y-su-influencia.js">60 - El arte del Renacimiento italiano y su influencia</option>
-                        <option value="61-El-arte-barroco.js">61 - El arte barroco</option>
-                        <option value="62-Velazquez-y-goya-en-su-contexto-artistico.js">62 - Velázquez y Goya en su contexto artístico</option>
-                        <option value="63-Las-artes-plasticas-del-impresionismo-a-la-abstraccion.js">63 - Las artes plásticas del impresionismo a la abstracción</option>
-                        <option value="64-La-arquitectura-en-los-siglos-xix-y-xx-el-modernismo.js">64 - La arquitectura en los siglos XIX y XX. El Modernismo</option>
-                        <option value="65-Picasso-dali-y-miro-en-su-contexto-artistico.js">65 - Picasso, Dalí y Miró en su contexto artístico</option>
-                        <option value="66-Interdependencias-y-desequilibrios-en-el-mundo-actual-desarrollo-y-subdesarrollo-desarrollo-sostenible.js">66 - Interdependencias y desequilibrios en el mundo actual. Desarrollo y subdesarrollo. Desarrollo sostenible</option>
-                        <option value="67-Analisis-de-la-constitucion-espanola-de-1978.js">67 - Análisis de la Constitución Española de 1978</option>
-                        <option value="68-Organizacion-economica-y-mundo-del-trabajo-la-inflacion-el-desempleo-y-la-politica-monetaria.js">68 - Organización económica y mundo del trabajo. La inflación, el desempleo y la política monetaria</option>
-                        <option value="69-Regimenes-politicos-y-sus-conflictos-internos-en-el-mundo-actual-principales-focos-de-tension-en-las-relaciones-internacionales.js">69 - Regímenes políticos y sus conflictos internos en el mundo actual. Principales focos de tensión en las relaciones internacionales</option>
-                        <option value="70-Medios-de-comunicacion-y-sociedad-de-masas.js">70 - Medios de comunicación y sociedad de masas</option>
-                        <option value="71-Revolucion-cientifico-tecnica-en-el-siglo-xx-implicaciones-en-la-sociedad.js">71 - Revolución científico-técnica en el siglo XX. Implicaciones en la sociedad</option>
-                        <option value="72-Cambio-social-y-movimientos-alternativos-feminismo-pacifismo-y-ecologismo.js">72 - Cambio social y movimientos alternativos. Feminismo, pacifismo y ecologismo</option>
-                    </select>
-                </div>
-                <div class="grupo">
-                    <label for="cantidad">Número de preguntas</label>
-                    <input id="cantidad" type="number" min="5" max="40" value="10" />
-                </div>
+
+<section id="pantalla-inicio" class="tarjeta aparece">
+    <div class="fila">
+        <div class="col panel-config">
+            <div class="grupo">
+                <label for="tema">Temario</label>
+                <select id="tema">
+                    <option value="01-La-concepcion-del-espacio-geografico-corrientes-actuales-del-pensamiento-geografico.js">1 - La concepción del espacio geográfico. Corrientes actuales del pensamiento geográfico</option>
+                    <option value="02-Metodologia-del-trabajo-geografico-tecnicas-de-trabajo.js">2 - Metodología del trabajo geográfico. Técnicas de trabajo</option>
+                    <option value="03-La-diversidad-del-medio-geografico-en-el-planeta-la-interaccion-de-factores-ecogeograficos.js">3 - La diversidad del medio geográfico en el planeta. La interacción de factores ecogeográficos</option>
+                    <option value="04-Climas-y-zonas-bioclimaticas-el-tiempo-y-el-clima-como-condicionantes-de-las-actividades-humanas.js">4 - Climas y zonas bioclimáticas. El tiempo y el clima como condicionantes de las actividades humanas</option>
+                    <option value="05-La-accion-humana-sobre-el-medio-problematica-actual.js">5 - La acción humana sobre el medio. Problemática actual</option>
+                    <option value="06-La-poblacion-mundial-modelos-demograficos-y-desigualdades-espaciales.js">6 - La población mundial: modelos demográficos y desigualdades espaciales</option>
+                    <option value="07-El-espacio-rural-actividades-agrarias-situacion-y-perspectivas-en-espana-y-en-el-mundo.js">7 - El espacio rural. Actividades agrarias: situación y perspectivas en España y en el mundo</option>
+                    <option value="08-El-espacio-y-la-actividad-industrial-materias-primas-y-fuentes-de-energia.js">8 - El espacio y la actividad industrial. Materias primas y fuentes de energía</option>
+                    <option value="09-Las-actividades-terciarias-en-las-economias-desarrolladas.js">9 - Las actividades terciarias en las economías desarrolladas</option>
+                    <option value="10-El-proceso-de-urbanizacion-en-el-planeta-repercusiones-ambientales-y-socioeconomicas.js">10 - El proceso de urbanización en el planeta. Repercusiones ambientales y socioeconómicas</option>
+                    <option value="11-Los-paises-de-la-comunidad-europea-aspectos-fisicos-sociales-y-economicos.js">11 - Los países de la Comunidad Europea: aspectos físicos, sociales y económicos</option>
+                    <option value="12-China-sociedad-y-economia.js">12 - China: sociedad y economía</option>
+                    <option value="13-Japon-y-el-area-del-pacifico-desarrollo-industrial-y-comercial.js">13 - Japón y el área del Pacífico: desarrollo industrial y comercial</option>
+                    <option value="14-Africa-territorio-y-sociedades-africa-mediterranea-y-africa-subsahariana-contrastes-fisicos-socioeconomicos-y-culturales.js">14 - África: territorio y sociedades. África Mediterránea y África Subsahariana: contrastes físicos, socioeconómicos y culturales</option>
+                    <option value="15-Canada-y-eeuu-aspectos-fisicos-y-humanos.js">15 - Canadá y EE.UU.: aspectos físicos y humanos</option>
+                    <option value="16-Los-paises-iberoamericanos-problematica-economica-y-social.js">16 - Los países iberoamericanos: problemática económica y social</option>
+                    <option value="17-La-peninsula-iberica-relieve-clima-y-vegetacion-diversidad-regional-de-la-espana-peninsular-e-insular.js">17 - La península Ibérica: relieve, clima y vegetación. Diversidad regional de la España Peninsular e Insular</option>
+                    <option value="18-La-actual-ordenacion-territorial-del-estado-espanol-raices-historicas.js">18 - La actual ordenación territorial del Estado español. Raíces históricas</option>
+                    <option value="19-La-poblacion-espanola-comportamiento-demografico-fenomenos-migratorios.js">19 - La población española. Comportamiento demográfico. Fenómenos migratorios</option>
+                    <option value="20-El-conocimiento-historico-tiempo-historico-y-categorias-temporales-el-historiador-y-las-fuentes-explicacion-y-comprension-en-la-historia.js">20 - El conocimiento histórico. Tiempo histórico y categorías temporales. El historiador y las fuentes. Explicación y comprensión en la historia</option>
+                    <option value="21-Grandes-lineas-de-investigacion-historica-en-los-siglos-xix-y-xx.js">21 - Grandes líneas de investigación histórica en los siglos XIX y XX</option>
+                    <option value="22-Proceso-de-hominizacion-y-cultura-material-la-aportacion-de-la-antropologia-historica.js">22 - Proceso de hominización y cultura material. La aportación de la antropología histórica</option>
+                    <option value="23-Del-neolitico-a-las-sociedades-urbanas-del-proximo-oriente-fuentes-arqueologicas.js">23 - Del neolítico a las sociedades urbanas del Próximo Oriente. Fuentes arqueológicas</option>
+                    <option value="24-La-peninsula-iberica-hasta-la-dominacion-romana.js">24 - La península Ibérica hasta la dominación romana</option>
+                    <option value="25-La-civilizacion-grecolatina.js">25 - La civilización grecolatina</option>
+                    <option value="26-Origenes-y-desarrollo-del-feudalismo-la-economia-senorial-debate-historiografico.js">26 - Orígenes y desarrollo del feudalismo. La economía señorial. Debate historiográfico</option>
+                    <option value="27-Nacimiento-y-expansion-del-islam.js">27 - Nacimiento y expansión del islam</option>
+                    <option value="28-Al-andalus-politica-sociedad-y-cultura.js">28 - Al-Andalus: política, sociedad y cultura</option>
+                    <option value="29-La-expansion-de-los-reinos-cristianos-en-la-peninsula-iberica.js">29 - La expansión de los reinos cristianos en la península Ibérica</option>
+                    <option value="30-La-formacion-de-las-monarquias-feudales-en-europa.js">30 - La formación de las monarquías feudales en la Europa</option>
+                    <option value="31-Los-reinos-peninsulares-en-los-siglos-xiv-y-xv-conflictos-sociales-diversidad-cultural.js">31 - Los reinos peninsulares en los siglos XIV y XV. Conflictos sociales. Diversidad cultural</option>
+                    <option value="32-La-cultura-renacentista-los-enfrentamientos-politico-religiosos-del-siglo-xvi.js">32 - La cultura renacentista. Los enfrentamientos político-religiosos del siglo XVI</option>
+                    <option value="33-La-monarquia-hispanica-bajo-los-austrias-aspectos-politicos-economicos-y-culturales.js">33 - La Monarquía hispánica bajo los Austrias: aspectos políticos, económicos y culturales</option>
+                    <option value="34-Conquista-colonizacion-y-administracion-de-la-america-hispanica-en-los-siglos-xvi-al-xviii.js">34 - Conquista, colonización y administración de la América Hispánica en los siglos XVI al XVIII</option>
+                    <option value="35-El-pensamiento-politico-moderno-del-humanismo-a-la-ilustracion.js">35 - El pensamiento político moderno: del Humanismo a la Ilustración</option>
+                    <option value="36-Crecimiento-economico-estructuras-y-mentalidades-sociales-en-europa-del-siglo-xviii-las-transformaciones-politicas-en-espana-del-siglo-xviii.js">36 - Crecimiento económico, estructuras y mentalidades sociales en la Europa del siglo XVIII. Las transformaciones políticas en la España del S. XVIII</option>
+                    <option value="37-El-debate-historiografico-sobre-la-revolucion-francesa-el-origen-de-los-estados-modernos.js">37 - El debate historiográfico sobre la Revolución francesa. occidental. El origen de los estados modernos</option>
+                    <option value="38-Revolucion-industrial-e-industrializacion.js">38 - Revolución industrial e industrialización</option>
+                    <option value="39-La-construccion-del-estado-liberal-y-primeros-intentos-democratizadores-en-espana-del-siglo-xix.js">39 - La construcción del estado liberal y primeros intentos democratizadores en la España del siglo XIX</option>
+                    <option value="40-Transformaciones-agrarias-y-proceso-de-industrializacion-en-espana-del-siglo-xix.js">40 - Transformaciones agrarias y proceso de industrialización en la España del siglo XIX</option>
+                    <option value="41-Nacionalismo-y-liberalismo-en-europa-del-siglo-xix.js">41 - Nacionalismo y liberalismo en la Europa del S. XIX</option>
+                    <option value="42-Imperialismo-y-expansion-colonial-los-conflictos-internacionales-antes-de-1914.js">42 - Imperialismo y expansión colonial. Los conflictos internacionales antes de 1914</option>
+                    <option value="43-Pensamiento-politico-y-economico-en-el-siglo-xix.js">43 - Pensamiento político y económico en el siglo XIX</option>
+                    <option value="44-El-proceso-de-independencia-de-america-latina.js">44 - El proceso de independencia de América Latina</option>
+                    <option value="45-Las-transformaciones-del-extremo-oriente-desde-1886-a-1949.js">45 - Las transformaciones del Extremo Oriente desde 1886 a 1949</option>
+                    <option value="46-Los-estados-balcanicos-en-el-siglo-xx.js">46 - Los Estados balcánicos en el siglo XX</option>
+                    <option value="47-La-primera-guerra-mundial-y-las-relaciones-internacionales-en-el-periodo-de-entreguerras-la-crisis-de-1929.js">47 - La primera guerra mundial y las relaciones internacionales en el período de entreguerras. La crisis de 1929</option>
+                    <option value="48-Fascismo-y-neofascismo-caracteres-y-circunstancias-en-que-se-desarrollan.js">48 - Fascismo y neofascismo: caracteres y circunstancias en que se desarrollan</option>
+                    <option value="49-Espana-la-ii-republica-y-la-guerra-civil.js">49 - España: la II República y la guerra civil</option>
+                    <option value="50-Las-revoluciones-rusas-creacion-desarrollo-y-crisis-de-la-urss-repercusiones-internacionales.js">50 - Las revoluciones rusas: creación, desarrollo y crisis de la URSS. Repercusiones internacionales</option>
+                    <option value="51-Repercusiones-de-la-segunda-guerra-mundial-las-relaciones-internacionales-despues-de-1945-la-politica-de-bloques-la-onu.js">51 - Repercusiones de la segunda guerra mundial. Las relaciones internacionales después de 1945. La política de bloques. La ONU</option>
+                    <option value="52-La-descolonizacion-de-asia-y-africa-los-problemas-del-tercer-mundo.js">52 - La descolonización de Asia y África: los problemas del Tercer Mundo</option>
+                    <option value="53-La-dictadura-franquista-regimen-politico-evolucion-social-y-economica.js">53 - La dictadura franquista: régimen político, evolución social y económica</option>
+                    <option value="54-La-construccion-de-la-comunidad-europea.js">54 - La construcción de la Comunidad Europea</option>
+                    <option value="55-Teoria-y-funcion-del-arte-analisis-e-interpretacion-de-la-obra-de-arte.js">55 - Teoría y función del arte. Análisis e interpretación de la obra de arte</option>
+                    <option value="56-El-arte-clasico-grecia-y-roma.js">56 - El arte clásico: Grecia y Roma</option>
+                    <option value="57-El-arte-romanico.js">57 - El arte románico</option>
+                    <option value="58-El-arte-islamico.js">58 - El arte islámico</option>
+                    <option value="59-El-arte-gotico.js">59 - El arte gótico</option>
+                    <option value="60-El-arte-del-renacimiento-italiano-y-su-influencia.js">60 - El arte del Renacimiento italiano y su influencia</option>
+                    <option value="61-El-arte-barroco.js">61 - El arte barroco</option>
+                    <option value="62-Velazquez-y-goya-en-su-contexto-artistico.js">62 - Velázquez y Goya en su contexto artístico</option>
+                    <option value="63-Las-artes-plasticas-del-impresionismo-a-la-abstraccion.js">63 - Las artes plásticas del impresionismo a la abstracción</option>
+                    <option value="64-La-arquitectura-en-los-siglos-xix-y-xx-el-modernismo.js">64 - La arquitectura en los siglos XIX y XX. El Modernismo</option>
+                    <option value="65-Picasso-dali-y-miro-en-su-contexto-artistico.js">65 - Picasso, Dalí y Miró en su contexto artístico</option>
+                    <option value="66-Interdependencias-y-desequilibrios-en-el-mundo-actual-desarrollo-y-subdesarrollo-desarrollo-sostenible.js">66 - Interdependencias y desequilibrios en el mundo actual. Desarrollo y subdesarrollo. Desarrollo sostenible</option>
+                    <option value="67-Analisis-de-la-constitucion-espanola-de-1978.js">67 - Análisis de la Constitución Española de 1978</option>
+                    <option value="68-Organizacion-economica-y-mundo-del-trabajo-la-inflacion-el-desempleo-y-la-politica-monetaria.js">68 - Organización económica y mundo del trabajo. La inflación, el desempleo y la política monetaria</option>
+                    <option value="69-Regimenes-politicos-y-sus-conflictos-internos-en-el-mundo-actual-principales-focos-de-tension-en-las-relaciones-internacionales.js">69 - Regímenes políticos y sus conflictos internos en el mundo actual. Principales focos de tensión en las relaciones internacionales</option>
+                    <option value="70-Medios-de-comunicacion-y-sociedad-de-masas.js">70 - Medios de comunicación y sociedad de masas</option>
+                    <option value="71-Revolucion-cientifico-tecnica-en-el-siglo-xx-implicaciones-en-la-sociedad.js">71 - Revolución científico-técnica en el siglo XX. Implicaciones en la sociedad</option>
+                    <option value="72-Cambio-social-y-movimientos-alternativos-feminismo-pacifismo-y-ecologismo.js">72 - Cambio social y movimientos alternativos. Feminismo, pacifismo y ecologismo</option>
+                    
+                </select>
             </div>
-            <div class="col">
-                <p style="color:var(--muted);margin-top:0">Elige "Comenzar" para hacer el test o "Modo estudio" para repasar todas las respuestas.</p>
-                <div style="display:flex;gap:10px;flex-wrap:wrap">
-                    <button id="btn-comenzar" class="primario">Comenzar</button>
-                    <button id="btn-aprender" title="Muestra todas las preguntas del temario en modo estudio">Modo estudio</button>
-                </div>
+            <div class="grupo">
+                <label for="cantidad">Número de preguntas</label>
+                <input id="cantidad" type="number" min="5" max="40" value="10" />
             </div>
         </div>
-    </section>
-
-    <section id="pantalla-juego" class="tarjeta oculto">
-        <div class="estado">
-            <div class="contador-puntos"><strong id="xIndex">1</strong>/<span id="xTotal">12</span> · Puntos: <strong id="xPuntos">0</strong></div>
-            <div class="progreso" aria-hidden="true"><div id="barra" class="barra" style="width:0%"></div></div>
-        </div>
-
-        <div id="enunciado" class="pregunta"></div>
-        <div id="opciones" class="opciones"></div>
-
-        <div class="pie">
-            <div>
-                <button id="btn-anterior" class="fantasma">Anterior</button>
-                <button id="btn-saltar">Saltar</button>
-            </div>
-            <div>
-                <button id="btn-comprobar" class="primario">Comprobar</button>
-                <button id="btn-siguiente" class="exito oculto">Siguiente</button>
-                <button id="btn-terminar" class="peligro oculto">Terminar</button>
+        <div class="col">
+            <p style="color:var(--muted);margin-top:0">Selecciona "Comenzar" para hacer el test o "Modo estudio" para repasar todas las respuestas.</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <button id="btn-comenzar" class="primario">Comenzar</button>
+                <button id="btn-aprender" title="Muestra todas las preguntas del temario en modo estudio">Modo estudio</button>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section id="pantalla-final" class="tarjeta oculto">
-        <p class="resultado" id="resumen"></p>
-        <div class="fila" style="margin-top:12px">
-            <button id="btn-repetir" class="primario">Repetir configuración</button>
-            <button id="btn-inicio">Volver al inicio</button>
-            <button id="btn-estudio">Repasar preguntas</button>
+    <div class="enlace-contenedor">
+        <a class="enlace-constante" href="https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Men%C3%BA.html" target="_blank" rel="noopener">
+            Enlace al Menú inicial con acceso a todos los recursos online gratuitos
+        </a>
+    </div>
+</section>
+
+<section id="pantalla-juego" class="tarjeta oculto">
+    <div class="estado">
+        <div class="contador-puntos"><strong id="xIndex">1</strong>/<span id="xTotal">12</span> · Puntos: <strong id="xPuntos">0</strong></div>
+        <div class="progreso" aria-hidden="true"><div id="barra" class="barra" style="width:0%"></div></div>
+    </div>
+
+    <div id="enunciado" class="pregunta"></div>
+    <div id="opciones" class="opciones"></div>
+
+    <div class="pie">
+        <div>
+            <button id="btn-anterior" class="fantasma">Anterior</button>
+            <button id="btn-saltar">Saltar</button>
         </div>
-    </section>
+        <div>
+            <button id="btn-comprobar" class="primario">Comprobar</button>
+            <button id="btn-siguiente" class="exito oculto">Siguiente</button>
+            <button id="btn-terminar" class="peligro oculto">Terminar</button>
+        </div>
+    </div>
+</section>
 
-    <section id="pantalla-estudio" class="tarjeta oculto">
-        <div id="lista-estudio"></div>
-        <div class="pie"><button id="btn-salir-estudio">Salir</button></div>
-    </section>
+<section id="pantalla-final" class="tarjeta oculto">
+    <p class="resultado" id="resumen"></p>
+    <div class="fila" style="margin-top:12px">
+        <button id="btn-repetir" class="primario">Repetir configuración</button>
+        <button id="btn-inicio">Volver al inicio</button>
+        <button id="btn-estudio">Repasar preguntas</button>
+    </div>
+</section>
+
+<section id="pantalla-estudio" class="tarjeta oculto">
+    <div id="lista-estudio"></div>
+    <div class="pie"><button id="btn-salir-estudio">Salir</button></div>
+</section>
+
+
 </div>
 
 <script>
@@ -225,7 +250,7 @@ class SistemaSonido{
         this.master = null;
         this.enabled = true;
         this.initialized = false;
-        this.volume = 0.15; // más audible
+        this.volume = 0.15;
         this._unlocked = false;
     }
     init(){
@@ -236,7 +261,7 @@ class SistemaSonido{
             this.master.gain.value = this.volume;
             this.master.connect(this.ctx.destination);
             this.initialized = true;
-        }catch(e){ /* sin sonido si falla */ }
+        }catch(e){}
     }
     ensure(){
         if(!this.initialized) this.init();
@@ -263,19 +288,16 @@ class SistemaSonido{
         o.stop(t0 + dur);
     }
     reproducirAcierto(){
-        // intervalos ascendentes, más claros
         this.tone(880, 0.16, "square");
         setTimeout(()=>this.tone(1245, 0.18, "square"), 120);
     }
     reproducirError(){
-        // tono grave breve
         this.tone(220, 0.22, "triangle");
     }
     mute(on){ this.enabled = !on; }
 }
 const sonido = new SistemaSonido();
 
-/* Desbloqueo por interacción del usuario (autoplay policy) */
 ["pointerdown","keydown"].forEach(ev=>{
     window.addEventListener(ev, ()=>sonido.unlockOnce(), { once:false, passive:true });
 });
@@ -422,7 +444,7 @@ function pintarPregunta(){
         btn.setAttribute("data-idx", idx);
         btn.innerHTML = `<span class="letra">${letras[idx]||"?"}</span><span>${texto}</span>`;
         btn.addEventListener("click", ()=>{
-            sonido.unlockOnce(); // gesto del usuario
+            sonido.unlockOnce();
             seleccionar(idx);
         });
         ui.opciones.appendChild(btn);
@@ -571,5 +593,6 @@ document.addEventListener("keydown", (e)=>{
 /* Inicio */
 mostrar(ui.inicio);
 </script>
+
 </body>
 </html>
