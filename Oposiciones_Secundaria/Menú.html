@@ -6,106 +6,237 @@
   <title>Oposiciones Secundaria</title>
   <style>
     :root{
-      --fondo:#f4f4f4;
-      --principal:#2c3e50;
-      --secundario:#7f8c8d;
-      --borde:#bdc3c7;
-      --enlace:#34495e;
-      --resalte:#e67e22;
+      --fondo: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --principal: #2c3e50;
+      --secundario: #34495e;
+      --borde: #e8eaf6;
+      --enlace: #5c6bc0;
+      --resalte: #ff6b6b;
+      --accent: #4ecdc4;
+      --gold: #f39c12;
+      --shadow: rgba(0, 0, 0, 0.15);
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{
-      font-family:"Georgia",serif;
+      font-family:"Georgia", "Times New Roman", serif;
       min-height:100vh;
-      background:linear-gradient(135deg,#fafafa,#ececec);
+      background: var(--fondo);
       display:flex;align-items:center;justify-content:center;
       padding:24px;color:var(--principal);
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(78, 205, 196, 0.2) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 1;
     }
 
     /* Portada inicial */
     #cover{
       position:fixed;inset:0;
-      background:#fff;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       display:flex;justify-content:center;align-items:center;
       z-index:9999;
     }
-    #cover img{max-width:100%;max-height:100%}
+    #cover img{max-width:100%;max-height:100%; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);}
 
     /* Fondo semitransparente permanente */
     #bgOverlay{
       position:fixed;inset:0;
       background:url("Portada.png") no-repeat center center;
       background-size:contain;
-      opacity:.5;
+      opacity:.15;
       z-index:1;
       pointer-events:none;
     }
 
     .container{
       width:min(900px,95vw);
-      background:#fffefc;
-      border:3px solid var(--borde);
-      border-radius:18px;
-      box-shadow:0 12px 40px rgba(0,0,0,.15);
-      padding:28px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius:24px;
+      box-shadow: 0 25px 50px rgba(0,0,0,.2), 0 0 0 1px rgba(255,255,255,0.1) inset;
+      padding:32px;
       position:relative;z-index:2;
     }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--resalte), var(--accent), var(--gold), var(--enlace));
+      border-radius: 24px 24px 0 0;
+    }
+
     header{
-      margin-bottom:18px;
+      margin-bottom:24px;
       text-align:center;
+      position: relative;
     }
     .titulo{
-      font-size:2rem;
+      font-size:2.4rem;
       font-weight:bold;
-      color:var(--principal);
+      background: linear-gradient(135deg, var(--principal), var(--enlace));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .ondertitel{
-      font-size:.95rem;
-      margin-top:6px;
+      font-size:1rem;
+      margin-top:8px;
+      color: var(--secundario);
     }
     .ondertitel a{
-      color:var(--enlace);
-      text-decoration:underline; /* subrayado permanente */
+      color: var(--enlace);
+      text-decoration:underline;
+      font-weight: 500;
+      transition: color 0.3s ease;
     }
-    .contact-info{margin-top:4px}
-    .contact-info a{color:var(--secundario);text-decoration:none}
-    .contact-info a:hover{text-decoration:underline}
+    .ondertitel a:hover{
+      color: var(--resalte);
+    }
+    .contact-info{margin-top:8px}
+    .contact-info a{
+      color: var(--accent);
+      text-decoration:none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .contact-info a:hover{
+      text-decoration:underline;
+      color: var(--gold);
+    }
 
     nav.menu{
       display:grid;
       grid-template-columns:repeat(2,minmax(200px,1fr));
-      gap:18px;
-      margin-top:22px;
+      gap:20px;
+      margin-top:28px;
     }
     .opcion{
-      background:#fff;
-      border:2px solid var(--borde);
-      border-radius:14px;
-      padding:18px;
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      border: 2px solid transparent;
+      border-radius:16px;
+      padding:24px;
       text-decoration:none;
       color:var(--principal);
-      box-shadow:0 6px 16px rgba(0,0,0,.06);
-      transition:transform .18s ease, box-shadow .18s ease;
+      box-shadow: 0 8px 25px rgba(0,0,0,.08);
+      transition: all .3s ease;
+      position: relative;
+      overflow: hidden;
     }
+
+    .opcion::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .opcion:hover::before {
+      left: 100%;
+    }
+
+    .opcion:nth-child(1) {
+      border-image: linear-gradient(135deg, var(--enlace), var(--accent)) 1;
+    }
+    .opcion:nth-child(2) {
+      border-image: linear-gradient(135deg, var(--resalte), var(--gold)) 1;
+    }
+    .opcion:nth-child(3) {
+      border-image: linear-gradient(135deg, var(--accent), var(--enlace)) 1;
+    }
+    .opcion:nth-child(4) {
+      border-image: linear-gradient(135deg, var(--gold), var(--resalte)) 1;
+    }
+
     .opcion:hover{
-      transform:translateY(-3px);
-      box-shadow:0 10px 24px rgba(0,0,0,.12);
-      border-color:var(--resalte);
+      transform:translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 35px rgba(0,0,0,.15);
+      background: linear-gradient(135deg, #ffffff 0%, #f0f2f5 100%);
     }
+
+    .opcion:nth-child(1):hover { border: 2px solid var(--enlace); }
+    .opcion:nth-child(2):hover { border: 2px solid var(--resalte); }
+    .opcion:nth-child(3):hover { border: 2px solid var(--accent); }
+    .opcion:nth-child(4):hover { border: 2px solid var(--gold); }
+
     .opcion .label{
-      font-size:1.1rem;
+      font-size:1.2rem;
       font-weight:bold;
-      margin-bottom:6px;
+      margin-bottom:8px;
+      position: relative;
     }
-    .opcion .info{font-size:.95rem;color:var(--secundario)}
+
+    .opcion:nth-child(1) .label { color: var(--enlace); }
+    .opcion:nth-child(2) .label { color: var(--resalte); }
+    .opcion:nth-child(3) .label { color: var(--accent); }
+    .opcion:nth-child(4) .label { color: var(--gold); }
+
+    .opcion .info{
+      font-size:0.95rem;
+      color: var(--secundario);
+      line-height: 1.4;
+    }
 
     footer{
       text-align:center;
-      font-size:.85rem;
-      margin-top:24px;
-      color:var(--secundario);
+      font-size:.9rem;
+      margin-top:32px;
+      color: var(--secundario);
+      font-style: italic;
     }
-    @media(max-width:700px){nav.menu{grid-template-columns:1fr}}
+
+    @media(max-width:700px){
+      nav.menu{grid-template-columns:1fr}
+      .titulo{font-size:2rem}
+      .container{padding:24px}
+    }
+
+    /* Animación de entrada */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .container {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .opcion {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .opcion:nth-child(1) { animation-delay: 0.1s; }
+    .opcion:nth-child(2) { animation-delay: 0.2s; }
+    .opcion:nth-child(3) { animation-delay: 0.3s; }
+    .opcion:nth-child(4) { animation-delay: 0.4s; }
   </style>
 </head>
 <body>
@@ -121,7 +252,7 @@
   <main class="container contenido-superior">
     <header>
       <h1 class="titulo">Oposiciones Secundaria</h1>
-      <p class="ondertitel"><a href="https://www.amazon.nl/dp/B0FMR8KPN4" target="_blank" rel="noopener noreferrer">Enlace al diseño y defensa de la Programación Didáctica</a></p>
+      <p class="ondertitel"><a href="https://www.amazon.es/dp/B0FQTNWMTP" target="_blank" rel="noopener noreferrer">Enlace al diseño y defensa de la Programación Didáctica</a></p>
       <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
     </header>
 
@@ -134,13 +265,13 @@
         <div class="label">Simulador del examen</div>
         <div class="info">Sorteo, temarios completos o parciales, temporizador</div>
       </a>
-      <a class="opcion" href="Juego3.html" target="_blank">
-        <div class="label">Legislación</div>
-        <div class="info">Normativa educativa esencial</div>
+      <a class="opcion" href="https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/%C3%8Dndice%20Tests.html" target="_blank">
+        <div class="label">Repasar</div>
+        <div class="info">Tests de elección múltiple de cada especialidad</div>
       </a>
       <a class="opcion" href="Juego4.html" target="_blank">
-        <div class="label">Evaluación</div>
-        <div class="info">Instrumentos y criterios básicos</div>
+        <div class="label">Expansión 4</div>
+        <div class="info">En obras</div>
       </a>
     </nav>
 
