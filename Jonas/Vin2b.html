@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonas Vingegaard – Cykel-Quiz for børn</title>
+<style>
+  :root{
+    --bg1:#b30000;    /* Dannebrog rød */
+    --bg2:#ff4d4d;
+    --card:#11151cdd;
+    --ink:#f5f7fa;
+    --mut:#c9d4e0;
+    --accent:#ffd600; /* Tour-gul */
+    --ok:#34c759; 
+    --err:#ff453a; 
+    --focus:#2563eb;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
+    color:var(--ink);
+    overflow-x:hidden;
+    background: linear-gradient(120deg, var(--bg1), var(--bg2));
+    animation: bgshift 10s ease-in-out infinite alternate;
+  }
+  @keyframes bgshift{
+    0%{ background: radial-gradient(120% 120% at 0% 0%, var(--bg1), var(--bg2)); }
+    100%{ background: radial-gradient(120% 120% at 100% 100%, var(--bg2), var(--bg1)); }
+  }
+
+  /* Capa de imagen semitransparente permanente */
+  #bgOverlay{
+    position: fixed;
+    inset: 0;
+    background: url("Portada.png") no-repeat center center;
+    background-size: contain;
+    opacity: .5;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Portada inicial a pantalla completa */
+  #cover{
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  #cover img{
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* Contenido principal por delante del fondo */
+  .contenido-superior,
+  .quiz-container,
+  .main-container{
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Cabecera y decoración de ciclismo */
+  header{
+    position: relative;
+    padding: 24px 16px 8px;
+    text-align:center;
+  }
+  h1{
+    margin:0 0 6px;
+    font-size: clamp(28px, 4vw, 42px);
+    letter-spacing:.5px;
+    text-shadow: 0 2px 0 rgba(0,0,0,.25);
+  }
+  .lede{
+    margin: 0 auto 10px;
+    max-width: 900px;
+    font-size: clamp(14px, 2.2vw, 18px);
+    color: var(--mut);
+  }
+
+  /* Elementos fijos del proyecto (debajo del título) */
+  .ondertitel{
+    margin: 6px 0 4px;
+    font-size: 14px;
+  }
+  .ondertitel a{
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  .contact-info{
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .contact-info a{
+    color: var(--ink);
+    text-decoration: underline;
+  }
+
+  /* Tarjeta principal */
+  .quiz-container{
+    width: min(980px, 92vw);
+    margin: 8px auto 24px;
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,.35);
+    overflow: hidden;
+  }
+
+  /* Campo de ciclismo/animación */
+  .track{
+    position: relative;
+    height: 64px;
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,.15) 0 24px, transparent 24px 48px);
+    border-bottom: 1px solid rgba(255,255,255,.15);
+  }
+  .peloton{
+    position: absolute;
+    left:-15%;
+    top:8px;
+    width: 120%;
+    height:48px;
+    background:
+      radial-gradient(circle at 10% 50%, #0000 12px, rgba(255,255,255,.08) 13px, #0000 14px) 0 0/64px 48px,
+      radial-gradient(circle at 30% 50%, #0000 12px, rgba(255,255,255,.12) 13px, #0000 14px) 0 0/64px 48px,
+      radial-gradient(circle at 50% 50%, #0000 12px, rgba(255,255,255,.08) 13px, #0000 14px) 0 0/64px 48px,
+      radial-gradient(circle at 70% 50%, #0000 12px, rgba(255,255,255,.12) 13px, #0000 14px) 0 0/64px 48px,
+      radial-gradient(circle at 90% 50%, #0000 12px, rgba(255,255,255,.08) 13px, #0000 14px) 0 0/64px 48px;
+    animation: ride 12s linear infinite;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.35));
+  }
+  @keyframes ride{ to{ transform: translateX(15%);} }
+
+  /* Barra de progreso */
+  .hud{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    padding: 14px 16px;
+    background: linear-gradient(90deg, rgba(255,214,0,.15), rgba(255,255,255,.04));
+    border-bottom: 1px solid rgba(255,255,255,.12);
+  }
+  .badge{
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.2);
+  }
+  .progress{
+    flex:1;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.12);
+    overflow: hidden;
+  }
+  .progress > span{
+    display:block;
+    height:100%;
+    width:0%;
+    background: linear-gradient(90deg, var(--accent), #fff);
+    transition: width .4s ease;
+  }
+  .score{
+    font-variant-numeric: tabular-nums;
+    min-width: 100px;
+    text-align:right;
+  }
+
+  /* Zona de pregunta */
+  .panel{
+    padding: 18px 16px 22px;
+  }
+  .question{
+    font-size: clamp(18px, 3vw, 22px);
+    line-height:1.25;
+    margin: 4px 0 14px;
+  }
+  .answers{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .btn{
+    display:block;
+    width:100%;
+    text-align:left;
+    font-size: 16px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,.06);
+    color: var(--ink);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 14px;
+    cursor:pointer;
+    transition: transform .06s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0,0,0,.25);
+    background: rgba(255,255,255,.1);
+  }
+  .btn:focus{ outline: 2px solid var(--focus); outline-offset: 2px; }
+  .btn.correct{ background: rgba(52,199,89,.18); border-color: rgba(52,199,89,.6); }
+  .btn.wrong{ background: rgba(255,69,58,.18); border-color: rgba(255,69,58,.6); }
+
+  .actions{
+    display:flex; gap:10px; align-items:center; justify-content:space-between;
+    margin-top: 6px;
+  }
+  .primary{
+    background: linear-gradient(180deg, var(--accent), #ffea70);
+    color:#222;
+    border:none;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor:pointer;
+    box-shadow: 0 8px 20px rgba(0,0,0,.35);
+    transition: transform .06s ease, box-shadow .2s ease;
+  }
+  .primary:hover{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,.4); }
+  .ghost{
+    background: transparent;
+    color: var(--mut);
+    border:1px dashed rgba(255,255,255,.3);
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor:pointer;
+  }
+
+  .status{
+    min-height: 24px;
+    color: var(--mut);
+    font-size: 14px;
+  }
+
+  /* Pantalla inicial y final */
+  .center{
+    text-align:center;
+    padding: 18px 16px 22px;
+  }
+  .title-chip{
+    display:inline-flex; align-items:center; gap:8px;
+    padding: 6px 10px; border-radius: 999px;
+    background: rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.2);
+    font-size: 13px; color: var(--mut);
+    margin-bottom: 8px;
+  }
+  .start-btn{ font-size:18px; padding:14px 18px; }
+  .final{
+    font-size: clamp(18px, 2.5vw, 22px);
+    margin: 6px auto 14px;
+  }
+
+  /* Etiqueta "NY" */
+  .tag-new{
+    position:absolute; right:10px; top:10px;
+    background:#fff; color:#000; font-weight:700;
+    padding:4px 8px; border-radius:8px;
+    transform: rotate(6deg);
+    box-shadow: 0 4px 10px rgba(0,0,0,.25);
+  }
+
+  /* Bandera sutil */
+  .flag{
+    position:absolute; left:12px; top:12px;
+    width:44px; height:28px;
+    background:
+      linear-gradient(#fff 0 100%),
+      linear-gradient(90deg,#fff 0 100%),
+      linear-gradient(#c60c30 0 100%);
+    background-size: 8px 100%, 100% 6px, 100% 100%;
+    background-position: 18px 0, 0 11px, 0 0;
+    background-repeat:no-repeat;
+    border-radius:4px;
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,.2);
+  }
+
+  /* Accesibilidad visual niños */
+  .sr{ position:absolute !important; left:-9999px !important; }
+
+  /* Responsive */
+  @media (min-width:700px){
+    .answers{ grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Portada inicial -->
+<div id="cover">
+  <img src="Portada.png" alt="Portada">
+</div>
+
+<!-- Fondo semitransparente permanente -->
+<div id="bgOverlay"></div>
+
+<header class="contenido-superior">
+  <div class="flag" aria-hidden="true"></div>
+  <span class="tag-new" aria-hidden="true">NY</span>
+  <h1>Jonas Vingegaard – Cykel-Quiz</h1>
+  <p class="lede">Et sjovt quiz for børn i Danmark: lær om Jonas’ barndom i Hillerslev, hans drømme, modgang og vejen til at blive en verdensstjerne på to hjul.</p>
+
+  <!-- Elementos fijos del proyecto -->
+  <p class="ondertitel"><a href="https://www.amazon.nl/dp/B0FMR8KPN4" target="_blank" rel="noopener noreferrer">¡Prueba nuestro libro!</a></p>
+  <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
+</header>
+
+<main class="quiz-container main-container">
+  <div class="track"><div class="peloton" aria-hidden="true"></div></div>
+
+  <div class="hud">
+    <span class="badge" id="qIndex">Spørgsmål 1/30</span>
+    <div class="progress"><span id="bar"></span></div>
+    <div class="score">Point: <strong id="score">0</strong></div>
+  </div>
+
+  <section class="panel" id="screen-intro">
+    <div class="center">
+      <div class="title-chip">Tema: Cykling &amp; biografi</div>
+      <p class="final">Er du klar til at træde i pedalerne? Svar på 30 spørgsmål om Jonas’ liv – fra vindfulde træninger til store mål.</p>
+      <button class="primary start-btn" id="startBtn">Start quiz</button>
+    </div>
+  </section>
+
+  <section class="panel" id="screen-quiz" hidden>
+    <div class="question" id="questionText">…</div>
+    <div class="answers" id="answers"></div>
+    <div class="actions">
+      <div class="status" id="status">Vælg et svar.</div>
+      <div>
+        <button class="ghost" id="skipBtn" title="Spring over (ingen straf)">Spring over</button>
+        <button class="primary" id="nextBtn" disabled>Næste</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="screen-final" hidden>
+    <div class="center">
+      <div class="title-chip">Målstregen</div>
+      <p class="final" id="finalMsg">Flot kørt!</p>
+      <button class="primary" id="restartBtn">Spil igen</button>
+    </div>
+  </section>
+</main>
+
+<!-- Pequeño SVG de bicicleta en la esquina inferior -->
+<svg width="0" height="0" class="sr" aria-hidden="true">
+  <defs>
+    <symbol id="bike" viewBox="0 0 64 32">
+      <circle cx="14" cy="24" r="8" fill="#fff"/>
+      <circle cx="50" cy="24" r="8" fill="#fff"/>
+      <rect x="28" y="10" width="8" height="4" rx="2" fill="#fff"/>
+      <path d="M14 24 L26 16 L38 22 L50 24" fill="none" stroke="#fff" stroke-width="2"/>
+      <circle cx="26" cy="16" r="3" fill="#fff"/>
+      <circle cx="38" cy="22" r="3" fill="#fff"/>
+    </symbol>
+  </defs>
+</svg>
+
+<script>
+  // Oculta la portada tras 3 s; ajustar cambiando 3000
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      var cover = document.getElementById('cover');
+      if (cover) cover.style.display = 'none';
+    }, 3000);
+  });
+</script>
+
+<script>
+/* =========================
+   Jonas Vingegaard – Cykel-Quiz
+   Interfaz en danés. 30 preguntas. Efectos de sonido con WebAudio.
+   ========================= */
+
+const data = [
+  // 1
+  {q:"Hvor blev Jonas født?", a:["Hillerslev","Aalborg","Odense"], c:0},
+  // 2
+  {q:"Hvad var særligt ved hans barndomsvejr ved Nordsøen?", a:["Det blæste næsten altid","Det sneede hver dag","Det var altid vindstille"], c:0},
+  // 3
+  {q:"Hvad arbejdede hans far, Claus, med?", a:["Anlæg til lakseopdræt","Bageri","Skovarbejde"], c:0},
+  // 4
+  {q:"Hvad hedder hans mor?", a:["Karina","Mette","Lene"], c:0},
+  // 5
+  {q:"Hvad hedder hans storesøster?", a:["Michelle","Sofie","Katrine"], c:0},
+  // 6
+  {q:"Hvilket kælenavn havde Jonas som barn?", a:["“Lille Skid”","“Mini-Raket”","“Spurtkongen”"], c:0},
+  // 7
+  {q:"Hvordan var Jonas som barn ifølge familien?", a:["Følsom og viste sine følelser","Meget tavs og viste aldrig følelser","Altid alvorlig"], c:0},
+  // 8
+  {q:"Hvilket fodboldhold drømte han om at spille for?", a:["Liverpool","FC Barcelona","Ajax"], c:0},
+  // 9
+  {q:"Hvorfor blev han skuffet over fodbold?", a:["Han fik sjældent bolden, fordi han var lille og tynd","Han kunne ikke lide at løbe","Han måtte ikke spille på skolen"], c:0},
+  // 10
+  {q:"Hvad fik ham til at opdage cykling?", a:["At se PostNord Danmark Rundt i Thisted","En tv-reklame","En skolekonkurrence"], c:0},
+  // 11
+  {q:"Hvilken klub startede han i?", a:["Thy Cycle Ring","Team Midtjylland","Aalborg CK"], c:0},
+  // 12
+  {q:"Hvad var hans allerførste konkurrence?", a:["En enkeltstart på ét minut","Et 50 km landevejsløb","Et baneløb"], c:0},
+  // 13
+  {q:"Hvad var svært i begyndelsen pga. hans vægt?", a:["Vinden kunne næsten vælte ham","Han kunne ikke bremse","Han punkterede hele tiden"], c:0},
+  // 14
+  {q:"Hvad gjorde Jonas, selv når han ikke vandt løb?", a:["Han blev ved med at træne","Han stoppede helt","Han skiftede til håndbold"], c:0},
+  // 15
+  {q:"Hvad købte familien for at støtte ham ved stævner?", a:["En autocamper","En varevogn","En minibus"], c:0},
+  // 16
+  {q:"Hvad lærte hans far for at hjælpe ham som atlet?", a:["Ernæring og sportspsykologi","Mekanikerarbejde på cykler","Massage"], c:0},
+  // 17
+  {q:"Hvad skete der, da han var 15 år?", a:["Han kom på eliteskole for sportsudøvere","Han flyttede til udlandet","Han stoppede i klubben"], c:0},
+  // 18
+  {q:"Hvad skrev han i sin klasses bog om fremtiden?", a:["At han en dag ville vinde Tour de France","At han ville være læge","At han ville være træner"], c:0},
+  // 19
+  {q:"Hvordan havde han det før løb i ungdomsårene?", a:["Han blev meget nervøs og kastede nogle gange op","Han var altid helt rolig","Han sprang opvarmningen over"], c:0},
+  // 20
+  {q:"Hvad arbejdede han med om vinteren for at betale for cyklingen?", a:["At pakke fisk","At bygge huse","At passe børn"], c:0},
+  // 21
+  {q:"Hvem beundrede han som cykelforbillede?", a:["Alberto Contador","Chris Froome","Fabian Cancellara"], c:0},
+  // 22
+  {q:"Hvilket hold skrev han sin første prof-kontrakt med i 2016?", a:["ColoQuick","Riwal","Uno-X"], c:0},
+  // 23
+  {q:"Hvilket internationalt resultat fik han samme år?", a:["Podie i Tour of China","Sejr i Paris–Roubaix U23","VM-sølv på enkeltstart"], c:0},
+  // 24
+  {q:"Hvem mødte han på holdet, som blev hans partner og støtte?", a:["Trine","Anna","Sara"], c:0},
+  // 25
+  {q:"Hvad skete der i 2017 i Tour des Fjords?", a:["Alvorligt styrt med lårbensbrud","Sejr i samlet klassement","Han skiftede disciplin til bane"], c:0},
+  // 26
+  {q:"Hvad vandt han i 2018?", a:["Prologen i Giro della Valle d’Aosta og TTT i Tour de l’Avenir","Flandern Rundt","VM i linjeløb"], c:0},
+  // 27
+  {q:"Hvilket WorldTour-hold skrev han under med for 2019?", a:["Jumbo-Visma","Ineos","Bahrain"], c:0},
+  // 28
+  {q:"Hvor tog han sin første WorldTour-etapesejr i 2019?", a:["Tour de Pologne (Polen Rundt)","Critérium du Dauphiné","UAE Tour"], c:0},
+  // 29
+  {q:"Hvad skete der i hans privatliv i 2020?", a:["Han blev far til datteren Frida","Han flyttede til Spanien","Han stoppede midlertidigt med at køre løb"], c:0},
+  // 30 (opsamlende)
+  {q:"Hvilket ord beskriver bedst Jonas’ rejse fra barn til professionel?", a:["Udholdenhed","Held","Genveje"], c:0},
+];
+
+const total = data.length;
+let idx = 0;
+let score = 0;
+let answered = false;
+
+const qIndex = document.getElementById('qIndex');
+const bar = document.getElementById('bar');
+const scoreEl = document.getElementById('score');
+const questionText = document.getElementById('questionText');
+const answersEl = document.getElementById('answers');
+const statusEl = document.getElementById('status');
+const nextBtn = document.getElementById('nextBtn');
+const skipBtn = document.getElementById('skipBtn');
+
+const screenIntro = document.getElementById('screen-intro');
+const screenQuiz = document.getElementById('screen-quiz');
+const screenFinal = document.getElementById('screen-final');
+const startBtn = document.getElementById('startBtn');
+const restartBtn = document.getElementById('restartBtn');
+const finalMsg = document.getElementById('finalMsg');
+
+// Audio simple con WebAudio (bip correcto/incorrecto)
+let audioCtx;
+function tone(freq=660, dur=0.16, type='sine', vol=0.15){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.value = vol;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start();
+    setTimeout(()=>{ o.stop(); }, dur*1000);
+  }catch(e){}
+}
+function correctSound(){
+  tone(740,0.13,'triangle',0.18);
+  setTimeout(()=>tone(880,0.12,'triangle',0.18), 90);
+}
+function wrongSound(){
+  tone(180,0.12,'sawtooth',0.12);
+  setTimeout(()=>tone(140,0.12,'sawtooth',0.12), 90);
+}
+
+// Utilidades
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+// Podríamos mezclar, pero mantenemos orden pedagógico
+const order = [...Array(total).keys()]; // fijo
+// shuffle(order) // si se desea aleatorio
+
+function setProgress(){
+  qIndex.textContent = `Spørgsmål ${idx+1}/${total}`;
+  bar.style.width = `${(idx)/total*100}%`;
+  scoreEl.textContent = score;
+}
+
+function renderQuestion(){
+  answered = false;
+  nextBtn.disabled = true;
+  statusEl.textContent = "Vælg et svar.";
+  answersEl.innerHTML = "";
+  setProgress();
+
+  const item = data[order[idx]];
+  questionText.textContent = item.q;
+
+  // construir opciones con índice original
+  const opts = item.a.map((txt, i)=>({txt, i}));
+  // no mezclamos para facilitar lectura infantil; descomenta para aleatorizar
+  // shuffle(opts);
+
+  opts.forEach(opt=>{
+    const b = document.createElement('button');
+    b.className = 'btn';
+    b.innerHTML = opt.txt;
+    b.addEventListener('click', ()=>{
+      if(answered) return;
+      answered = true;
+      const correct = opt.i === item.c;
+      if(correct){
+        b.classList.add('correct');
+        statusEl.textContent = "Rigtigt! Godt trådt!";
+        score++;
+        correctSound();
+      }else{
+        b.classList.add('wrong');
+        statusEl.textContent = `Ups – det rigtige svar er: ${item.a[item.c]}.`;
+        wrongSound();
+      }
+      // desactivar el resto y marcar correcto
+      [...answersEl.children].forEach(btn=>{
+        btn.disabled = true;
+        if(btn.innerHTML === item.a[item.c]) btn.classList.add('correct');
+      });
+      nextBtn.disabled = false;
+      setProgress();
+    });
+    answersEl.appendChild(b);
+  });
+}
+
+function start(){
+  idx = 0; score = 0;
+  screenIntro.hidden = true;
+  screenFinal.hidden = true;
+  screenQuiz.hidden = false;
+  setProgress();
+  renderQuestion();
+}
+
+function next(){
+  if(idx < total-1){
+    idx++;
+    renderQuestion();
+  }else{
+    finish();
+  }
+}
+
+function skip(){
+  if(answered) return; // no saltar tras responder
+  idx < total-1 ? idx++ : null;
+  if(idx >= total-1){ // si era la última, mostramos igualmente
+    renderQuestion();
+  }else{
+    renderQuestion();
+  }
+}
+
+function finish(){
+  screenQuiz.hidden = true;
+  screenFinal.hidden = false;
+  bar.style.width = "100%";
+  const pct = Math.round(100*score/total);
+  let msg = "";
+  if(pct === 100) msg = "Legendekørsel! Du ramte 30/30 – gult trøje-niveau!";
+  else if(pct >= 80) msg = `Stærkt feltarbejde! ${score}/${total} rigtige.`;
+  else if(pct >= 50) msg = `God indsats! ${score}/${total}. Fortsæt træningen.`;
+  else msg = `Start roligt og træd jævnt – du fik ${score}/${total}. Prøv igen!`;
+  finalMsg.textContent = msg;
+}
+
+// Eventos
+startBtn.addEventListener('click', start);
+nextBtn.addEventListener('click', next);
+skipBtn.addEventListener('click', skip);
+restartBtn && restartBtn.addEventListener('click', start);
+
+// Accesibilidad teclado básico
+document.addEventListener('keydown', (e)=>{
+  if(screenQuiz.hidden) return;
+  if(e.key === 'Enter' && !nextBtn.disabled){ next(); }
+});
+
+</script>
+</body>
+</html>

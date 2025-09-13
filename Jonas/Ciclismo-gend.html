@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <title>Cykelquiz</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            font-family:'Comic Sans MS',cursive,sans-serif;
+            background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+            min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px
+        }
+        .game-container{
+            background:#fff;border-radius:25px;box-shadow:0 20px 40px rgba(0,0,0,.1);
+            padding:30px;max-width:600px;width:100%;text-align:center;position:relative;overflow:hidden
+        }
+        .game-container::before{
+            content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+            background:linear-gradient(45deg,transparent,rgba(255,255,255,.1),transparent);
+            animation:shine 3s infinite
+        }
+        @keyframes shine{0%{transform:translateX(-100%) translateY(-100%) rotate(45deg)}100%{transform:translateX(100%) translateY(100%) rotate(45deg)}}
+        .header{margin-bottom:30px;position:relative;z-index:2}
+        .title{font-size:2.5em;color:#4a5568;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,.1)}
+        .subtitle{font-size:1.05em;color:#334155;margin-bottom:10px}
+        /* Obligatorisk projektblok */
+        .ondertitel{font-size:.95em;margin:.2em 0}
+        .ondertitel a{color:#0f766e;text-decoration:none}
+        .ondertitel a:hover{text-decoration:underline}
+        .contact-info{font-size:.92em;margin-top:2px}
+        .contact-info a{color:#2563eb;text-decoration:none}
+        .contact-info a:hover{text-decoration:underline}
+
+        .bike-emoji{font-size:3em;margin:0 10px;animation:bounce 2s infinite}
+        @keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}60%{transform:translateY(-5px)}}
+        .game-content{position:relative;z-index:2}
+        .welcome-screen,.quiz-screen,.result-screen{display:none}
+        .welcome-screen.active,.quiz-screen.active,.result-screen.active{display:block}
+        .start-btn,.next-btn,.restart-btn{
+            background:linear-gradient(45deg,#ff6b6b,#ffa726);color:#fff;border:none;padding:15px 30px;border-radius:25px;
+            font-size:1.2em;font-weight:bold;cursor:pointer;transition:all .3s ease;box-shadow:0 5px 15px rgba(255,107,107,.3)
+        }
+        .start-btn:hover,.next-btn:hover,.restart-btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(255,107,107,.4)}
+        .question-counter{background:linear-gradient(45deg,#4facfe,#00f2fe);color:#fff;padding:10px 20px;border-radius:20px;margin-bottom:20px;display:inline-block;font-weight:bold}
+        .question{font-size:1.3em;color:#2d3748;margin-bottom:25px;padding:20px;background:linear-gradient(135deg,#f7fafc,#edf2f7);border-radius:15px;border-left:5px solid #4299e1}
+        .options{display:flex;flex-direction:column;gap:15px;margin-bottom:25px}
+        .option{
+            background:linear-gradient(135deg,#fff,#f8f9fa);border:2px solid #e2e8f0;padding:15px 20px;border-radius:15px;
+            cursor:pointer;transition:all .3s ease;font-size:1.1em;text-align:left
+        }
+        .option:hover{transform:translateX(5px);border-color:#4299e1;box-shadow:0 5px 15px rgba(66,153,225,.2)}
+        .option.selected{background:linear-gradient(135deg,#bee3f8,#90cdf4);border-color:#2b6cb0;transform:translateX(5px)}
+        .option.correct{background:linear-gradient(135deg,#c6f6d5,#9ae6b4);border-color:#38a169;animation:correct-pulse .6s ease-in-out}
+        .option.incorrect{background:linear-gradient(135deg,#fed7d7,#feb2b2);border-color:#e53e3e;animation:incorrect-shake .6s ease-in-out}
+        @keyframes correct-pulse{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+        @keyframes incorrect-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+        .score{font-size:2em;margin-bottom:20px;font-weight:bold}
+        .score.good{color:#38a169}.score.medium{color:#d69e2e}.score.low{color:#e53e3e}
+        .feedback{font-size:1.2em;margin-bottom:20px;padding:15px;border-radius:10px}
+        .feedback.good{background:linear-gradient(135deg,#c6f6d5,#9ae6b4);color:#22543d}
+        .feedback.medium{background:linear-gradient(135deg,#faf089,#f6e05e);color:#744210}
+        .feedback.low{background:linear-gradient(135deg,#fed7d7,#feb2b2);color:#742a2a}
+        .progress-bar{width:100%;height:10px;background:#e2e8f0;border-radius:5px;overflow:hidden;margin-bottom:20px}
+        .progress-fill{height:100%;background:linear-gradient(45deg,#4facfe,#00f2fe);border-radius:5px;transition:width .3s ease}
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <div class="header">
+        <h1 class="title">
+            <span class="bike-emoji">🚴‍♂️</span>
+            Cykelquiz
+            <span class="bike-emoji">🚴‍♀️</span>
+        </h1>
+
+        <!-- Kort sætning der forklarer programmet (lige under titlen) -->
+        <p class="subtitle">Selvstændigt quizspil om Grand Tours, trøjer, roller og UCI-regler.</p>
+
+        <!-- Fast projektblok (obligatorisk) -->
+        <p class="ondertitel"><a href="https://www.amazon.nl/dp/B0FMR8KPN4" target="_blank" rel="noopener noreferrer">Nyd bogen</a></p>
+        <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
+    </div>
+
+    <div class="game-content">
+        <div class="welcome-screen active">
+            <div class="bike-emoji" style="font-size:4em;margin:20px 0;">🏆</div>
+            <p style="font-size:1.3em;margin-bottom:30px;color:#4a5568;">
+                Svar på 5 spørgsmål om Grand Tours, trøjer og regler
+            </p>
+            <button class="start-btn" onclick="playClick();startGame()">Start</button>
+        </div>
+
+        <div class="quiz-screen">
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="question-counter" id="questionCounter">Spørgsmål 1 af 5</div>
+            <div class="question" id="questionText"></div>
+            <div class="options" id="optionsContainer"></div>
+            <button class="next-btn" id="nextBtn" onclick="playClick();nextQuestion()" style="display:none;">Næste</button>
+        </div>
+
+        <div class="result-screen">
+            <div class="bike-emoji" style="font-size:4em;margin:20px 0;">🏅</div>
+            <div class="score" id="finalScore"></div>
+            <div class="feedback" id="feedback"></div>
+            <button class="restart-btn" onclick="playClick();restartGame()">Spil igen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+/* -------------------- Simpel lyd (Web Audio API) -------------------- */
+let audioCtx;
+function ctx(){ if(!audioCtx){ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } return audioCtx; }
+
+function beep({freq=440,type='sine',duration=0.15,gain=0.08,attack=0.005,release=0.08}={}){
+    const ac = ctx();
+    const osc = ac.createOscillator();
+    const g = ac.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    g.gain.setValueAtTime(0, ac.currentTime);
+    g.gain.linearRampToValueAtTime(gain, ac.currentTime + attack);
+    g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + duration + release);
+    osc.connect(g).connect(ac.destination);
+    osc.start();
+    osc.stop(ac.currentTime + duration + release + 0.02);
+}
+
+function playClick(){ beep({freq:320,type:'square',duration:0.07,gain:0.06}); }           // klik
+function playAlert(){ beep({freq:660,type:'triangle',duration:0.08,gain:0.07});           // varsel
+                      setTimeout(()=>beep({freq:520,type:'triangle',duration:0.10,gain:0.07}),90); }
+function playCorrect(){ beep({freq:520,type:'sine',duration:0.10,gain:0.08});             // korrekt
+                        setTimeout(()=>beep({freq:660,type:'sine',duration:0.12,gain:0.08}),110);
+                        setTimeout(()=>beep({freq:880,type:'sine',duration:0.14,gain:0.08}),230); }
+function playIncorrect(){ beep({freq:440,type:'sawtooth',duration:0.12,gain:0.08});       // forkert
+                          setTimeout(()=>beep({freq:330,type:'sawtooth',duration:0.16,gain:0.08}),130); }
+
+/* -------------------- Spørgsmålsbank -------------------- */
+const questions = [
+    {question:"Hvad er de tre Grand Tours i cykling?",options:["Tour de France, Giro d’Italia og Vuelta a España","Tour de France, Paris–Roubaix og Flandern Rundt","Giro d’Italia, Vuelta a España og Milano–Sanremo"],correct:0},
+    {question:"Hvilken farve har ledertrøjen i Tour de France?",options:["Rosa","Gul","Grøn"],correct:1},
+    {question:"Hvad kaldes den lyserøde trøje i cykling?",options:["Maglia Rosa i Giro d’Italia","Den lyserøde trøje i Touren","Lyserød trøje i Vueltaen"],correct:0},
+    {question:"Hvilken farve har ledertrøjen i Vuelta a España?",options:["Gul","Grøn","Rød"],correct:2},
+    {question:"Hvad repræsenterer den grønne trøje i Tour de France?",options:["Bedste klatrer","Pointklassifikationen","Bedste unge rytter"],correct:1},
+    {question:"Hvilken farve er prikkerne på bjergtrøjen i Touren?",options:["Blå","Røde","Grønne"],correct:1},
+    {question:"Hvem bærer den hvide trøje?",options:["National mesterskabsvinder","Bedste unge (under 25 år)","Bedste sprinter"],correct:1},
+    {question:"Hvilken trøje bærer verdensmesteren?",options:["Guldtrøje","Regnbuetrøje","Sølvtrøje"],correct:1},
+    {question:"Hvornår kan en rytter bruge national mestertrøje?",options:["Kun ved nationale mesterskaber","I endagsløb","I alle løb"],correct:1},
+    {question:"Hvad kaldes den hurtigste rytter i massespurter?",options:["Klatrer","Sprinter","Rullerytter"],correct:1},
+    {question:"Hvilken type rytter dominerer i bjergene?",options:["Sprinter","Enkeltstartsrytter","Klatrer"],correct:2},
+    {question:"Hvad kaldes specialisten i enkeltstart?",options:["Enkeltstartsrytter","Kronometrist","Temporytter"],correct:0},
+    {question:"Hvad er en 'rullerytter' (rodador)?",options:["En rytter der holder høj fart på flad vej","En rytter der kører mange kilometer","En nybegynder"],correct:0},
+    {question:"Hvad kaldes specialisten i endagsklassikere?",options:["Klassisk rytter","Klassikerrytter (clasicómano)","Specialist"],correct:1},
+    {question:"Hvad er en 'puncheur'?",options:["En stærk rytter","Specialist i korte, eksplosive stigninger","En aggressiv rytter"],correct:1},
+    {question:"Hvad er en hjælperytters (gregario) rolle?",options:["At vinde etaper","At støtte holdets leder","At være den hurtigste"],correct:1},
+    {question:"Hvad gør en lead-out-rytter i en spurt?",options:["Kaster cyklen","Fører sprinteren de sidste meter","Starter spurten"],correct:1},
+    {question:"Hvad kaldes holdets udpegede leder?",options:["Kaptajn","Holdets leder (jefe de filas)","Sportsdirektør"],correct:1},
+    {question:"Hvor mange ryttere stiller WorldTour-herrehold normalt med i Grand Tours?",options:["6 eller 7","7 eller 8","8 eller 9"],correct:1},
+    {question:"Hvor mange ryttere har WorldTour-kvindehold typisk?",options:["5","6","7"],correct:1},
+    {question:"Hvad kaldes hovedfeltet?",options:["Feltet (peloton)","Gruppen","Flokken"],correct:0},
+    {question:"Hvad er et udbrud (escapada)?",options:["Når en rytter tager på ferie","En lille gruppe der får hul til feltet","En meget hurtig etape"],correct:1},
+    {question:"Med hvilket interval starter ryttere i individuel enkeltstart?",options:["30 sek.–1 min.","1–2 minutter","2–3 minutter"],correct:1},
+    {question:"I holdtidskørsel, hvilken tid gælder?",options:["Den første rytters tid","Den fjerde eller femte rytters tid","Den sidste rytters tid"],correct:1},
+    {question:"Hvilke etapetyper findes i Grand Tours?",options:["Flade, bjerg og sprint","Flade, medium bjerg, høj bjerg og enkeltstarter","Let, normal og svær"],correct:1},
+    {question:"Hvor gives tidsbonusser?",options:["Kun ved mål","Ved indlagte spurter og etapemål","Kun på bjerge"],correct:1},
+    {question:"Hvad uddeles ved en indlagt spurt (meta volante)?",options:["Kun point","Mellemtider og point","Kun sekunder"],correct:1},
+    {question:"Hvad er 'drafting' eller at ligge på hjul?",options:["At køre bag en anden for at spare energi","At skifte hjul","At køre meget hurtigt"],correct:0},
+    {question:"Hvad er et 'vifte' (abanico) i cykling?",options:["En genstand til luft","Sidevindformation","En cykeltype"],correct:1},
+    {question:"Hvem giver instruktioner over radio under løbet?",options:["Kommentatoren","Sportsdirektøren","Kommissærerne"],correct:1},
+    {question:"Er øresnegle tilladt i professionel cykling?",options:["Ja, uden grænser","Ja, men med begrænsninger","Nej, forbudt"],correct:1},
+    {question:"Hvem håndhæver reglementet?",options:["Sportsdirektørerne","Kommissærerne","Rytterne"],correct:1},
+    {question:"Hvad kan sanktioner i cykling omfatte?",options:["Kun bøder","Tidsstraf, bøder eller udelukkelse","Kun udelukkelse"],correct:1},
+    {question:"Må ryttere modtage skub udefra?",options:["Ja, altid","Nej, forbudt","Kun i bjergene"],correct:1},
+    {question:"Hvad er UCI’s minimumsvægt for racercykler?",options:["6,8 kg","7,5 kg","8 kg"],correct:0},
+    {question:"Siden hvornår har skivebremser været tilladt på landevej?",options:["2016","2018","2020"],correct:1},
+    {question:"Er hjelm obligatorisk i løb?",options:["Nej","Kun i bjergene","Ja, obligatorisk"],correct:2},
+    {question:"Hvor ofte skifter lederne af specialklassifikationer?",options:["Hver uge","Hver dag efter resultater","Kun til sidst"],correct:1},
+    {question:"Ved styrt inden for de sidste 3 km på en flad etape, tabes der tid?",options:["Ja, altid","Nej, der tabes ikke tid","Det afhænger af styrtet"],correct:1},
+    {question:"Skal en rytter fuldføre hver etape for at fortsætte?",options:["Ikke nødvendigt","Ja, med medicinske undtagelser","Kun de vigtige"],correct:1},
+    {question:"Hvornår blev det første Tour de France afholdt?",options:["1903","1909","1935"],correct:0},
+    {question:"Hvornår var den første moderne kvindeudgave af Tour de France?",options:["2020","2022","2024"],correct:1},
+    {question:"Hvad er det ældste kvindelige etapeløb?",options:["Kvinderne’s Tour de France","Giro Donne (siden 1988)","Vuelta Femenina"],correct:1},
+    {question:"Siden hvornår køres kvindernes Vuelta som en uges rundtur?",options:["2021","2023","2025"],correct:1},
+    {question:"Deler kvinde- og herrecykling kategorier?",options:["Nej, forskellige","Ja, UCI WorldTour deles","Kun nogle løb"],correct:1},
+    {question:"Findes der kvindeudgaver af forårsklassikerne?",options:["Nej","Ja, fx Paris–Roubaix og Flandern","Kun nogle få"],correct:1},
+    {question:"Siden hvornår har der været kvindernes landevejs-VM?",options:["1958","1960","1965"],correct:0},
+    {question:"Hvordan beregnes holdklassifikationen?",options:["Summen af alle ryttere","Summen af de tre bedste tider","Kun den bedste rytter"],correct:1},
+    {question:"Er antidopingkontrol obligatorisk?",options:["Kun i store løb","Ja, i alle UCI-løb","Ikke obligatorisk"],correct:1},
+    {question:"Hvordan er ligestillingen i præmier mellem mænd og kvinder?",options:["Allerede fuld ligestilling","Under indførelse","Ingen planer"],correct:1}
+];
+
+/* -------------------- Tilstand -------------------- */
+let currentQuestions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+let locked = false;
+
+/* -------------------- Hjælpemetoder -------------------- */
+function shuffleArray(arr){
+    const a = [...arr];
+    for(let i=a.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+}
+
+/* -------------------- Spilforløb -------------------- */
+function startGame(){
+    currentQuestions = shuffleArray(questions).slice(0,5);
+    currentQuestionIndex = 0;
+    score = 0;
+    locked = false;
+
+    document.querySelector('.welcome-screen').classList.remove('active');
+    document.querySelector('.quiz-screen').classList.add('active');
+
+    showQuestion();
+}
+
+function showQuestion(){
+    const q = currentQuestions[currentQuestionIndex];
+
+    document.getElementById('questionCounter').textContent = `Spørgsmål ${currentQuestionIndex+1} af 5`;
+    document.getElementById('progressFill').style.width = `${(currentQuestionIndex/5)*100}%`;
+
+    document.getElementById('questionText').textContent = q.question;
+
+    const optionsContainer = document.getElementById('optionsContainer');
+    optionsContainer.innerHTML = '';
+
+    // Blander svar og bevarer det korrekte
+    const entries = q.options.map((text, idx)=>({text, isCorrect: idx===q.correct}));
+    const shuffled = shuffleArray(entries);
+
+    shuffled.forEach(entry=>{
+        const div = document.createElement('div');
+        div.className = 'option';
+        div.textContent = entry.text;
+        div.setAttribute('data-correct', entry.isCorrect ? 'true' : 'false');
+        div.onclick = ()=>selectAnswer(div);
+        optionsContainer.appendChild(div);
+    });
+
+    document.getElementById('nextBtn').style.display = 'none';
+    locked = false;
+}
+
+function selectAnswer(optionElement){
+    if(locked) return;
+    locked = true;
+
+    playAlert(); // varsel ved valg
+
+    optionElement.classList.add('selected');
+
+    setTimeout(()=>{
+        const options = Array.from(document.querySelectorAll('.option'));
+        const chosenCorrect = optionElement.getAttribute('data-correct') === 'true';
+
+        options.forEach(opt=>{
+            const isC = opt.getAttribute('data-correct') === 'true';
+            if(isC) opt.classList.add('correct');
+            else if(opt === optionElement && !chosenCorrect) opt.classList.add('incorrect');
+            opt.style.pointerEvents = 'none';
+        });
+
+        if(chosenCorrect){ score++; playCorrect(); }
+        else{ playIncorrect(); }
+
+        document.getElementById('nextBtn').style.display = 'inline-block';
+        document.getElementById('progressFill').style.width = `${((currentQuestionIndex+1)/5)*100}%`;
+    },300);
+}
+
+function nextQuestion(){
+    currentQuestionIndex++;
+    if(currentQuestionIndex < 5) showQuestion();
+    else showResults();
+}
+
+function showResults(){
+    document.querySelector('.quiz-screen').classList.remove('active');
+    document.querySelector('.result-screen').classList.add('active');
+
+    const scoreElement = document.getElementById('finalScore');
+    const feedbackElement = document.getElementById('feedback');
+
+    scoreElement.textContent = `Du har fået ${score} af 5 point`;
+
+    let feedbackText, feedbackClass, scoreClass;
+    if(score >= 4){ feedbackText="Fremragende kendskab til emnet"; feedbackClass="good"; scoreClass="good"; }
+    else if(score >= 3){ feedbackText="Godt generelt kendskab"; feedbackClass="medium"; scoreClass="medium"; }
+    else{ feedbackText="Det er en god idé at genopfriske nogle begreber"; feedbackClass="low"; scoreClass="low"; }
+
+    scoreElement.className = `score ${scoreClass}`;
+    feedbackElement.className = `feedback ${feedbackClass}`;
+    feedbackElement.textContent = feedbackText;
+}
+
+function restartGame(){
+    document.querySelector('.result-screen').classList.remove('active');
+    document.querySelector('.welcome-screen').classList.add('active');
+}
+
+/* -------------------- Start -------------------- */
+document.querySelector('.welcome-screen').classList.add('active');
+</script>
+</body>
+</html>

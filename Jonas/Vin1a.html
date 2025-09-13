@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Cykelquiz – Jonas Vingegaard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <style>
+    :root{
+      /* Palet med nik til Danmark (rød/hvid) + sportsblå */
+      --rojo:#c8102e; --rojo-osc:#8f0f22; --azul:#4facfe; --azul2:#667eea;
+      --blanco:#fff; --negro:#1f2937; --gris:#e5e7eb; --sombra:0 22px 60px rgba(0,0,0,.18);
+      --ok1:#16a34a; --ok2:#047857; --ko1:#ef4444; --ko2:#b91c1c;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+
+    body{
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--negro);
+      background:linear-gradient(135deg,var(--azul) 0%,var(--azul2) 25%,#f093fb 50%,#f5576c 75%,#4facfe 100%);
+      background-size:400% 400%; animation:gradShift 9s ease-in-out infinite;
+      display:flex; align-items:center; justify-content:center; padding:16px;
+    }
+    @keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    @media (prefers-reduced-motion:reduce){ body{animation:none} }
+
+    .wrap{
+      width:min(960px,96vw); background:rgba(255,255,255,.96);
+      backdrop-filter: blur(14px);
+      border-radius:24px; box-shadow:var(--sombra); overflow:hidden;
+      position:relative; isolation:isolate; animation:rise .6s ease-out;
+    }
+    @keyframes rise{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+    .header{
+      background:linear-gradient(135deg,var(--rojo),var(--rojo-osc));
+      color:var(--blanco); padding:24px 18px; text-align:center; position:relative; overflow:hidden;
+    }
+    .header::before{
+      content:""; position:absolute; inset:0; transform:translateX(-100%);
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);
+      animation:shine 3.2s linear infinite;
+    }
+    @keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+    h1{font-weight:900; letter-spacing:.2px; text-shadow:2px 2px 4px rgba(0,0,0,.25);
+       font-size:clamp(1.4rem,1.1rem + 2vw,2.2rem)}
+
+    .flag{
+      display:inline-block; width:42px; height:30px; border-radius:4px; margin:0 8px; position:relative;
+      background:linear-gradient(to right,#c8102e 0% 35%,#fff 35% 45%,#c8102e 45% 100%);
+      border:2px solid rgba(255,255,255,.85);
+      transform-origin:center; animation:waver 2.6s ease-in-out infinite;
+    }
+    .flag::before{content:""; position:absolute; inset:35% 0; height:30%; background:#fff}
+    @keyframes waver{0%,100%{transform:rotate(-1.8deg)}50%{transform:rotate(1.8deg)}}
+    @media (prefers-reduced-motion:reduce){ .flag{animation:none} }
+
+    .subline{
+      margin:8px auto 10px; max-width:60ch; font-weight:600; opacity:.95
+    }
+
+    .ondertitel{margin:.35rem 0}
+    .ondertitel a{color:#fff;text-decoration:none}
+    .ondertitel a:hover{text-decoration:underline}
+    .contact-info a{color:#fff;opacity:.92;text-decoration:none}
+    .contact-info a:hover{text-decoration:underline;opacity:1}
+
+    .content{padding:22px}
+    .stats{
+      display:flex; gap:12px; justify-content:space-between; align-items:center; flex-wrap:wrap;
+      background:linear-gradient(135deg,#f093fb,#f5576c); color:#fff;
+      border-radius:16px; padding:12px 16px; font-weight:800;
+    }
+    .stat{text-align:center; min-width:120px}
+    .stat .lab{display:block; font-size:.84rem; opacity:.9}
+    .stat .val{font-size:1.15rem}
+
+    .card{
+      position:relative; margin:18px 0; background:#fff; border-radius:20px; padding:22px; box-shadow:0 10px 28px rgba(0,0,0,.1);
+      border:3px solid transparent; background-clip:padding-box; animation:qSlide .45s ease-out;
+    }
+    .card::before{
+      content:""; position:absolute; inset:-3px; border-radius:20px;
+      background:linear-gradient(135deg,var(--rojo),var(--rojo-osc),var(--azul),var(--azul2));
+      z-index:-1; animation:borderRoll 5s linear infinite; background-size:400% 100%;
+    }
+    @keyframes borderRoll{0%{background-position:0% 50%}100%{background-position:400% 50%}}
+    @keyframes qSlide{from{transform:translateX(22px);opacity:0}to{transform:translateX(0);opacity:1}}
+    @media (prefers-reduced-motion:reduce){ .card{animation:none} .card::before{animation:none} }
+
+    .preg{font-size:clamp(1.04rem,1rem + .7vw,1.35rem); font-weight:900; line-height:1.4; text-align:center; margin-bottom:18px}
+    .grid{display:grid; gap:12px}
+    @media (min-width:760px){ .grid{grid-template-columns:1fr 1fr} }
+
+    .btn{
+      padding:16px 18px; border-radius:14px; border:2px solid var(--gris);
+      background:linear-gradient(135deg,#f8f9ff,#f0f2ff); cursor:pointer; font-size:1.05rem; font-weight:800;
+      transition:transform .18s, box-shadow .18s, background .18s, color .18s, border-color .18s;
+      text-align:left;
+    }
+    .btn:hover, .btn:focus-visible{
+      background:linear-gradient(135deg,var(--azul),var(--azul2)); color:#fff; border-color:transparent;
+      transform:translateY(-1.5px); box-shadow:0 10px 22px rgba(79,172,254,.32);
+      outline:none;
+    }
+    .btn.ok{background:linear-gradient(135deg,var(--ok1),var(--ok2)); color:#fff; border-color:transparent}
+    .btn.ko{background:linear-gradient(135deg,var(--ko1),var(--ko2)); color:#fff; border-color:transparent}
+    .btn:disabled{opacity:.98; cursor:default}
+
+    .progress{height:12px; background:#edf0f5; border-radius:20px; overflow:hidden; margin:18px 0}
+    .bar{height:100%; width:0%; background:linear-gradient(90deg,var(--rojo),var(--rojo-osc)); position:relative; transition:width .6s cubic-bezier(.4,0,.2,1)}
+    .bar::after{
+      content:""; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+      animation:barShine 2s linear infinite;
+    }
+    @keyframes barShine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+    @media (prefers-reduced-motion:reduce){ .bar::after{animation:none} }
+
+    .result{
+      text-align:center; font-size:1.32rem; font-weight:900; color:#fff;
+      background:linear-gradient(135deg,var(--azul),#00f2fe); border-radius:20px; padding:22px; box-shadow:0 10px 28px rgba(79,172,254,.3);
+      animation:resPop .55s ease-out; margin-top:12px;
+    }
+    @keyframes resPop{0%{transform:scale(.86);opacity:0}50%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}
+    @media (prefers-reduced-motion:reduce){ .result{animation:none} }
+
+    .play{
+      display:inline-block; margin:16px auto 4px; padding:14px 34px; border:none; border-radius:32px;
+      background:linear-gradient(135deg,var(--rojo),var(--rojo-osc)); color:#fff; font-size:1.05rem; font-weight:900; cursor:pointer;
+      box-shadow:0 8px 22px rgba(200,16,46,.35); transition:transform .18s, box-shadow .18s;
+      animation:pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse{0%{box-shadow:0 8px 22px rgba(200,16,46,.35)}50%{box-shadow:0 8px 28px rgba(200,16,46,.5)}100%{box-shadow:0 8px 22px rgba(200,16,46,.35)}}
+    .play:hover{transform:translateY(-2px)}
+    @media (prefers-reduced-motion:reduce){ .play{animation:none} }
+
+    .hidden{display:none}
+
+    .feedback{
+      position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.6);
+      padding:18px 28px; border-radius:16px; color:#fff; font-weight:900; font-size:1.12rem; z-index:999;
+      animation:fb 1.2s ease-out forwards; pointer-events:none; box-shadow:0 10px 28px rgba(0,0,0,.22);
+    }
+    .feedback.ok{background:linear-gradient(135deg,var(--ok1),var(--ok2))}
+    .feedback.ko{background:linear-gradient(135deg,var(--ko1),var(--ko2))}
+    @keyframes fb{0%{opacity:0; transform:translate(-50%,-50%) scale(.6)} 20%{opacity:1; transform:translate(-50%,-50%) scale(1.04)} 80%{opacity:1} 100%{opacity:0; transform:translate(-50%,-50%) scale(.9)}}
+    @media (prefers-reduced-motion:reduce){ .feedback{animation:none} }
+  </style>
+
+</head>
+<body>
+  <main class="wrap" role="application" aria-label="Cykelquiz – Jonas Vingegaard">
+    <header class="header">
+      <h1><span class="flag" aria-hidden="true"></span>Cykelquiz – Jonas Vingegaard<span class="flag" aria-hidden="true"></span></h1>
+      <p class="subline">Svar på 5 hurtige spørgsmål om hans liv, hold, sejre og svære øjeblikke.</p>
+      <p class="ondertitel"><a href="https://www.amazon.nl/dp/B0FMR8KPN4" target="_blank" rel="noopener noreferrer">Nyd bogen</a></p>
+      <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
+    </header>
+
+    <section class="content">
+      <div class="stats" aria-live="polite">
+        <div class="stat"><span class="lab">Spørgsmål</span><span class="val"><span id="qnow">1</span> / <span id="qtot">5</span></span></div>
+        <div class="stat"><span class="lab">Rigtige</span><span class="val" id="hits">0</span></div>
+        <div class="stat"><span class="lab">Point</span><span class="val" id="pts">0</span></div>
+      </div>
+
+      <div class="card" id="qcard">
+        <div class="preg" id="qtext">Tryk “Start” for at begynde spillet.</div>
+        <div class="grid" id="opts"></div>
+      </div>
+
+      <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+
+      <div id="result" class="result hidden" role="status" aria-live="polite"></div>
+      <div style="text-align:center">
+        <button id="restart" class="play hidden" aria-label="Spil igen">Spil igen</button>
+        <button id="start" class="play" aria-label="Start quizzen">Start</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    /* ========= Web Audio API-lyde: klik / korrekt / forkert ========= */
+    const Snd = (() => {
+      let ctx;
+      const init=()=>{ if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)(); };
+      function ping(f=440, d=0.12, type='sine', vol=0.06, attack=0.005, release=0.08){
+        init(); const t=ctx.currentTime; const o=ctx.createOscillator(), g=ctx.createGain();
+        o.type=type; o.frequency.value=f; g.gain.setValueAtTime(0,t);
+        g.gain.linearRampToValueAtTime(vol, t+attack);
+        g.gain.exponentialRampToValueAtTime(0.0001, t+d+release);
+        o.connect(g); g.connect(ctx.destination); o.start(); o.stop(t+d+release+0.02);
+      }
+      return {
+        click(){ ping(320,.08,'square',.06); },
+        ok(){ ping(520,.09,'sine',.07); setTimeout(()=>ping(660,.10,'sine',.07),100); setTimeout(()=>ping(880,.12,'sine',.07),210); },
+        ko(){ ping(440,.12,'sawtooth',.08); setTimeout(()=>ping(330,.16,'sawtooth',.08),120); }
+      };
+    })();
+
+    /* ========= Spørgsmålsbank (50). Der vælges 5 tilfældigt ========= */
+    const BANK = [
+      {p:"Hvornår blev Jonas Vingegaard født?",o:["10. december 1996","15. november 1996","20. januar 1997"],c:0},
+      {p:"I hvilken dansk by blev Jonas Vingegaard født?",o:["København","Hillerslev","Aarhus"],c:1},
+      {p:"Hvad arbejdede Jonas’ familie med?",o:["Landbrug","Lakseopdræt","Byggeri"],c:1},
+      {p:"Hvordan var Jonas som barn?",o:["Meget udadvendt","Genert og tilbageholdende","Meget oprørsk"],c:1},
+      {p:"Hvilke sportsgrene dyrkede Jonas før cykling?",o:["Kun cykling","Fodbold, håndbold og svømning","Tennis og atletik"],c:1},
+      {p:"Hvorfor havde Jonas problemer med selvtilliden som ung?",o:["På grund af karaktererne","Fordi han var lav og spinkel","Fordi han var meget høj"],c:1},
+      {p:"Hvem tog Jonas med ud for at se etaper i Danmark Rundt?",o:["Hans mor","Hans far","Hans bror"],c:1},
+      {p:"I hvilken alder fik Jonas sin første racercykel?",o:["9 år","11 år","13 år"],c:1},
+      {p:"I hvilken alder begyndte Jonas at konkurrere for alvor?",o:["15 år","17 år","19 år"],c:1},
+      {p:"Hvor arbejdede Jonas før han blev professionel cykelrytter?",o:["I en cykelbutik","Med at rense fisk på en fabrik","På en restaurant"],c:1},
+      {p:"Hvilken rytter beundrede Jonas for sin offensive stil?",o:["Alberto Contador","Chris Froome","Miguel Indurain"],c:0},
+      {p:"Hvilken lille klub kørte Jonas for?",o:["Danish Cycling Club","Thy Cykle Ring","Copenhagen Riders"],c:1},
+      {p:"Hvilket gymnasium gik Jonas på?",o:["Copenhagen High School","Thisted Handelsgymnasium","Aarhus Academy"],c:1},
+      {p:"I hvilken alder blev Jonas set som et talent i Danmark?",o:["18 år","20 år","22 år"],c:1},
+      {p:"Hvad hedder Jonas Vingegaards partner?",o:["Anna Hansen","Trine Hansen","Maria Larsen"],c:1},
+      {p:"Hvad hedder Jonas Vingegaards datter?",o:["Emma","Frida","Astrid"],c:1},
+      {p:"Hvor høj er Jonas Vingegaard?",o:["1,70 m","1,75 m","1,80 m"],c:1},
+      {p:"Hvad vejer Jonas cirka?",o:["55 kg","60 kg","65 kg"],c:1},
+      {p:"Hvilket hold sluttede Jonas sig til i 2019?",o:["Team Sky","Jumbo-Visma","UAE Team Emirates"],c:1},
+      {p:"I hvilket år debuterede Jonas som kaptajn i Tour de France?",o:["2020","2021","2022"],c:1},
+      {p:"Hvorfor blev Jonas kaptajn i Touren 2021?",o:["Det var den oprindelige plan","På grund af Roglič’ styrt","På grund af Van Aerts skade"],c:1},
+      {p:"Hvilken placering fik Jonas i Tour de France 2021?",o:["Førsteplads","Andenplads","Tredjeplads"],c:1},
+      {p:"Hvor vandt Jonas sin første Tour-etape i 2021?",o:["Alpe d'Huez","Mont Ventoux","Tourmalet"],c:1},
+      {p:"I hvilket år vandt Jonas sin første Tour de France?",o:["2021","2022","2023"],c:1},
+      {p:"Hvilken etape var afgørende for Jonas’ sejr i Touren 2022?",o:["Alpe d'Huez","Hautacam","Granon"],c:1},
+      {p:"Hvor mange Tour de France-titler har Jonas Vingegaard?",o:["1","2","3"],c:1},
+      {p:"Hvilket løb vandt Jonas i 2021 og 2023?",o:["Dauphiné","Itzulia (Baskerlandet Rundt)","Tirreno–Adriatico"],c:1},
+      {p:"Hvilken type rytter er Jonas mest kendt som?",o:["Sprinter","Bjergspecialist","Enkeltstartsrytter"],c:1},
+      {p:"Hvor styrtede Jonas alvorligt i 2024?",o:["Tour de France","Itzulia 2024","Giro d’Italia"],c:1},
+      {p:"Hvilke knogler brækkede Jonas i styrtet i 2024?",o:["Arm og ben","Kraveben og ribben","Hofte og håndled"],c:1},
+      {p:"Hvilke lungeskader fik Jonas i ulykken i 2024?",o:["Kun kontusion","Lungekontusion og pneumothorax","Lungeperforation"],c:1},
+      {p:"Hvornår vendte Jonas tilbage til konkurrence efter skaden?",o:["Midt i 2024","Slutningen af 2024","Begyndelsen af 2025"],c:1},
+      {p:"Har Jonas kørt Vuelta a España som kaptajn?",o:["Ja, flere gange","Nej, han prioriterer altid Touren","Kun én gang"],c:1},
+      {p:"Hvilken fair play-gest huskes fra Jonas i 2022?",o:["Angreb på nedkørsel","At han ventede på Pogačar efter hans styrt","Sejr i sprint"],c:1},
+      {p:"I hvilken type etaper er Jonas mest sårbar?",o:["Bjerg","Lange enkeltstarter","Flade etaper"],c:1},
+      {p:"Hvem er Jonas’ største rival i dette årti?",o:["Roglič","Tadej Pogačar","Remco Evenepoel"],c:1},
+      {p:"Hvilke kendte holdkammerater har Jonas haft i Jumbo-Visma?",o:["Kun danske ryttere","Roglič, Van Aert og Kuss","Kun bjergspecialister"],c:1},
+      {p:"Hvordan var Jonas’ sejrmargen i Touren 2023?",o:["Meget tæt","En af de største i årtier","Normal"],c:1},
+      {p:"Med hvilke danske bjergstjerner sammenlignes Jonas?",o:["Riis og Rasmussen","Kun med Riis","Med ingen"],c:0},
+      {p:"Hvad adskiller Jonas fra nogle bjergspecialister fra fortiden?",o:["Han er stærkere","Ingen dopingskygger","Han er yngre"],c:1},
+      {p:"Sammen med hvilke nuværende ryttere regnes Jonas som en reference?",o:["Kun med Pogačar","Pogačar, Roglič og Evenepoel","Kun danske ryttere"],c:1},
+      {p:"Hvor i karrieren er Jonas nu?",o:["Begynder","I sin sportslige modenhed","Karrierens slutning"],c:1},
+      {p:"Hvordan ser Jonas’ fremtid i Tour de France ud?",o:["Usikker","Favorit til at dominere videre","Kun ét år mere"],c:1},
+      {p:"På hvilke legendariske bjerge har Jonas vundet etaper?",o:["Kun Alpe d'Huez","Tourmalet og Granon","Ingen vigtige"],c:1},
+      {p:"Hvad viste Jonas mentalt i 2022?",o:["Nervøsitet","At han overvandt duellen med Pogačar","Usikkerhed"],c:1},
+      {p:"Hvilken taktisk kvalitet udmærker Jonas sig ved?",o:["Konstante angreb","Moden regulering af kræfter","Sprintfinish"],c:1},
+      {p:"Hvordan har Jonas reageret på modgang?",o:["Med problemer","Med stor modstandskraft","Ved at udgå"],c:1},
+      {p:"Hvilken rolle har Jonas nogle gange spillet på sit hold?",o:["Kun kaptajn","Også loyal hjælperytter (gregario)","Kun sprinter"],c:1},
+      {p:"I hvilke løbstyper har Jonas tabt på grund af manglende topfart?",o:["Bjerg","Klassikere og mindre etapeløb i spurter","Enkeltstart"],c:1}
+    ];
+
+    /* ========= Tilstand og hjælpefunktioner ========= */
+    const TOTAL_PER_GAME = 5, POINTS_PER_OK = 10;
+
+    const qnowEl = document.getElementById('qnow');
+    const qtotEl = document.getElementById('qtot');
+    const hitsEl = document.getElementById('hits');
+    const ptsEl  = document.getElementById('pts');
+    const barEl  = document.getElementById('bar');
+    const qtextEl= document.getElementById('qtext');
+    const optsEl = document.getElementById('opts');
+    const resultEl=document.getElementById('result');
+    const startBtn=document.getElementById('start');
+    const restartBtn=document.getElementById('restart');
+    const qcard   =document.getElementById('qcard');
+
+    let pick=[], idx=0, hits=0, pts=0, locked=false;
+
+    function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b;}
+    function feedback(ok=true){
+      const fb=document.createElement('div');
+      fb.className='feedback '+(ok?'ok':'ko');
+      fb.textContent = ok ? 'Korrekt!' : 'Forkert!';
+      document.body.appendChild(fb);
+      setTimeout(()=>fb.remove(),1100);
+    }
+
+    /* ========= Spilforløb ========= */
+    function startGame(){
+      Snd.click();
+      pick = shuffle([...Array(BANK.length).keys()]).slice(0,TOTAL_PER_GAME);
+      idx=0; hits=0; pts=0; locked=false;
+      qtotEl.textContent = TOTAL_PER_GAME;
+      qnowEl.textContent = '1';
+      hitsEl.textContent = '0';
+      ptsEl.textContent  = '0';
+      barEl.style.width  = '0%';
+      resultEl.classList.add('hidden');
+      restartBtn.classList.add('hidden');
+      startBtn.classList.add('hidden');
+      renderQ();
+    }
+
+    function renderQ(){
+      locked=false; optsEl.innerHTML='';
+      qcard.style.animation='none'; requestAnimationFrame(()=>{ qcard.style.animation='qSlide .45s ease-out'; });
+
+      const q = BANK[pick[idx]];
+      qtextEl.textContent = q.p;
+
+      const options = shuffle(q.o.map((t,i)=>({t,i})));
+      options.forEach(({t,i})=>{
+        const b=document.createElement('button');
+        b.className='btn'; b.textContent=t; b.type='button'; b.tabIndex=0;
+        b.setAttribute('aria-pressed','false');
+        b.onclick=()=>choose(b, i===q.c, q);
+        b.onkeydown=(e)=>{ if((e.key==='Enter'||e.key===' ')&&!locked){e.preventDefault(); b.click();} };
+        optsEl.appendChild(b);
+      });
+      qnowEl.textContent = String(idx+1);
+      barEl.style.width  = `${(idx)*(100/TOTAL_PER_GAME)}%`;
+    }
+
+    function choose(btn, ok, q){
+      if(locked) return; locked=true;
+      const buttons=[...optsEl.querySelectorAll('.btn')];
+      buttons.forEach(b=>b.disabled=true);
+      if(ok){
+        btn.classList.add('ok'); hits++; pts+=POINTS_PER_OK; Snd.ok(); feedback(true);
+      }else{
+        btn.classList.add('ko'); Snd.ko(); feedback(false);
+        buttons.forEach(b=>{ if(b.textContent===q.o[q.c]) b.classList.add('ok'); });
+      }
+      hitsEl.textContent = String(hits);
+      ptsEl.textContent  = String(pts);
+      barEl.style.width  = `${(idx+1)*(100/TOTAL_PER_GAME)}%`;
+      setTimeout(()=> nextStep(), 850);
+    }
+
+    function nextStep(){
+      if(idx < TOTAL_PER_GAME-1){ idx++; renderQ(); }
+      else finish();
+    }
+
+    function finish(){
+      const pct = Math.round( (hits/TOTAL_PER_GAME)*100 );
+      const mood = pct>=80 ? ['🏆','Fremragende'] : pct>=60 ? ['🥇','Meget godt'] : pct>=40 ? ['🥈','Godt – fortsæt'] : ['📚','Øv dig mere'];
+      resultEl.innerHTML = `
+        <div style="font-size:2rem; margin-bottom:6px">${mood[0]}</div>
+        <div style="font-weight:900;margin-bottom:6px">${mood[1]}</div>
+        <div style="font-size:1.05rem;opacity:.95">${hits} af ${TOTAL_PER_GAME} · ${pct}% rigtige</div>
+      `;
+      resultEl.classList.remove('hidden');
+      restartBtn.classList.remove('hidden');
+      startBtn.classList.add('hidden');
+    }
+
+    startBtn.onclick = startGame;
+    restartBtn.onclick = startGame;
+
+    window.addEventListener('keydown', (e)=>{
+      if((e.key==='Enter'||e.key===' ') && !locked && !startBtn.classList.contains('hidden')){
+        e.preventDefault(); startBtn.click();
+      }
+    });
+  </script>
+
+</body>
+</html>

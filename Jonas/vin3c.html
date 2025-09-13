@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>La Vuelta a España – Interaktiv quiz</title>
+  <style>
+    :root{
+      --rojo:#e11d48; --amarillo:#fbbf24; --granate:#9f1239; --azul:#2563eb;
+      --blanco:#fff; --negro:#111; --sombra:0 20px 60px rgba(0,0,0,.18);
+      --ok1:#16a34a; --ok2:#22c55e; --ko1:#ef4444; --ko2:#b91c1c;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px;
+      color:#1f2937; background:#fff;
+      overflow-x:hidden;
+    }
+
+    /* Baggrund med animation: vej + hjul */
+    .decor{position:fixed; inset:0; pointer-events:none; z-index:-2; overflow:hidden}
+    .road{
+      position:absolute; left:0; right:0; bottom:0; height:38vh;
+      background:
+        repeating-linear-gradient(90deg, rgba(0,0,0,.12) 0 2px, transparent 2px 80px),
+        linear-gradient(180deg, #ffd7a7 0 4%, #fecaca 4% 18%, #ffe08a 18% 60%, #333 60% 100%);
+      filter:saturate(1.05);
+    }
+    .lane{
+      position:absolute; left:0; right:0; bottom:12vh; height:6px;
+      background:repeating-linear-gradient(90deg, #fff 0 46px, transparent 46px 86px);
+      opacity:.9; animation:dash 2.6s linear infinite;
+    }
+    @keyframes dash{to{transform:translateX(-132px)}}
+    .wheels{
+      position:absolute; left:50%; transform:translateX(-50%); bottom:9vh; display:flex; gap:40px;
+      opacity:.22; filter:contrast(1.05);
+    }
+    .wheel{
+      width:82px; height:82px; border-radius:50%;
+      border:6px solid #111; position:relative; box-shadow:0 0 0 3px #fff inset;
+      animation:spin 2s linear infinite;
+    }
+    .wheel::before,.wheel::after{
+      content:""; position:absolute; inset:8px; border:2px dashed #111; border-radius:50%;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @media (prefers-reduced-motion: reduce){
+      .lane,.wheel{animation:none}
+    }
+
+    /* Hovedcontainer med æstetik fra dine modeller */
+    .wrap{
+      width:min(1000px,96vw);
+      background:rgba(255,255,255,.96);
+      border:4px solid var(--granate);
+      border-radius:22px; box-shadow:var(--sombra); overflow:hidden;
+      animation:pop .6s ease-out;
+    }
+    @keyframes pop{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+    header{
+      background:linear-gradient(135deg,var(--rojo),var(--amarillo));
+      color:#111; padding:22px 18px; text-align:center; position:relative; overflow:hidden;
+    }
+    header::after{
+      content:""; position:absolute; inset:0; transform:translateX(-100%);
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+      animation:shine 3s linear infinite;
+    }
+    @keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+    h1{font-weight:900; letter-spacing:.3px; font-size:clamp(1.4rem,1.1rem + 1.6vw,2.3rem)}
+    .subtitle{margin:.25rem auto .5rem; font-size:1rem; opacity:.92}
+    .ondertitel{margin:.15rem auto}
+    .ondertitel a{color:#111; font-weight:700; text-decoration:none}
+    .ondertitel a:hover{text-decoration:underline}
+    .contact-info a{color:#111; opacity:.9; text-decoration:none}
+    .contact-info a:hover{opacity:1; text-decoration:underline}
+
+    .content{padding:18px}
+    .stats{
+      display:flex; gap:12px; justify-content:space-between; align-items:center; flex-wrap:wrap;
+      background:linear-gradient(135deg,#fecaca,#fde68a); color:#111; border-radius:16px; padding:10px 14px; font-weight:800;
+      border:2px solid #f59e0b44;
+    }
+    .stat{text-align:center; min-width:110px}
+    .stat .lab{display:block; font-size:.82rem; opacity:.9}
+    .stat .val{font-size:1.15rem}
+
+    .board{margin:12px 0}
+    .card{
+      position:relative; margin:12px 0; background:#fff; border-radius:18px; padding:18px;
+      box-shadow:0 10px 26px rgba(0,0,0,.08);
+      border:3px solid transparent; background-clip:padding-box; animation:qSlide .45s ease-out;
+    }
+    .card::before{
+      content:""; position:absolute; inset:-3px; border-radius:18px; z-index:-1;
+      background:linear-gradient(135deg,var(--rojo),var(--amarillo),#fca5a5,#fde68a);
+      background-size:300% 100%; animation:borderRoll 5s linear infinite;
+    }
+    @keyframes borderRoll{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+    @keyframes qSlide{from{transform:translateX(24px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+    .preg{font-size:clamp(1.02rem,1rem + .6vw,1.32rem); font-weight:900; line-height:1.42; text-align:center; margin-bottom:16px}
+    .grid{display:grid; gap:10px}
+    @media (min-width:760px){ .grid{grid-template-columns:1fr 1fr} }
+
+    .btn{
+      padding:14px 16px; border-radius:14px; border:2px solid #e5e7eb;
+      background:linear-gradient(135deg,#fff,#f8fafc); cursor:pointer; font-size:1.02rem; font-weight:800;
+      transition:transform .18s, box-shadow .18s, background .18s, color .18s, border-color .18s;
+    }
+    .btn:hover{
+      background:linear-gradient(135deg,var(--rojo),var(--amarillo)); color:#111; border-color:#f59e0b;
+      transform:translateY(-2px); box-shadow:0 10px 24px rgba(245,158,11,.28);
+    }
+    .btn.ok{background:linear-gradient(135deg,var(--ok1),var(--ok2)); color:#fff; border-color:transparent}
+    .btn.ko{background:linear-gradient(135deg,var(--ko1),var(--ko2)); color:#fff; border-color:transparent}
+    .btn:disabled{opacity:.98; cursor:default}
+
+    .progress{height:12px; background:#edf0f5; border-radius:20px; overflow:hidden; margin:12px 0}
+    .bar{height:100%; width:0%; background:linear-gradient(90deg,var(--rojo),var(--amarillo)); position:relative; transition:width .6s cubic-bezier(.4,0,.2,1)}
+    .bar::after{
+      content:""; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+      animation:barShine 2s linear infinite;
+    }
+    @keyframes barShine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+    .actions{display:flex; gap:10px; justify-content:center; margin-top:8px}
+    .play{
+      display:inline-block; padding:12px 24px; border:none; border-radius:999px;
+      background:linear-gradient(135deg,#ef4444,#f59e0b); color:#111; font-size:1rem; font-weight:900; cursor:pointer;
+      box-shadow:0 6px 18px rgba(239,68,68,.35); transition:transform .18s, box-shadow .18s;
+    }
+    .play:hover{transform:translateY(-2px)}
+    .secondary{
+      background:linear-gradient(135deg,#f3f4f6,#e5e7eb); color:#111; box-shadow:none; border:2px solid #e5e7eb
+    }
+    .hidden{display:none}
+
+    .result{
+      text-align:center; font-size:1.22rem; font-weight:900; color:#0b3d1f;
+      background:linear-gradient(135deg,#86efac,#22c55e); border-radius:18px; padding:18px; box-shadow:0 10px 26px rgba(34,197,94,.28);
+      animation:resPop .6s ease-out; margin-top:8px;
+    }
+    @keyframes resPop{0%{transform:scale(.85);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+
+    .feedback{
+      position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.6);
+      padding:16px 24px; border-radius:16px; color:#fff; font-weight:900; font-size:1.05rem; z-index:999;
+      animation:fb 1.2s ease-out forwards; pointer-events:none; box-shadow:0 10px 24px rgba(0,0,0,.2);
+    }
+    .feedback.ok{background:linear-gradient(135deg,var(--ok1),var(--ok2))}
+    .feedback.ko{background:linear-gradient(135deg,var(--ko1),var(--ko2))}
+    @keyframes fb{
+      0%{opacity:0; transform:translate(-50%,-50%) scale(.6)}
+      20%{opacity:1; transform:translate(-50%,-50%) scale(1.05)}
+      80%{opacity:1; transform:translate(-50%,-50%) scale(1)}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(.85)}
+    }
+
+    footer{padding:10px 16px 18px; text-align:center; font-size:.92rem; color:#475569}
+  </style>
+</head>
+<body>
+  <div class="decor" aria-hidden="true">
+    <div class="road"></div>
+    <div class="lane"></div>
+    <div class="wheels"><div class="wheel"></div><div class="wheel"></div></div>
+  </div>
+
+  <main class="wrap" role="application" aria-label="La Vuelta a España – Interaktiv quiz">
+    <header>
+      <h1>La Vuelta a España – Interaktiv quiz</h1>
+      <p class="subtitle">Selvstændigt quizspil (10 pr. spil) om historie, bjerge og trøjer i Vueltaen (1935–2025).</p>
+
+      <!-- Fast blok i projektet (obligatorisk, lige under titlen) -->
+      <p class="ondertitel"><a href="https://www.amazon.nl/dp/B0FMR8KPN4" target="_blank" rel="noopener noreferrer">Nyd bogen</a></p>
+      <div class="contact-info"><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></div>
+    </header>
+
+    <section class="content">
+      <div class="stats">
+        <div class="stat"><span class="lab">Spørgsmål</span><span class="val"><span id="qnow">0</span> / <span id="qtot">10</span></span></div>
+        <div class="stat"><span class="lab">Rigtige</span><span class="val" id="hits">0</span></div>
+        <div class="stat"><span class="lab">Point</span><span class="val" id="pts">0</span></div>
+        <div class="stat"><span class="lab">Bedste resultat</span><span class="val" id="best">0</span></div>
+      </div>
+
+      <div class="board">
+        <div class="card" id="qcard">
+          <div class="preg" id="qtext">Tryk «Start» for at spille.</div>
+          <div class="grid" id="opts"></div>
+        </div>
+        <div class="progress"><div class="bar" id="bar"></div></div>
+        <div id="result" class="result hidden"></div>
+        <div class="actions">
+          <button id="start" class="play">Start</button>
+          <button id="restart" class="play secondary hidden">Spil igen</button>
+          <button id="resetBest" class="play secondary hidden">Nulstil rekord</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>Program inspireret af dine modeller (menu + quiz). Animation, diskrete lyde, fremdriftslinje og points.</footer>
+  </main>
+
+  <script>
+    // ——— Lyde (Web Audio API) ———
+    const Snd = (() => {
+      let ctx;
+      const init=()=>{ if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)(); };
+      function ping(f=880, d=0.1, type='sine', vol=0.06){
+        init(); const o=ctx.createOscillator(), g=ctx.createGain();
+        o.type=type; o.frequency.value=f; g.gain.value=vol;
+        o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime+d);
+      }
+      return {
+        ok(){ ping(880,.09,'sine',.07); setTimeout(()=>ping(1180,.09,'sine',.06),85); },
+        ko(){ ping(220,.17,'sawtooth',.06); },
+        click(){ ping(520,.07,'triangle',.05); }
+      };
+    })();
+
+    // ——— Spørgsmålsbank (3 valg, ét korrekt). Baseret på dine 40 data. ———
+    const BANK = [
+      {p:"I hvilket år blev den første Vuelta a España afholdt?",o:["1935","1928","1941"],c:0},
+      {p:"Hvem vandt den første Vuelta a España?",o:["Gustaaf Deloor","Federico Bahamontes","Fausto Coppi"],c:0},
+      {p:"Gustaaf Deloor gentog sejren i…",o:["1936","1937","1939"],c:0},
+      {p:"Hvorfor blev Vueltaen ikke kørt fra 1937 til 1940?",o:["Den Spanske Borgerkrig","Anden Verdenskrig","Mangel på sponsor"],c:0},
+      {p:"Hvem er, sammen med Roglič, rytteren med 4 Vuelta-sejre?",o:["Roberto Heras","Alberto Contador","Miguel Induráin"],c:0},
+      {p:"Primož Roglič har fire Vuelta-sejre: 2019, 2020, 2021 og…",o:["2024","2018","2023"],c:0},
+      {p:"Hvem tog 13 etapesejre i én udgave (1977)?",o:["Freddy Maertens","Sean Kelly","Eddy Merckx"],c:0},
+      {p:"Den emblematiske asturiske stigning i Vueltaen er…",o:["Lagos de Covadonga","Mortirolo","Alpe d’Huez"],c:0},
+      {p:"Hvilken spanier vandt Vueltaen i 1985 med angreb i Sierra de Guadarrama?",o:["Pedro Delgado","Abraham Olano","Óscar Pereiro"],c:0},
+      {p:"Duellen Froome–Contador i 2014 havde et nøglemoment på…",o:["Los Ancares","La Camperona","Navacerrada"],c:0},
+      {p:"Hvem vandt Vueltaen 2015?",o:["Fabio Aru","Tom Dumoulin","Chris Froome"],c:0},
+      {p:"Hvem vandt Vueltaen 2016?",o:["Nairo Quintana","Alejandro Valverde","Egan Bernal"],c:0},
+      {p:"Alberto Contador vandt Vueltaen i…",o:["2008, 2012 og 2014","2007, 2010 og 2012","2009, 2011 og 2013"],c:0},
+      {p:"Vueltaen 1935 startede med etapen…",o:["Madrid–Valladolid","Madrid–Toledo","Madrid–Burgos"],c:0},
+      {p:"Hvor mange ryttere startede i 1935 (ca.)?",o:["50","120","80"],c:0},
+      {p:"Miguel Induráin i Vueltaen…",o:["Udmerket sig, men vandt ikke samlet","Vandt to udgaver","Kørte den aldrig"],c:0},
+      {p:"Ledertrøjen i Vueltaen har været rød siden…",o:["2010","2005","2014"],c:0},
+      {p:"Før 2010 var farven på ledertrøjen…",o:["Guld/gul","Grøn","Hvid"],c:0},
+      {p:"Vueltaen køres som regel i…",o:["August–september","April–maj","Juni–juli"],c:0},
+      {p:"En “dronningeetape” i Vueltaen er…",o:["Den hårdeste bjergetape","Den første enkeltstart","Etapen med flest spurter"],c:0},
+      {p:"Hvilke elementer har påvirket de seneste års præstationer?",o:["Udstyr og aerodynamik","Kun kost","Kun flere træningstimer"],c:0},
+      {p:"Vueltaen inkluderer ofte…",o:["Individuelle og holdtidskørsler","Kun individuelle tidskørsler","Kun holdtidskørsler"],c:0},
+      {p:"I 2020 blev Vueltaen…",o:["Kørt om efteråret pga. pandemien","Aflyst","Reduceret til 10 etaper"],c:0},
+      {p:"Valverde og Joaquim Rodríguez…",o:["Har mange podier og etapesejre i Vueltaen","Kørte aldrig Vueltaen","Kørte kun Giroen"],c:0},
+      {p:"Vueltaen udgør sammen med Tour og Giro…",o:["De tre Grand Tours","Monument-klassikerne","De kontinentale serier"],c:0},
+      {p:"Vueltaens bjerge omfatter ofte…",o:["Pyrenæerne, Cantabrerne og Sierra Nevada","Dolomitterne og Jurabjergene","Atlas og Kaukasus"],c:0},
+      {p:"I 2019 og 2021 var vinderen…",o:["Primož Roglič","Tadej Pogačar","Egan Bernal"],c:0},
+      {p:"Vueltaen har været en platform for…",o:["Unge talenter under 25","Kun veteraner","Kun rene sprintere"],c:0},
+      {p:"Trøjerne skelner mellem klassifikationer som…",o:["Samlet, point og bjerg","Samlet, kampvillighed og holdleder","Kun samlet"],c:0},
+      {p:"I det seneste årti har tendensen været…",o:["Flere mål på toppe","Mindre bjergkørsel","Flere massespurter"],c:0},
+      {p:"Kombinationen af bjerg og tidskørsel…",o:["Kræver alsidige ryttere","Gavner kun klatrere","Eliminerer taktik"],c:0},
+      {p:"Vueltaen har oplevet perioder med…",o:["Krise og fremgang, tilpasningsevne","Kun kontinuerlig vækst","Midlertidig forsvinden i 20 år"],c:0},
+      {p:"WorldTour-hold bruger Vueltaen til…",o:["At afprøve strategier og udstyr","At hvile efter Touren","Kun at udvikle juniorer"],c:0},
+    ];
+
+    const TOTAL_PER_GAME = 10;
+    const POINTS_PER_OK = 10;
+
+    // ——— UI-elementer ———
+    const qnowEl = document.getElementById('qnow');
+    const qtotEl = document.getElementById('qtot');
+    const hitsEl = document.getElementById('hits');
+    const ptsEl  = document.getElementById('pts');
+    const bestEl = document.getElementById('best');
+    const barEl  = document.getElementById('bar');
+    const qtextEl= document.getElementById('qtext');
+    const optsEl = document.getElementById('opts');
+    const resultEl=document.getElementById('result');
+    const startBtn=document.getElementById('start');
+    const restartBtn=document.getElementById('restart');
+    const resetBestBtn=document.getElementById('resetBest');
+    const qcard   =document.getElementById('qcard');
+
+    let pick=[], idx=0, hits=0, pts=0, locked=false;
+    let best = Number(localStorage.getItem('vuelta_best')||0);
+    bestEl.textContent = String(best);
+
+    function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b;}
+
+    function showFeedback(ok=true){
+      const fb=document.createElement('div');
+      fb.className='feedback '+(ok?'ok':'ko');
+      fb.textContent = ok ? 'Korrekt!' : 'Forkert svar';
+      document.body.appendChild(fb);
+      setTimeout(()=>fb.remove(),1200);
+    }
+
+    function startGame(){
+      Snd.click();
+      pick = shuffle([...Array(BANK.length).keys()]).slice(0,TOTAL_PER_GAME);
+      idx=0; hits=0; pts=0; locked=false;
+      qtotEl.textContent = TOTAL_PER_GAME;
+      qnowEl.textContent = '1';
+      hitsEl.textContent = '0';
+      ptsEl.textContent  = '0';
+      barEl.style.width  = '0%';
+      resultEl.classList.add('hidden');
+      restartBtn.classList.add('hidden');
+      resetBestBtn.classList.add('hidden');
+      startBtn.classList.add('hidden');
+      renderQ();
+    }
+
+    function renderQ(){
+      locked=false; optsEl.innerHTML='';
+      // nulstil kort-animation
+      qcard.style.animation='none'; setTimeout(()=>qcard.style.animation='qSlide .45s ease-out',10);
+
+      const q = BANK[pick[idx]];
+      qtextEl.textContent = q.p;
+
+      const options = shuffle(q.o.map((t,i)=>({t,i})));
+      options.forEach(({t,i})=>{
+        const b=document.createElement('button');
+        b.className='btn'; b.textContent=t;
+        b.onclick=()=>choose(b, i===q.c, q);
+        b.onkeydown=(e)=>{ if((e.key==='Enter'||e.key===' ')&&!locked){e.preventDefault(); b.click();} };
+        optsEl.appendChild(b);
+      });
+      qnowEl.textContent = String(idx+1);
+      barEl.style.width  = `${(idx)*(100/TOTAL_PER_GAME)}%`;
+    }
+
+    function choose(btn, ok, q){
+      if(locked) return; locked=true;
+      const buttons=[...optsEl.querySelectorAll('.btn')];
+      buttons.forEach(b=>b.disabled=true);
+      if(ok){
+        btn.classList.add('ok'); hits++; pts+=POINTS_PER_OK; Snd.ok(); showFeedback(true);
+      }else{
+        btn.classList.add('ko'); Snd.ko(); showFeedback(false);
+        // markér det korrekte svar
+        buttons.forEach(b=>{
+          if(b.textContent===q.o[q.c]) b.classList.add('ok');
+        });
+      }
+      hitsEl.textContent = String(hits);
+      ptsEl.textContent  = String(pts);
+      barEl.style.width  = `${(idx+1)*(100/TOTAL_PER_GAME)}%`;
+
+      setTimeout(()=> nextStep(), 850);
+    }
+
+    function nextStep(){
+      if(idx < TOTAL_PER_GAME-1){ idx++; renderQ(); }
+      else finish();
+    }
+
+    function finish(){
+      const pct = Math.round( (hits/TOTAL_PER_GAME)*100 );
+      const msg = pct>=90 ? 'Fremragende' : pct>=70 ? 'Meget godt' : pct>=50 ? 'Godt' : 'Øv dig mere';
+      resultEl.innerHTML = `${msg}: ${hits} af ${TOTAL_PER_GAME} · ${pct}% rigtige · ${pts} point`;
+      resultEl.classList.remove('hidden');
+      restartBtn.classList.remove('hidden');
+      resetBestBtn.classList.remove('hidden');
+      // rekord
+      if(pts>best){ best=pts; localStorage.setItem('vuelta_best', String(best)); bestEl.textContent=String(best); }
+    }
+
+    startBtn.onclick = startGame;
+    restartBtn.onclick = startGame;
+    resetBestBtn.onclick = ()=>{ localStorage.removeItem('vuelta_best'); best=0; bestEl.textContent='0'; Snd.click(); };
+
+    // Tilgængelighed: Enter/Mellemrum for Start hvis synlig
+    window.addEventListener('keydown', (e)=>{
+      if((e.key==='Enter'||e.key===' ') && !locked && !startBtn.classList.contains('hidden')){
+        e.preventDefault(); startBtn.click();
+      }
+    });
+  </script>
+</body>
+</html>
