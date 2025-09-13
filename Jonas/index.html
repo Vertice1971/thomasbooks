@@ -1,1 +1,160 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cykelmenu – Vingegaard og Vueltaen</title>
+  <style>
+    :root{
+      --verde:#3bbf6b;
+      --verde-osc:#2da85b;
+      --cielo:#e7f6ff;
+      --blanco:#ffffff;
+      --rojo:#d71920;
+      --azul:#114b8a;
+      --amarillo:#ffb703;
+      --tarjeta:#ffffffee;
+      --griscarretera:#444;
+      --danesa-rojo:#C8102E;
+      --danesa-blanco:#FFFFFF;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"Segoe UI",Arial,sans-serif;
+      min-height:100vh;
+      background:radial-gradient(ellipse at top,var(--cielo),#cfeeff 60%,#b8e1ff 100%);
+      display:flex;align-items:center;justify-content:center;
+      padding:24px;color:#123;
+      position:relative;
+      overflow-x:hidden;
+    }
+    .bandera-dk{position:fixed;width:32px;height:24px;background:var(--danesa-rojo);z-index:1;animation:flotar 8s ease-in-out infinite;user-select:none;filter:drop-shadow(2px 2px 4px rgba(0,0,0,0.3));border-radius:2px;}
+    .bandera-dk::before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg, transparent 13px, white 13px, white 19px, transparent 19px),linear-gradient(0deg, transparent 10px, white 10px, white 14px, transparent 14px);}
+    .bandera-dk:nth-child(1){top:10%;left:5%;animation-delay:-1s;}
+    .bandera-dk:nth-child(2){top:20%;right:8%;animation-delay:-3s;}
+    .bandera-dk:nth-child(3){top:70%;left:3%;animation-delay:-5s;}
+    .bandera-dk:nth-child(4){top:80%;right:5%;animation-delay:-2s;}
+    .bandera-dk:nth-child(5){top:40%;left:2%;animation-delay:-4s;}
+    .bandera-dk:nth-child(6){top:60%;right:2%;animation-delay:-6s;}
+    @keyframes flotar{0%,100%{transform:translateY(0px) rotate(0deg)}50%{transform:translateY(-15px) rotate(5deg)}}
+    .ciclista-deco{position:fixed;font-size:20px;z-index:1;animation:pedalear 6s linear infinite;user-select:none;filter:drop-shadow(1px 1px 2px rgba(0,0,0,0.3));}
+    .ciclista-deco:nth-child(odd){top:15%;animation-delay:-2s;}
+    .ciclista-deco:nth-child(even){top:25%;animation-delay:-4s;}
+    .ciclista-deco.izq{left:-30px;}
+    .ciclista-deco.der{right:-30px;transform:scaleX(-1);}
+    @keyframes pedalear{from{transform:translateX(0)}to{transform:translateX(calc(100vw + 60px))}}
+    .maillot-deco{position:fixed;width:18px;height:16px;background:var(--danesa-rojo);border-radius:2px 2px 4px 4px;z-index:1;animation:girar 4s ease-in-out infinite;box-shadow:0 0 0 1px #fff inset;}
+    .maillot-deco::before,.maillot-deco::after{content:"";position:absolute;top:-3px;width:8px;height:6px;background:var(--danesa-rojo);border-radius:2px;box-shadow:0 0 0 1px #fff inset;}
+    .maillot-deco::before{left:-4px}
+    .maillot-deco::after{right:-4px}
+    .maillot-deco:nth-child(1){top:12%;left:12%;animation-delay:-1s;}
+    .maillot-deco:nth-child(2){top:18%;right:15%;animation-delay:-2s;}
+    .maillot-deco:nth-child(3){top:65%;left:8%;animation-delay:-3s;}
+    .maillot-deco:nth-child(4){top:75%;right:12%;animation-delay:-1.5s;}
+    @keyframes girar{0%,100%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.1)}}
+    .fondo{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 0 55%,#c7f0d7 55% 100%);z-index:-2;}
+    .fondo::after{content:"";position:absolute;left:0;right:0;bottom:0;height:45vh;background:linear-gradient(180deg,var(--verde) 0%,var(--verde-osc) 100%);opacity:.9;}
+    .fondo::before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background-image:radial-gradient(circle at 85% 15%, var(--danesa-rojo) 1px, transparent 1px),radial-gradient(circle at 15% 35%, var(--danesa-rojo) 1px, transparent 1px),radial-gradient(circle at 75% 65%, var(--danesa-rojo) 1px, transparent 1px),radial-gradient(circle at 25% 85%, var(--danesa-rojo) 1px, transparent 1px);background-size:200px 200px,150px 150px,180px 180px,220px 220px;opacity:0.1;z-index:-1;}
+    .container{width:min(1000px,96vw);background:var(--tarjeta);border:4px solid var(--danesa-rojo);border-radius:22px;box-shadow:0 18px 60px rgba(0,0,0,.25);padding:22px 22px 26px;position:relative;overflow:hidden;z-index:10;}
+    .container::before{content:"";position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:2px solid var(--danesa-rojo);border-radius:16px;opacity:0.3;pointer-events:none;}
+    header{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
+    .titulo{font-size:clamp(1.4rem,2.2vw + 1rem,2.2rem);color:var(--danesa-rojo);font-weight:800;text-shadow:1px 1px 2px rgba(0,0,0,0.1);}
+    .ondertitel{font-size:.98rem;color:#245;max-width:46ch;}
+    .banderolas-header{margin:10px 0;text-align:center;font-size:20px;letter-spacing:3px;user-select:none;animation:ondear 3s ease-in-out infinite;display:flex;align-items:center;justify-content:center;}
+    .bandera-mini{width:20px;height:15px;background:var(--danesa-rojo);border-radius:1px;position:relative;display:inline-block;filter:drop-shadow(1px 1px 2px rgba(0,0,0,0.3));}
+    .bandera-mini::before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg, transparent 8px, white 8px, white 12px, transparent 12px),linear-gradient(0deg, transparent 6px, white 6px, white 9px, transparent 9px);}
+    @keyframes ondear{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+    .arena{display:grid;place-items:center;margin:18px 0 8px;position:relative;}
+    .arena-escena{width:300px;height:150px;background:linear-gradient(180deg,#f7f7f7,#e0e0e0);border:3px solid var(--danesa-rojo);border-radius:14px;box-shadow:inset 0 0 0 3px #ffffffa6,0 8px 20px rgba(0,0,0,.12);position:relative;overflow:hidden;}
+    .guirnalda{position:absolute;left:0;right:0;top:6px;text-align:center;font-size:20px;user-select:none;animation:brillar 2s ease-in-out infinite alternate;display:flex;align-items:center;justify-content:center;gap:8px;}
+    .bandera-guirnalda{width:16px;height:12px;background:var(--danesa-rojo);border-radius:1px;position:relative;display:inline-block;filter:drop-shadow(1px 1px 2px rgba(0,0,0,0.3));}
+    .bandera-guirnalda::before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg, transparent 6px, white 6px, white 10px, transparent 10px),linear-gradient(0deg, transparent 5px, white 5px, white 7px, transparent 7px);}
+    @keyframes brillar{from{filter:brightness(1)}to{filter:brightness(1.2)}}
+    .maillot{position:absolute;bottom:44px;left:16px;width:44px;height:38px;background:linear-gradient(135deg,var(--danesa-rojo),#a50e17);border-radius:6px 6px 10px 10px;box-shadow:0 0 0 2px #fff inset,0 6px 10px rgba(0,0,0,.12);animation:latir 2s ease-in-out infinite;}
+    .maillot::before,.maillot::after{content:"";position:absolute;top:-6px;width:20px;height:14px;background:linear-gradient(135deg,var(--danesa-rojo),#a50e17);border-radius:6px;box-shadow:0 0 0 2px #fff inset;}
+    .maillot::before{left:-10px}
+    .maillot::after{right:-10px}
+    @keyframes latir{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+    .ciclista{position:absolute;bottom:40px;left:50%;transform:translateX(-50%) scaleX(-1);font-size:42px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));user-select:none;animation:pedaleo 1s ease-in-out infinite;}
+    @keyframes pedaleo{0%,100%{transform:translateX(-50%) scaleX(-1) translateY(0)}50%{transform:translateX(-50%) scaleX(-1) translateY(-2px)}}
+    .carretera{position:absolute;bottom:20px;left:0;right:0;height:14px;background:var(--griscarretera);overflow:hidden;box-shadow:inset 0 2px 0 rgba(255,255,255,.35),inset 0 -2px 0 rgba(0,0,0,.12);}
+    .carretera::before{content:"";position:absolute;top:50%;left:0;width:200%;height:4px;background:repeating-linear-gradient(90deg,white 0 20px,transparent 20px 40px);animation:mover 1s linear infinite;transform:translate(0,-50%);}
+    @keyframes mover{from{transform:translate(0,-50%)}to{transform:translate(-40px,-50%)}}
+    .menu{display:grid;grid-template-columns:repeat(2,minmax(200px,1fr));gap:16px;margin-top:10px;}
+    .tarjeta{background:#fff;border:3px solid var(--danesa-rojo);border-radius:16px;padding:16px;text-decoration:none;color:#123;box-shadow:0 8px 20px rgba(0,0,0,.08);transition:transform .18s ease,box-shadow .18s ease;position:relative;overflow:hidden;}
+    .tarjeta::before{content:"";position:absolute;top:-50%;right:-50%;width:20px;height:20px;background:radial-gradient(circle,var(--danesa-rojo) 30%,transparent 30%);opacity:0.1;transform:rotate(45deg);}
+    .tarjeta:hover{transform:translateY(-4px);box-shadow:0 14px 26px rgba(0,0,0,.14);border-color:#a50e17;}
+    .tarjeta .label{font-weight:800;color:var(--danesa-rojo);font-size:1.1rem;margin-bottom:4px;text-shadow:1px 1px 2px rgba(0,0,0,0.05);}
+    .tarjeta .info{font-size:.95rem;color:#345;}
+    footer{margin-top:16px;font-size:.9rem;color:#345;text-align:center;padding-top:10px;border-top:1px solid rgba(200,16,46,0.2);}
+    @media (max-width:800px){.menu{grid-template-columns:1fr}.bandera-dk,.ciclista-deco,.maillot-deco{display:none;}}
+  </style>
+</head>
+<body>
+  <div class="bandera-dk"></div>
+  <div class="bandera-dk"></div>
+  <div class="bandera-dk"></div>
+  <div class="bandera-dk"></div>
+  <div class="bandera-dk"></div>
+  <div class="bandera-dk"></div>
+  <div class="ciclista-deco izq">🚴</div>
+  <div class="ciclista-deco der">🚴</div>
+  <div class="maillot-deco"></div>
+  <div class="maillot-deco"></div>
+  <div class="maillot-deco"></div>
+  <div class="maillot-deco"></div>
+  <div class="fondo" aria-hidden="true"></div>
+  <main class="container" role="application" aria-label="Cykelmenu">
+    <header>
+      <div>
+        <h1 class="titulo">Cykelmenu – Vingegaard og Vueltaen</h1>
+        <p>Udforsk mesterens liv, løbets historie og test din viden om cykling.</p>
+        <p class="ondertitel"><a href="https://www.amazon.nl/dp/B0FMR8KPN4" target="_blank" rel="noopener noreferrer">Nyd bogen</a></p>
+      </div>
+    </header>
+    <div class="banderolas-header">
+      <div class="bandera-mini"></div>
+      <span style="margin:0 8px">🏆</span>
+      <div class="bandera-mini"></div>
+      <span style="margin:0 8px">🏆</span>
+      <div class="bandera-mini"></div>
+      <span style="margin:0 8px">🏆</span>
+      <div class="bandera-mini"></div>
+    </div>
+    <section class="arena" aria-label="Cykelanimation">
+      <div class="arena-escena">
+        <div class="guirnalda">
+          <span>🏆</span>
+          <div class="bandera-guirnalda"></div>
+          <span>🏆</span>
+          <div class="bandera-guirnalda"></div>
+          <span>🏆</span>
+        </div>
+        <div class="maillot" aria-label="Rødt førertrøje"></div>
+        <div class="ciclista" aria-label="Cyklist i bevægelse">🚴</div>
+        <div class="carretera" aria-hidden="true"></div>
+      </div>
+    </section>
+    <nav class="menu">
+      <a class="tarjeta" href="https://vertice1971.github.io/thomasbooks/Jonas/Vin1a.html" target="_blank" rel="noopener noreferrer">
+        <div class="label">Vingegaards liv</div>
+        <div class="info">Opdag historien om den danske rytter</div>
+      </a>
+      <a class="tarjeta" href="https://vertice1971.github.io/thomasbooks/Jonas/vin3c.html" target="_blank" rel="noopener noreferrer">
+        <div class="label">Historien om Vueltaen</div>
+        <div class="info">En rejse gennem Spaniens store rundtur</div>
+      </a>
+      <a class="tarjeta" href="https://vertice1971.github.io/thomasbooks/Jonas/Ciclismo-gend.html" target="_blank" rel="noopener noreferrer">
+        <div class="label">Cykelquiz</div>
+        <div class="info">Test din viden om cykling</div>
+      </a>
+      <a class="tarjeta" href="https://vertice1971.github.io/thomasbooks/Jonas/Vin2b.html" target="_blank" rel="noopener noreferrer">
+        <div class="label">Vingegaards triumfer</div>
+        <div class="info">Bedrifter og sejre i hans karriere</div>
+      </a>
+    </nav>
+    <footer><a href="mailto:thomasbooks71@gmail.com">thomasbooks71@gmail.com</a></footer>
+  </main>
+</body>
+</html>
 
