@@ -17,27 +17,48 @@
         background:linear-gradient(180deg,#0a0c10 0%, #0d1117 100%);
         color:var(--text);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
     }
-    .contenedor{max-width:920px;margin:0 auto;padding:24px}
-    header{margin-bottom:16px}
-    h1{margin:0;font-weight:800;letter-spacing:.3px}
-    .sub{margin:8px 0 0 0;color:var(--muted)}
-    .tarjeta{
-        background:var(--card);border:1px solid #1d2530;border-radius:16px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.35);
-    }
-    .fila{display:flex;gap:16px;flex-wrap:wrap}
-    .col{flex:1 1 280px}
-    button{
-        background:#1a2330;color:var(--text);border:1px solid #283346;padding:12px 16px;border-radius:12px;
-        font-weight:700;cursor:pointer;transition:.15s transform ease,.15s background ease,.15s border-color ease,.15s opacity ease;
-    }
-    button:hover{transform:translateY(-1px);border-color:#3a4a63}
-    button:active{transform:translateY(0)}
-    .primario{background:var(--accent);color:#111;border-color:#b69500}
-    .exito{background:var(--accent2);color:#041;border-color:#1f7a3a}
-    .peligro{background:var(--danger);color:#2b0302;border-color:#c21e16}
-    .fantasma{background:transparent}
-    .oculto{display:none !important}
 
+
+/* Portada previa */
+body.bloqueado{overflow:hidden}
+#cover{
+    position:fixed;inset:0;
+    background:#000;
+    display:flex;align-items:center;justify-content:center;
+    z-index:10000;
+    opacity:1;visibility:visible;
+    transition:opacity .6s ease, visibility 0s linear .6s;
+    pointer-events:auto;
+}
+#cover.oculta{opacity:0;visibility:hidden}
+#cover img{
+    max-width:100%;max-height:100%;
+    border-radius:12px;
+    box-shadow:0 20px 40px rgba(0,0,0,.6);
+    filter:brightness(1.05) contrast(1.05);
+    user-select:none;
+}
+
+.contenedor{max-width:920px;margin:0 auto;padding:24px}
+header{margin-bottom:16px}
+h1{margin:0;font-weight:800;letter-spacing:.3px}
+.sub{margin:8px 0 0 0;color:var(--muted)}
+.tarjeta{
+    background:var(--card);border:1px solid #1d2530;border-radius:16px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+.fila{display:flex;gap:16px;flex-wrap:wrap}
+.col{flex:1 1 280px}
+button{
+    background:#1a2330;color:var(--text);border:1px solid #283346;padding:12px 16px;border-radius:12px;
+    font-weight:700;cursor:pointer;transition:.15s transform ease,.15s background ease,.15s border-color ease,.15s opacity ease;
+}
+button:hover{transform:translateY(-1px);border-color:#3a4a63}
+button:active{transform:translateY(0)}
+.primario{background:var(--accent);color:#111;border-color:#b69500}
+.exito{background:var(--accent2);color:#041;border-color:#1f7a3a}
+.peligro{background:var(--danger);color:#2b0302;border-color:#c21e16}
+.fantasma{background:transparent}
+.oculto{display:none !important}
 
 .panel-config label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
 .panel-config input[type="number"], .panel-config select{
@@ -69,7 +90,6 @@
 .medalla{font-weight:800;color:var(--accent)}
 .seleccionable{user-select:none}
 
-/* Enlace permanente subrayado */
 .enlace-contenedor{margin-top:18px}
 .enlace-constante{
     color:var(--accent);
@@ -88,7 +108,14 @@
 
 </style>
 </head>
-<body>
+<body class="bloqueado">
+
+<!-- Portada previa -->
+
+<div id="cover" aria-hidden="true">
+  <img src="Portada.png" alt="">
+</div>
+
 <div class="contenedor">
     <header>
         <h1>Oposiciones Secundaria: Lengua Española y Literatura</h1>
@@ -96,7 +123,6 @@
         <p id="cabecera-estado" class="sub" style="color: rgb(247, 227, 3);">Elige el tema y la cantidad de preguntas</p>
         <p class="sub" style="font-size: 0.85em;">tomcue@iesjuandelacierva.com</p>
     </header>
-
 
 <section id="pantalla-inicio" class="tarjeta aparece">
     <div class="fila">
@@ -176,7 +202,6 @@
                     <option value="70-el-teatro-espanol-a-partir-de-1940.js">70 - El teatro español a partir de 1940</option>
                     <option value="71-recuperacion-de-la-literatura-de-tradicion-oral-topicos-y-formas.js">71 - Recuperación de la literatura de tradición oral: tópicos y formas</option>
                     <option value="72-la-literatura-en-lengua-catalana-gallega-y-vasca-obras-mas-relevantes-y-situacion-actual.js">72 - La literatura en lengua catalana, gallega y vasca: obras más relevantes y situación actual</option>
-                    
                 </select>
             </div>
             <div class="grupo">
@@ -193,11 +218,14 @@
         </div>
     </div>
 
-    <div class="enlace-contenedor">
-        <a class="enlace-constante" href="https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Men%C3%BA.html" target="_blank" rel="noopener">
-            Enlace al Menú inicial con acceso a todos los recursos online gratuitos
-        </a>
-    </div>
+
+<div class="enlace-contenedor">
+    <a class="enlace-constante" href="https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Men%C3%BA.html" target="_blank" rel="noopener">
+        Enlace al Menú inicial con acceso a todos los recursos online gratuitos
+    </a>
+</div>
+
+
 </section>
 
 <section id="pantalla-juego" class="tarjeta oculto">
@@ -206,20 +234,23 @@
         <div class="progreso" aria-hidden="true"><div id="barra" class="barra" style="width:0%"></div></div>
     </div>
 
-    <div id="enunciado" class="pregunta"></div>
-    <div id="opciones" class="opciones"></div>
 
-    <div class="pie">
-        <div>
-            <button id="btn-anterior" class="fantasma">Anterior</button>
-            <button id="btn-saltar">Saltar</button>
-        </div>
-        <div>
-            <button id="btn-comprobar" class="primario">Comprobar</button>
-            <button id="btn-siguiente" class="exito oculto">Siguiente</button>
-            <button id="btn-terminar" class="peligro oculto">Terminar</button>
-        </div>
+<div id="enunciado" class="pregunta"></div>
+<div id="opciones" class="opciones"></div>
+
+<div class="pie">
+    <div>
+        <button id="btn-anterior" class="fantasma">Anterior</button>
+        <button id="btn-saltar">Saltar</button>
     </div>
+    <div>
+        <button id="btn-comprobar" class="primario">Comprobar</button>
+        <button id="btn-siguiente" class="exito oculto">Siguiente</button>
+        <button id="btn-terminar" class="peligro oculto">Terminar</button>
+    </div>
+</div>
+
+
 </section>
 
 <section id="pantalla-final" class="tarjeta oculto">
@@ -236,10 +267,27 @@
     <div class="pie"><button id="btn-salir-estudio">Salir</button></div>
 </section>
 
-
 </div>
 
 <script>
+/* Portada: oculta tras retardo y libera scroll */
+(function(){
+    const cover = document.getElementById('cover');
+    const liberar = ()=> document.body.classList.remove('bloqueado');
+    window.addEventListener('load', function(){
+        const T = 3000; // ms
+        setTimeout(function(){
+            if(!cover){ liberar(); return; }
+            cover.classList.add('oculta');
+            cover.addEventListener('transitionend', function onEnd(){
+                cover.removeEventListener('transitionend', onEnd);
+                if (cover && cover.parentNode) cover.parentNode.removeChild(cover);
+                liberar();
+            });
+        }, T);
+    }, {once:true});
+})();
+
 /* ===== Utilidades ===== */
 function barajar(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
 
@@ -317,7 +365,7 @@ function cargarTemario(nombreArchivo){
         const s = document.createElement("script");
         s.id = "temario-script";
         s.async = true;
-        s.src = `temarios/${nombreArchivo}?t=${Date.now()}`;
+               s.src = `temarios/${nombreArchivo}?t=${Date.now()}`;
         s.onload = ()=>{
             if(typeof window.PREGUNTAS === "undefined" || !Array.isArray(window.PREGUNTAS)){
                 reject(new Error("El temario no define PREGUNTAS válidas."));
