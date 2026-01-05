@@ -12,11 +12,9 @@ Este documento recoge la normativa educativa esencial de ámbito estatal y en su
 - [Menú inicial con acceso a todos los recursos online gratuitos](https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Men%C3%BA.html)
 - [Manual para el Diseño y Defensa de la Programación Didáctica](https://www.amazon.es/dp/B0FQTNWMTP)
 - [Simulación de fases del proceso selectivo](https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Oposiciones%20app/)
-- [Temarios de especialidades (1993)](https://www.boe.es/boe/dias/1993/09/21/pdfs/A27400-27438.pdf)  
-Temarios vigentes para muchas especialidades del cuerpo de Secundaria.
-
-- [Temarios actualizados (2011)](https://www.boe.es/boe/dias/2011/11/18/pdfs/BOE-A-2011-18099.pdf)  
-Temarios específicos actualizados para algunas especialidades concretas.
+- [Temarios de especialidades (1993)](https://www.boe.es/boe/dias/1993/09/21/pdfs/A27400-27438.pdf)  Temarios vigentes para muchas especialidades del cuerpo de Secundaria.
+- [Temarios de especialidades (1996)](https://www.boe.es/boe/dias/1996/02/13/pdfs/C00001-00096.pdf) 
+Temarios vigentes para diversas especialidades de Secundaria y FP.
 
 ---
 
