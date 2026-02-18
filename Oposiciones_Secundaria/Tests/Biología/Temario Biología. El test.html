@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Biología y Geología – Temarios</title>
+<style>
+    :root{
+        --bg:#0a0c10; --card:#11151c; --text:#e7edf3; --muted:#9fb0c3;
+        --accent:#ffd23f; --accent2:#34c759; --danger:#ff453a; --focus:#2563eb;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+        margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+        background:linear-gradient(180deg,#0a0c10 0%, #0d1117 100%);
+        color:var(--text);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    }
+
+
+/* Portada previa */
+body.bloqueado{overflow:hidden}
+#cover{
+    position:fixed;inset:0;
+    background:#000;
+    display:flex;align-items:center;justify-content:center;
+    z-index:10000;
+    opacity:1;visibility:visible;
+    transition:opacity .6s ease, visibility 0s linear .6s;
+    pointer-events:auto;
+}
+#cover.oculta{opacity:0;visibility:hidden}
+#cover img{
+    max-width:100%;max-height:100%;
+    border-radius:12px;
+    box-shadow:0 20px 40px rgba(0,0,0,.6);
+    filter:brightness(1.05) contrast(1.05);
+    user-select:none;
+}
+
+.contenedor{max-width:920px;margin:0 auto;padding:24px}
+header{margin-bottom:16px}
+h1{margin:0;font-weight:800;letter-spacing:.3px}
+.sub{margin:8px 0 0 0;color:var(--muted)}
+.tarjeta{
+    background:var(--card);border:1px solid #1d2530;border-radius:16px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+.fila{display:flex;gap:16px;flex-wrap:wrap}
+.col{flex:1 1 280px}
+button{
+    background:#1a2330;color:var(--text);border:1px solid #283346;padding:12px 16px;border-radius:12px;
+    font-weight:700;cursor:pointer;transition:.15s transform ease,.15s background ease,.15s border-color ease,.15s opacity ease;
+}
+button:hover{transform:translateY(-1px);border-color:#3a4a63}
+button:active{transform:translateY(0)}
+.primario{background:var(--accent);color:#111;border-color:#b69500}
+.exito{background:var(--accent2);color:#041;border-color:#1f7a3a}
+.peligro{background:var(--danger);color:#2b0302;border-color:#c21e16}
+.fantasma{background:transparent}
+.oculto{display:none !important}
+
+.panel-config label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
+.panel-config input[type="number"], .panel-config select{
+    width:100%;padding:10px 12px;border-radius:10px;border:1px solid #283346;background:#0f1319;color:var(--text);outline:none;
+}
+.panel-config input[type="checkbox"]{transform:scale(1.2);margin-right:8px}
+.grupo{margin-bottom:14px}
+
+.estado{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.progreso{width:100%;height:10px;background:#121923;border-radius:999px;overflow:hidden;border:1px solid #233047}
+.barra{height:100%;width:0%;background:linear-gradient(90deg,#ffd23f,#ffb703);transition:width .3s ease}
+.contador-puntos{min-width:120px;text-align:center;padding:8px 10px;border-radius:10px;border:1px solid #283346;background:#0f1319}
+
+.pregunta{font-size:20px;line-height:1.35;margin:6px 0 12px 0;font-weight:700}
+.opciones{display:grid;gap:10px}
+.opcion{
+    padding:12px 14px;border-radius:12px;border:1px solid #2b3649;background:#0e141b;cursor:pointer;display:flex;gap:10px;align-items:flex-start;text-align:left
+}
+.opcion:hover{border-color:#3c4f6c}
+.opcion.correcta{background:rgba(52,199,89,.12);border-color:rgba(52,199,89,.6)}
+.opcion.incorrecta{background:rgba(255,69,58,.10);border-color:rgba(255,69,58,.55)}
+.opcion .letra{
+    width:28px;height:28px;display:inline-grid;place-items:center;border-radius:8px;border:1px solid #344055;background:#121826;color:var(--muted);font-weight:700;flex:0 0 auto
+}
+
+.pie{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+
+.resultado{font-size:18px;margin:0;color:var(--muted)}
+.medalla{font-weight:800;color:var(--accent)}
+.seleccionable{user-select:none}
+
+.enlace-contenedor{margin-top:18px}
+.enlace-constante{
+    color:var(--accent);
+    text-decoration:underline !important;
+    text-underline-offset:3px;
+    font-weight:700;
+}
+.enlace-constante:hover,
+.enlace-constante:focus{filter:brightness(1.05)}
+
+@media (prefers-reduced-motion:no-preference){
+    .aparece{animation:aparece .25s ease both}
+    @keyframes aparece{from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)}}
+}
+
+
+</style>
+</head>
+<body class="bloqueado">
+
+<!-- Portada previa -->
+
+<div id="cover" aria-hidden="true">
+  <img src="Portada.png" alt="">
+</div>
+
+<div class="contenedor">
+    <header>
+        <h1>Oposiciones Secundaria: Biología y Geología</h1>
+        <h2>Conforme al temario vigente establecido en la Orden de 9 de septiembre de 1993</h2>
+        <p id="cabecera-estado" class="sub" style="color: rgb(247, 227, 3);">Elige el tema y la cantidad de preguntas</p>
+        <p class="sub" style="font-size: 0.85em;">tomcue@iesjuandelacierva.com</p>
+    </header>
+
+<section id="pantalla-inicio" class="tarjeta aparece">
+    <div class="fila">
+        <div class="col panel-config">
+            <div class="grupo">
+                <label for="tema">Temario</label>
+                <select id="tema">
+                    <option value="01-la-tierra-en-el-universo-geologia-de-los-planetas-origen-de-la-tierra-y-del-sistema-solar.js">1 - La Tierra en el universo. Geología de los planetas. Origen de la Tierra y del Sistema Solar</option>
+                    <option value="02-estructura-y-composicion-de-la-tierra-los-metodos-de-estudio.js">2 - Estructura y composición de la Tierra. Los métodos de estudio</option>
+                    <option value="03-la-materia-mineral-y-la-materia-cristalina-propiedades-y-metodos-de-estudio.js">3 - La materia mineral y la materia cristalina. Propiedades y métodos de estudio</option>
+                    <option value="04-magmatismo-las-rocas-igneas-mas-importantes.js">4 - Magmatismo. Las rocas ígneas más importantes</option>
+                    <option value="05-metamorfosis-las-rocas-metamorficas-mas-importantes.js">5 - Metamorfosis. Las rocas metamórficas más importantes</option>
+                    <option value="06-los-ambientes-sedimentarios-litogenesis-las-rocas-sedimentarias-mas-importantes.js">6 - Los ambientes sedimentarios. Litogénesis. Las rocas sedimentarias más importantes</option>
+                    <option value="07-minerales-petrogeneticos-minerales-y-rocas-de-interes-economico.js">7 - Minerales petrogenéticos. Minerales y rocas de interés económico</option>
+                    <option value="08-los-impactos-ambientales-del-aprovechamiento-de-los-recursos-geologicos.js">8 - Los impactos ambientales del aprovechamiento de los recursos geológicos</option>
+                    <option value="09-las-teorias-orogenicas-deriva-continental-y-tectonica-de-placas.js">9 - Las teorías orogénicas. Deriva continental y tectónica de placas</option>
+                    <option value="10-interpretacion-global-de-los-fenomenos-geologicos-en-el-marco-de-la-teoria-de-la-tectonica-de-placas.js">10 - Interpretación global de los fenómenos geológicos en el marco de la teoría de la tectónica de placas</option>
+                    <option value="11-la-atmosfera-estructura-composicion-y-dinamica-la-contaminacion-atmosferica-metodos-de-determinacion-y-de-correccion.js">11 - La atmósfera: estructura, composición y dinámica. La contaminación atmosférica. Métodos de determinación y de corrección</option>
+                    <option value="12-la-hidrosfera-el-ciclo-del-agua-la-contaminacion-del-agua-metodos-de-analisis-y-depuracion-el-problema-de-la-escasez-de-agua.js">12 - La hidrosfera. El ciclo del agua. La contaminación del agua. Métodos de análisis y depuración. El problema de la escasez de agua</option>
+                    <option value="13-el-equilibrio-termico-del-planeta-el-clima-y-su-distribucion-los-sistemas-morfoclimaticos-grandes-cambios-climaticos-historicos.js">13 - El equilibrio térmico del planeta. El clima y su distribución. Los sistemas morfoclimáticos. Grandes cambios climáticos históricos</option>
+                    <option value="14-geomorfologia-los-factores-condicionantes-del-modelado-del-relieve-la-importancia-de-la-litologia-y-las-estructuras-geologicas.js">14 - Geomorfología. Los factores condicionantes del modelado del relieve. La importancia de la litología y las estructuras geológicas</option>
+                    <option value="15-el-modelado-de-las-zonas-aridas-el-problema-de-la-desertizacion-medidas-de-prevencion-y-correccion.js">15 - El modelado de las zonas áridas. El problema de la desertización. Medidas de prevención y corrección</option>
+                    <option value="16-el-modelado-fluvial-costero-y-glacial-las-aguas-subterraneas-los-impactos-en-las-costas.js">16 - El modelado fluvial, costero y glacial. Las aguas subterráneas. Los impactos en las costas</option>
+                    <option value="17-el-suelo-origen-estructura-y-composicion-la-utilizacion-del-suelo-la-contaminacion-del-suelo-metodos-de-analisis-del-suelo.js">17 - El suelo: origen, estructura y composición. La utilización del suelo. La contaminación del suelo. Métodos de análisis del suelo</option>
+                    <option value="18-la-tierra-un-planeta-en-continuo-cambio-los-fosiles-como-indicadores-el-tiempo-geologico-explicaciones-historicas-al-problema-de-los-cambios.js">18 - La Tierra, un planeta en continuo cambio. Los fósiles como indicadores. El tiempo geológico. Explicaciones históricas al problema de los cambios</option>
+                    <option value="19-la-historia-geologica-de-la-tierra-fauna-y-flora-fosiles.js">19 - La historia geológica de la Tierra. Fauna y flora fósiles</option>
+                    <option value="20-la-investigacion-geologica-y-sus-metodos-fundamentos-y-utilidad-de-la-fotografia-aerea-el-mapa-topografico-y-el-mapa-geologico-importancia-de-la-geologia-en-la-busqueda-de-recursos-y-en-las-obras-publicas.js">20 - La investigación geológica y sus métodos. Fundamentos y utilidad de la fotografía aérea, el mapa topográfico y el mapa geológico. Importancia de la geología en la búsqueda de recursos y en las obras públicas</option>
+                    <option value="21-la-constitucion-geologica-de-espana-repercusiones-de-la-geologia-en-la-variedad-de-paisajes-distribucion-de-recursos-las-comunicaciones-y-la-industria-el-problema-de-los-riesgos-la-ordenacion-del-territorio.js">21 - La constitución geológica de España. Repercusiones de la geología en la variedad de paisajes, distribución de recursos, las comunicaciones y la industria. El problema de los riesgos. La ordenación del territorio</option>
+                    <option value="22-el-origen-de-la-vida-y-su-interpretacion-historica-evolucion-precelular-la-teoria-celular-y-la-organizacion-de-los-seres-vivos.js">22 - El origen de la vida y su interpretación histórica. Evolución precelular. La teoría celular y la organización de los seres vivos</option>
+                    <option value="23-la-base-quimica-de-la-vida-componentes-inorganicos-y-organicos-el-agua-y-las-sales-minerales-los-glucidos-y-los-lipidos-su-biosintesis.js">23 - La base química de la vida: componentes inorgánicos y orgánicos. El agua y las sales minerales. Los glúcidos y los lípidos. Su biosíntesis</option>
+                    <option value="24-aminoacidos-y-proteinas-biosintesis-proteica-enzimas-y-coenzimas-las-vitaminas.js">24 - Aminoácidos y proteínas. Biosíntesis proteica. Enzimas y coenzimas. Las vitaminas</option>
+                    <option value="25-los-acidos-nucleicos-replicacion-y-transcripcion.js">25 - Los ácidos nucleicos. Replicación y transcripción</option>
+                    <option value="26-metodos-de-estudio-de-la-celula-celulas-procariontas-y-eucariontas-la-celula-animal-y-vegetal-formas-acelulares.js">26 - Métodos de estudio de la célula. Células procariontas y eucariontas. La célula animal y vegetal. Formas acelulares</option>
+                    <option value="27-la-membrana-plasmatica-y-la-pared-celular-citosol-citoesqueleto-sistemas-de-membranas-y-organulos-motilidad-celular.js">27 - La membrana plasmática y la pared celular. Citosol, citoesqueleto. Sistemas de membranas y orgánulos. Motilidad celular</option>
+                    <option value="28-necesidades-energeticas-de-la-celula-la-respiracion-celular-aerobia-y-anaerobia-la-fotosintesis-la-quimiosintesis.js">28 - Necesidades energéticas de la célula. La respiración celular aerobia y anaerobia. La fotosíntesis. La quimiosíntesis</option>
+                    <option value="29-el-nucleo-interfasico-y-el-nucleo-en-division-el-ciclo-celular-y-la-division-celular-mitosis-y-meiosis.js">29 - El núcleo interfásico y el núcleo en división. El ciclo celular y la división celular. Mitosis y meiosis</option>
+                    <option value="30-niveles-de-organizacion-de-los-seres-vivos-la-diferenciacion-celular-tejidos-animales-y-vegetales.js">30 - Niveles de organización de los seres vivos. La diferenciación celular. Tejidos animales y vegetales</option>
+                    <option value="31-la-reproduccion-asexual-y-la-reproduccion-sexual-genetica-del-sexo-gametogenesis-fecundacion-y-desarrollo-embrionario-en-metazoos-ciclos-biologicos.js">31 - La reproducción asexual y la reproducción sexual. Genética del sexo. Gametogénesis. Fecundación y desarrollo embrionario en metazoos. Ciclos biológicos</option>
+                    <option value="32-la-clasificacion-de-los-seres-vivos-taxonomia-y-nomenclatura-los-cinco-reinos-relaciones-evolutivas-los-virus-y-su-patologia-otras-formas-acelulares.js">32 - La clasificación de los seres vivos. Taxonomía y nomenclatura. Los cinco reinos, relaciones evolutivas. Los virus y su patología. Otras formas acelulares</option>
+                    <option value="33-reino-moneras-las-cyanophytas-las-bacterias-y-su-importancia-en-la-sanidad-la-industria-y-la-investigacion-basica.js">33 - Reino Moneras. Las cyanophytas. Las bacterias y su importancia en la sanidad, la industria y la investigación básica</option>
+                    <option value="34-reino-protoctistas-generos-mas-comunes-en-charcas-rios-y-mares-el-papel-ecologico-y-su-importancia-economica-y-sanitaria.js">34 - Reino Protoctistas. Géneros más comunes en charcas, ríos y mares. El papel ecológico y su importancia económica y sanitaria</option>
+                    <option value="35-reino-hongos-hongos-comunes-en-nuestros-campos-y-bosques-importancia-en-los-ecosistemas-aplicaciones-y-utilidad-los-liquenes-su-papel-como-indicadores.js">35 - Reino Hongos. Hongos comunes en nuestros campos y bosques. Importancia en los ecosistemas. Aplicaciones y utilidad. Los líquenes. Su papel como indicadores</option>
+                    <option value="36-las-plantas-i-briofitas-generos-comunes-e-importancia-ecologica-el-paso-a-la-vascularidad-licopodios-equisetos-y-helechos-la-adquisicion-de-semillas-cicadofitos-y-ginkofitos.js">36 - Las plantas I. Briofitas. Géneros comunes e importancia ecológica. El paso a la vascularidad: licopodios, equisetos y helechos. La adquisición de semillas: cicadófitos y ginkófitos</option>
+                    <option value="37-las-plantas-ii-coniferofitos-y-angioespermatofitos-caracteres-generales-origen-clasificacion-y-ecologia-familias-y-especies-de-arboles-y-arbustos-espanoles-mas-representativos-la-destruccion-de-los-bosques-la-repoblacion-y-las-medidas-preventivas.js">37 - Las plantas II. Coniferófitos y angioespermatófitos. Caracteres generales, origen, clasificación y ecología. Familias y especies de árboles y arbustos españoles más representativos. La destrucción de los bosques. La repoblación y las medidas preventivas</option>
+                    <option value="38-morfologia-y-fisiologia-de-las-estructuras-vegetativas-y-reproductoras-de-las-cormofitas.js">38 - Morfología y fisiología de las estructuras vegetativas y reproductoras de las cormófitas</option>
+                    <option value="39-la-agricultura-en-espana-el-impacto-ambiental-de-la-sobreexplotacion-nuevas-alternativas-para-la-obtencion-de-recursos-alimentarios.js">39 - La agricultura en España. El impacto ambiental de la sobreexplotación. Nuevas alternativas para la obtención de recursos alimentarios</option>
+                    <option value="40-invertebrados-no-artropodos-fila-poriferos-cnidarios-ctenoforos-platelmintos-anelidos-moluscos-y-equipodermos-especies-representativas-de-nuestra-fauna-importancia-economica-sanitaria-y-alimentaria.js">40 - Invertebrados no artrópodos: fila poríferos, cnidarios, ctenóforos, platelmintos, anélidos, moluscos y equinodermos. Especies representativas de nuestra fauna. Importancia económica, sanitaria y alimentaria</option>
+                    <option value="41-invertebrados-artropodos-insectos-crustaceos-aracnidos-y-miriapodos-especies-representativas-de-nuestra-fauna-importancia-economica-sanitaria-y-alimentaria.js">41 - Invertebrados artrópodos: insectos, crustáceos, arácnidos y miriápodos. Especies representativas de nuestra fauna. Importancia económica, sanitaria y alimentaria</option>
+                    <option value="42-filum-cordados-caracteres-generales-y-clasificacion-los-vertebrados-caracteristicas-generales-y-clasificacion-agnatos-y-condrictios.js">42 - Filum Cordados. Caracteres generales y clasificación. Los vertebrados: características generales y clasificación. Agnatos y condrictios</option>
+                    <option value="43-organos-y-funciones-de-nutricion-en-los-vertebrados.js">43 - Órganos y funciones de nutrición en los vertebrados</option>
+                    <option value="44-organos-y-funciones-de-relacion-en-los-vertebrados.js">44 - Órganos y funciones de relación en los vertebrados</option>
+                    <option value="45-organos-y-funciones-de-reproduccion-en-los-vertebrados.js">45 - Órganos y funciones de reproducción en los vertebrados</option>
+                    <option value="46-otros-recursos-bioticos-aprovechamiento-medicinal-ornamental-agropecuario-avicola-pesquero-la-biotecnologia.js">46 - Otros recursos bióticos. Aprovechamiento medicinal, ornamental, agropecuario, avícola, pesquero. La biotecnología</option>
+                    <option value="47-ecologia-poblaciones-comunidades-y-ecosistemas-dinamica-de-las-poblaciones-interacciones-en-el-ecosistema-relaciones-intra-e-interespecificas.js">47 - Ecología. Poblaciones, comunidades y ecosistemas. Dinámica de las poblaciones. Interacciones en el ecosistema. Relaciones intra e interespecíficas</option>
+                    <option value="48-el-ecosistema-en-accion-estructura-funcionamiento-y-autorregulacion-del-ecosistema.js">48 - El ecosistema en acción. Estructura, funcionamiento y autorregulación del ecosistema</option>
+                    <option value="49-el-paisaje-componentes-e-interpretacion-paisajes-espanoles-caracteristicos-el-paisaje-como-recurso-estetico-impactos-en-el-paisaje-espacios-protegidos.js">49 - El paisaje: componentes e interpretación. Paisajes españoles característicos. El paisaje como recurso estético. Impactos en el paisaje. Espacios protegidos</option>
+                    <option value="50-los-impactos-ambientales-de-las-actividades-humanas-los-grandes-impactos-globales.js">50 - Los impactos ambientales de las actividades humanas. Los grandes impactos globales</option>
+                    <option value="51-los-problemas-ambientales-y-sus-repercusiones-politicas-economicas-y-sociales-salud-ambiental-y-calidad-de-vida-la-educacion-ambiental.js">51 - Los problemas ambientales y sus repercusiones políticas, económicas y sociales. Salud ambiental y calidad de vida. La educación ambiental</option>
+                    <option value="52-anatomia-y-fisiologia-de-los-aparatos-digestivo-y-urinario-humanos-habitos-saludables-principales-enfermedades.js">52 - Anatomía y fisiología de los aparatos digestivo y urinario humanos. Hábitos saludables. Principales enfermedades</option>
+                    <option value="53-anatomia-y-fisiologia-de-los-sistemas-circulatorio-y-respiratorio-humanos-habitos-saludables-principales-enfermedades.js">53 - Anatomía y fisiología de los sistemas circulatorio y respiratorio humanos. Hábitos saludables. Principales enfermedades</option>
+                    <option value="54-nutricion-y-alimentacion-habitos-saludables-principales-enfermedades-las-personas-como-consumidores.js">54 - Nutrición y alimentación. Hábitos saludables. Principales enfermedades. Las personas como consumidores</option>
+                    <option value="55-el-medio-interno-sangre-linfa-y-liquidos-intersticiales-habitos-saludables-principales-enfermedades.js">55 - El medio interno: sangre, linfa y líquidos intersticiales. Hábitos saludables. Principales enfermedades</option>
+                    <option value="56-anatomia-y-fisiologia-del-sistema-nervioso-humano-alteraciones-del-sistema-nervioso-en-la-sociedad-actual-habitos-saludables-la-salud-mental.js">56 - Anatomía y fisiología del sistema nervioso humano. Alteraciones del sistema nervioso en la sociedad actual. Hábitos saludables. La salud mental</option>
+                    <option value="57-anatomia-y-fisiologia-de-los-organos-de-los-sentidos-en-el-ser-humano-habitos-saludables-y-principales-enfermedades.js">57 - Anatomía y fisiología de los órganos de los sentidos en el ser humano. Hábitos saludables y principales enfermedades</option>
+                    <option value="58-anatomia-y-fisiologia-del-sistema-endocrino-regulacion-neuroendocrina-principales-alteraciones.js">58 - Anatomía y fisiología del sistema endocrino. Regulación neuroendocrina. Principales alteraciones</option>
+                    <option value="59-anatomia-y-fisiologia-del-aparato-locomotor-habitos-posturales-adecuados-y-principales-enfermedades.js">59 - Anatomía y fisiología del aparato locomotor. Hábitos posturales adecuados y principales enfermedades</option>
+                    <option value="60-los-cambios-corporales-a-lo-largo-de-la-vida-la-sexualidad-y-la-reproduccion-anatomia-y-fisiologia-de-los-aparatos-reproductores-habitos-saludables-y-principales-enfermedades.js">60 - Los cambios corporales a lo largo de la vida. La sexualidad y la reproducción. Anatomía y fisiología de los aparatos reproductores. Hábitos saludables y principales enfermedades</option>
+                    <option value="61-la-salud-y-la-enfermedad-evolucion-del-concepto-de-salud-las-enfermedades-de-nuestro-tiempo-la-drogodependencia-estilos-de-vida-saludables.js">61 - La salud y la enfermedad. Evolución del concepto de salud. Las enfermedades de nuestro tiempo. La drogodependencia. Estilos de vida saludables</option>
+                    <option value="62-el-sistema-inmunologico-la-inmunodeficiencia-los-sueros-y-las-vacunas-descubrimiento-historico-e-importancia-sanitaria-y-economica.js">62 - El sistema inmunológico. La inmunodeficiencia. Los sueros y las vacunas: descubrimiento histórico e importancia sanitaria y económica</option>
+                    <option value="63-la-genetica-mendeliana-la-teoria-cromosomica-de-la-herencia-las-mutaciones.js">63 - La genética mendeliana. La teoría cromosómica de la herencia. Las mutaciones</option>
+                    <option value="64-la-genetica-molecular-la-ingenieria-genetica-y-sus-aplicaciones-su-dimension-etica.js">64 - La genética molecular. La ingeniería genética y sus aplicaciones. Su dimensión ética</option>
+                    <option value="65-la-naturaleza-de-la-evolucion-mecanismos-y-pruebas-principales-teorias.js">65 - La naturaleza de la evolución. Mecanismos y pruebas. Principales teorías</option>
+                    <option value="66-evolucion-de-la-concepcion-de-ciencia-las-revoluciones-cientificas-y-los-cambios-de-paradigmas-en-la-biologia-y-la-geologia.js">66 - Evolución de la concepción de Ciencia. Las revoluciones científicas y los cambios de paradigmas en la Biología y la Geología. La ciencia como proceso en construcción. Los científicos y sus condicionamientos sociales. Las actitudes científicas en la vida cotidiana</option>
+                    <option value="67-momentos-claves-en-la-historia-de-la-biologia-y-la-geologia-la-biologia-y-la-geologia-espanolas-en-el-contexto-mundial-principales-areas-d_e0e79db3.js">67 - Momentos claves en la historia de la Biología y la Geología. La Biología y la Geología españolas en el contexto mundial. Principales áreas de investigación actual. Las relaciones Ciencia/Tecnología/Sociedad en la Biología y Geología</option>
+                    <option value="68-sistemas-materiales-propiedades-generales-y-especificas-aplicaciones-comportamiento-de-los-gases-estructura-de-la-materia-teoria-cinetica-_1cb09602.js">68 - Sistemas materiales. Propiedades generales y específicas. Aplicaciones. Comportamiento de los gases. Estructura de la materia. Teoría cinética y teoría atómico-molecular. Papel de los modelos y de las teorías</option>
+                    <option value="69-clasificacion-de-los-elementos-quimicos-sistema-periodico-enlace-quimico-justificacion-de-las-propiedades-de-las-sustancias-en-funcion-de-_ebc39e6f.js">69 - Clasificación de los elementos químicos. Sistema periódico. Enlace químico. Justificación de las propiedades de las sustancias en función de su enlace. Reconocimiento de sustancias de uso común como ácidos, bases, metales, etc</option>
+                    <option value="70-cambios-en-la-materia-reacciones-quimicas-intercambios-energeticos-estequiometria-factores-que-afectan-al-desarrollo-de-las-reacciones-su-_52000c5c.js">70 - Cambios en la materia. Reacciones químicas. Intercambios energéticos. Estequiometría. Factores que afectan al desarrollo de las reacciones. Su importancia en la evolución de la sociedad</option>
+                    <option value="71-estudio-del-movimiento-fuerzas-efectos-sobre-los-cuerpos-leyes-de-newton-estatica-de-los-cuerpos-rigidos-condiciones-de-equilibrio-estatic_04fd6c47.js">71 - Estudio del movimiento. Fuerzas, efectos sobre los cuerpos. Leyes de Newton. Estática de los cuerpos rígidos. Condiciones de equilibrio. Estática de fluidos</option>
+                    <option value="72-el-problema-de-la-posicion-de-la-tierra-en-el-universo-sistemas-geocentrico-y-helicentrico-gravitacion-universal-peso-de-los-cuerpos-impor_4705af97.js">72 - El problema de la posición de la Tierra en el universo. Sistemas geocéntrico y heliocéntrico. Gravitación universal. Peso de los cuerpos. Importancia histórica de la unificación de la gravedad terrestre y celeste</option>
+                    <option value="73-la-energia-transformacion-conservacion-y-degradacion-trabajo-y-calor-procesos-de-transferencia-de-energia-efectos-y-propagacion-del-calor-_3abf6c0f.js">73 - La energía. Transformación, conservación y degradación. Trabajo y calor, procesos de transferencia de energía. Efectos y propagación del calor. Propagación de energía sin transporte de masa: movimiento ondulatorio. Luz y sonido</option>
+                    <option value="74-naturaleza-electrica-de-la-materia-corriente-electrica-electromagnetismo-induccion-electromagnetica-la-energia-electrica-una-forma-privile-_07b443b3.js">74 - Naturaleza eléctrica de la materia. Corriente eléctrica. Electromagnetismo. Inducción electromagnética. La energía eléctrica: una forma privilegiada de energía. Evolución en las necesidades energéticas de la sociedad. Energías alternativas</option>
+                    <option value="75-el-trabajo-experimental-en-el-area-de-ciencias-utilizacion-del-laboratorio-escolar-norma-de-seguridad.js">75 - El trabajo experimental en el área de ciencias. Utilización del laboratorio escolar. Norma de seguridad</option>
+                </select>
+            </div>
+            <div class="grupo">
+                <label for="cantidad">Número de preguntas</label>
+                <input id="cantidad" type="number" min="5" max="40" value="10" />
+            </div>
+        </div>
+        <div class="col">
+            <p style="color:var(--muted);margin-top:0">Selecciona "Comenzar" para hacer el test o "Modo estudio" para repasar todas las respuestas.</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <button id="btn-comenzar" class="primario">Comenzar</button>
+                <button id="btn-aprender" title="Muestra todas las preguntas del temario en modo estudio">Modo estudio</button>
+            </div>
+        </div>
+    </div>
+
+
+<div class="enlace-contenedor">
+    <a class="enlace-constante" href="https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Men%C3%BA.html" target="_blank" rel="noopener">
+        Enlace al Menú inicial con acceso a todos los recursos online gratuitos
+    </a>
+</div>
+
+
+</section>
+
+<section id="pantalla-juego" class="tarjeta oculto">
+    <div class="estado">
+        <div class="contador-puntos"><strong id="xIndex">1</strong>/<span id="xTotal">12</span> · Puntos: <strong id="xPuntos">0</strong></div>
+        <div class="progreso" aria-hidden="true"><div id="barra" class="barra" style="width:0%"></div></div>
+    </div>
+
+
+<div id="enunciado" class="pregunta"></div>
+<div id="opciones" class="opciones"></div>
+
+<div class="pie">
+    <div>
+        <button id="btn-anterior" class="fantasma">Anterior</button>
+        <button id="btn-saltar">Saltar</button>
+    </div>
+    <div>
+        <button id="btn-comprobar" class="primario">Comprobar</button>
+        <button id="btn-siguiente" class="exito oculto">Siguiente</button>
+        <button id="btn-terminar" class="peligro oculto">Terminar</button>
+    </div>
+</div>
+
+
+</section>
+
+<section id="pantalla-final" class="tarjeta oculto">
+    <p class="resultado" id="resumen"></p>
+    <div class="fila" style="margin-top:12px">
+        <button id="btn-repetir" class="primario">Repetir configuración</button>
+        <button id="btn-inicio">Volver al inicio</button>
+        <button id="btn-estudio">Repasar preguntas</button>
+    </div>
+</section>
+
+<section id="pantalla-estudio" class="tarjeta oculto">
+    <div id="lista-estudio"></div>
+    <div class="pie"><button id="btn-salir-estudio">Salir</button></div>
+</section>
+
+</div>
+
+<script>
+/* Portada: oculta tras retardo y libera scroll */
+(function(){
+    const cover = document.getElementById('cover');
+    const liberar = ()=> document.body.classList.remove('bloqueado');
+    window.addEventListener('load', function(){
+        const T = 3000; // ms
+        setTimeout(function(){
+            if(!cover){ liberar(); return; }
+            cover.classList.add('oculta');
+            cover.addEventListener('transitionend', function onEnd(){
+                cover.removeEventListener('transitionend', onEnd);
+                if (cover && cover.parentNode) cover.parentNode.removeChild(cover);
+                liberar();
+            });
+        }, T);
+    }, {once:true});
+})();
+
+/* ===== Utilidades ===== */
+function barajar(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+/* ===== Sistema de sonido (WebAudio) ===== */
+class SistemaSonido{
+    constructor(){
+        this.ctx = null;
+        this.master = null;
+        this.enabled = true;
+        this.initialized = false;
+        this.volume = 0.15;
+        this._unlocked = false;
+    }
+    init(){
+        if(this.initialized) return;
+        try{
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            this.master = this.ctx.createGain();
+            this.master.gain.value = this.volume;
+            this.master.connect(this.ctx.destination);
+            this.initialized = true;
+        }catch(e){}
+    }
+    ensure(){
+        if(!this.initialized) this.init();
+        if(this.ctx && this.ctx.state === "suspended") this.ctx.resume();
+    }
+    unlockOnce(){
+        if(this._unlocked) return;
+        this._unlocked = true;
+        this.ensure();
+    }
+    tone(freq=440, dur=0.18, type="square"){
+        if(!this.enabled) return;
+        this.ensure();
+        if(!this.ctx) return;
+        const t0 = this.ctx.currentTime + 0.01;
+        const o = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        o.type = type;
+        o.frequency.setValueAtTime(freq, t0);
+        o.connect(g); g.connect(this.master);
+        g.gain.setValueAtTime(1, t0);
+        g.gain.exponentialRampToValueAtTime(0.0008, t0 + dur);
+        o.start(t0);
+        o.stop(t0 + dur);
+    }
+    reproducirAcierto(){
+        this.tone(880, 0.16, "square");
+        setTimeout(()=>this.tone(1245, 0.18, "square"), 120);
+    }
+    reproducirError(){
+        this.tone(220, 0.22, "triangle");
+    }
+    mute(on){ this.enabled = !on; }
+}
+const sonido = new SistemaSonido();
+
+["pointerdown","keydown"].forEach(ev=>{
+    window.addEventListener(ev, ()=>sonido.unlockOnce(), { once:false, passive:true });
+});
+document.addEventListener("visibilitychange", ()=>{
+    if(document.visibilityState==="visible") sonido.ensure();
+});
+
+/* ===== Carga de temarios ===== */
+let BANCO = [];
+
+function cargarTemario(nombreArchivo){
+    return new Promise((resolve, reject)=>{
+        delete window.PREGUNTAS;
+        const prev = document.getElementById("temario-script");
+        if(prev) prev.remove();
+
+        const s = document.createElement("script");
+        s.id = "temario-script";
+        s.async = true;
+               s.src = `temarios/${nombreArchivo}?t=${Date.now()}`;
+        s.onload = ()=>{
+            if(typeof window.PREGUNTAS === "undefined" || !Array.isArray(window.PREGUNTAS)){
+                reject(new Error("El temario no define PREGUNTAS válidas."));
+                return;
+            }
+            BANCO = convertirPreguntas(window.PREGUNTAS);
+            resolve(BANCO);
+        };
+        s.onerror = ()=>reject(new Error("No se pudo cargar el temario."));
+        document.body.appendChild(s);
+    });
+}
+
+function convertirPreguntas(arr){
+    return arr.map(p=>{
+        const opciones = [p.correcta, ...(p.incorrectas||[])];
+        const idxs = opciones.map((_,i)=>i);
+        barajar(idxs);
+        const opsBarajadas = idxs.map(i=>opciones[i]);
+        const indiceCorrecta = idxs.indexOf(0);
+        return {
+            pregunta: p.enunciado,
+            opciones: opsBarajadas,
+            correcta: indiceCorrecta,
+            explicacion: ""
+        };
+    });
+}
+
+/* ===== Estado/UI ===== */
+const ui = {
+    inicio:      document.getElementById("pantalla-inicio"),
+    juego:       document.getElementById("pantalla-juego"),
+    final:       document.getElementById("pantalla-final"),
+    estudio:     document.getElementById("pantalla-estudio"),
+    tema:        document.getElementById("tema"),
+    cantidad:    document.getElementById("cantidad"),
+    enunciado:   document.getElementById("enunciado"),
+    opciones:    document.getElementById("opciones"),
+    idx:         document.getElementById("xIndex"),
+    total:       document.getElementById("xTotal"),
+    puntos:      document.getElementById("xPuntos"),
+    barra:       document.getElementById("barra"),
+    resumen:     document.getElementById("resumen"),
+    listaEstudio:document.getElementById("lista-estudio"),
+    cabecera:    document.getElementById("cabecera-estado"),
+    btns:{
+        comenzar: document.getElementById("btn-comenzar"),
+        aprender: document.getElementById("btn-aprender"),
+        anterior: document.getElementById("btn-anterior"),
+        saltar:   document.getElementById("btn-saltar"),
+        comprobar:document.getElementById("btn-comprobar"),
+        siguiente:document.getElementById("btn-siguiente"),
+        terminar: document.getElementById("btn-terminar"),
+        repetir:  document.getElementById("btn-repetir"),
+        inicio:   document.getElementById("btn-inicio"),
+        estudio:  document.getElementById("btn-estudio"),
+        salirEst: document.getElementById("btn-salir-estudio")
+    }
+};
+
+let estado = {
+    preguntas: [], orden: [], actual: 0, puntos: 0, seleccion: null
+};
+
+/* ===== Cabecera dinámica ===== */
+const CABECERA_INICIAL = ui.cabecera.textContent;
+function setCabeceraTituloFromSelect(){
+    const opt = ui.tema.options[ui.tema.selectedIndex];
+    if(opt) ui.cabecera.textContent = opt.textContent;
+}
+function resetCabecera(){ ui.cabecera.textContent = CABECERA_INICIAL; }
+
+/* ===== Navegación ===== */
+function mostrar(section){
+    for(const s of [ui.inicio, ui.juego, ui.final, ui.estudio]) s.classList.add("oculto");
+    section.classList.remove("oculto");
+    section.classList.add("aparece");
+}
+
+/* ===== Preparación desde BANCO ===== */
+function prepararJuego(opts){
+    const conjunto = barajar([...BANCO]);
+    const n = Math.max(5, Math.min(opts.cantidad, conjunto.length));
+    const seleccion = conjunto.slice(0, n).map(clonarYBarajarOpciones);
+
+    estado.preguntas = seleccion;
+    estado.orden = [...Array(estado.preguntas.length).keys()];
+    estado.actual = 0; estado.puntos = 0; estado.seleccion = null;
+
+    ui.total.textContent = String(estado.preguntas.length);
+    ui.puntos.textContent = "0";
+    ui.barra.style.width = "0%";
+
+    setCabeceraTituloFromSelect();
+    pintarPregunta();
+    mostrar(ui.juego);
+}
+
+function clonarYBarajarOpciones(qo){
+    const copia = JSON.parse(JSON.stringify(qo));
+    const idxs = copia.opciones.map((_,i)=>i);
+    barajar(idxs);
+    const ops = idxs.map(i=>copia.opciones[i]);
+    const corr = idxs.indexOf(copia.correcta);
+    copia.opciones = ops; copia.correcta = corr;
+    return copia;
+}
+
+/* ===== Pintado ===== */
+function pintarPregunta(){
+    const i = estado.actual;
+    const q = estado.preguntas[i];
+    ui.idx.textContent = String(i+1);
+    ui.enunciado.textContent = q.pregunta;
+    ui.opciones.innerHTML = "";
+    ui.btns.siguiente.classList.add("oculto"); ui.btns.terminar.classList.add("oculto");
+    ui.btns.comprobar.classList.remove("oculto");
+
+    const letras = "ABCD".split("");
+    q.opciones.forEach((texto, idx)=>{
+        const btn = document.createElement("button");
+        btn.className = "opcion";
+        btn.setAttribute("data-idx", idx);
+        btn.innerHTML = `<span class="letra">${letras[idx]||"?"}</span><span>${texto}</span>`;
+        btn.addEventListener("click", ()=>{
+            sonido.unlockOnce();
+            seleccionar(idx);
+        });
+        ui.opciones.appendChild(btn);
+    });
+
+    actualizarProgreso(); estado.seleccion = null;
+}
+
+function seleccionar(idx){
+    if(ui.btns.comprobar.classList.contains("oculto")) return;
+    estado.seleccion = idx;
+    [...ui.opciones.children].forEach(el=>el.style.outline="none");
+    const el = ui.opciones.querySelector(`[data-idx="${idx}"]`);
+    el.style.outline = `2px solid var(--focus)`;
+    el.scrollIntoView({block:"nearest", behavior:"smooth"});
+}
+
+function actualizarProgreso(){
+    const pct = (estado.actual/estado.preguntas.length)*100;
+    ui.barra.style.width = `${pct}%`;
+}
+
+/* ===== Comprobación/flujo ===== */
+function comprobar(){
+    const q = estado.preguntas[estado.actual];
+    const sel = estado.seleccion;
+    const acierto = sel === q.correcta;
+
+    [...ui.opciones.children].forEach((btn, idx)=>{
+        if(idx===q.correcta) btn.classList.add("correcta");
+        if(sel!==null && idx===sel && sel!==q.correcta) btn.classList.add("incorrecta");
+        btn.style.cursor="default";
+    });
+
+    if(sel !== null){
+        if(acierto){
+            estado.puntos++;
+            ui.puntos.textContent = String(estado.puntos);
+            sonido.reproducirAcierto();
+        }else{
+            sonido.reproducirError();
+        }
+    }
+
+    ui.btns.comprobar.classList.add("oculto");
+    const ultima = estado.actual === estado.preguntas.length - 1;
+    if(ultima){ ui.btns.terminar.classList.remove("oculto"); }
+    else{ ui.btns.siguiente.classList.remove("oculto"); }
+}
+
+function siguiente(){
+    estado.actual++;
+    pintarPregunta();
+}
+function anterior(){
+    if(estado.actual===0) return;
+    estado.actual--;
+    pintarPregunta();
+}
+function saltar(){
+    estado.seleccion = null;
+    comprobar();
+}
+
+/* ===== Final ===== */
+function terminar(){
+    mostrar(ui.final);
+    const n = estado.preguntas.length, p = estado.puntos, r = p/n;
+    const med = r>=0.85 ? "Oro" : r>=0.65 ? "Plata" : r>=0.45 ? "Bronce" : "Finalista";
+    ui.resumen.innerHTML = `Resultado: <span class="medalla">${med}</span>. Aciertos ${p}/${n}.`;
+}
+
+/* ===== Estudio ===== */
+function entrarEstudio(pregs = BANCO){
+    ui.listaEstudio.innerHTML = "";
+    const frag = document.createDocumentFragment();
+    const letras = "ABCD".split("");
+    pregs.forEach((q,i)=>{
+        const card = document.createElement("div");
+        card.className = "tarjeta"; card.style.marginBottom = "12px";
+        const h = document.createElement("div"); h.className = "pregunta"; h.textContent = `${i+1}. ${q.pregunta}`;
+        const lista = document.createElement("div"); lista.className = "opciones";
+        q.opciones.forEach((op,idx)=>{
+            const p = document.createElement("div");
+            p.className = "opcion " + (idx===q.correcta?"correcta":"");
+            p.innerHTML = `<span class="letra">${letras[idx]}</span><span>${op}</span>`;
+            lista.appendChild(p);
+        });
+        const ex = document.createElement("div"); ex.className = "explicacion"; ex.textContent = q.explicacion || "";
+        card.append(h, lista, ex); frag.appendChild(card);
+    });
+    ui.listaEstudio.appendChild(frag);
+    mostrar(ui.estudio);
+}
+
+/* ===== Eventos ===== */
+async function iniciarDesdeTemario(archivo, opts){
+    await cargarTemario(archivo);
+    prepararJuego(opts);
+}
+
+ui.btns.comenzar.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
+    await iniciarDesdeTemario(ui.tema.value, {
+        cantidad: Number(ui.cantidad.value || 12)
+    });
+});
+
+ui.btns.aprender.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
+    await cargarTemario(ui.tema.value);
+    setCabeceraTituloFromSelect();
+    entrarEstudio(barajar([...BANCO]));
+});
+
+ui.btns.comprobar.addEventListener("click", comprobar);
+ui.btns.siguiente.addEventListener("click", siguiente);
+ui.btns.anterior.addEventListener("click", anterior);
+ui.btns.saltar.addEventListener("click", saltar);
+ui.btns.terminar.addEventListener("click", terminar);
+
+ui.btns.repetir.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
+    await iniciarDesdeTemario(ui.tema.value, {
+        cantidad: estado.preguntas.length
+    });
+});
+
+ui.btns.inicio.addEventListener("click", ()=>{
+    resetCabecera();
+    mostrar(ui.inicio);
+});
+ui.btns.estudio.addEventListener("click", ()=>entrarEstudio(estado.preguntas));
+ui.btns.salirEst.addEventListener("click", ()=>mostrar(ui.final));
+
+document.addEventListener("keydown", (e)=>{
+    if(ui.juego.classList.contains("oculto")) return;
+    if(e.key==="Enter") {
+        if(!ui.btns.comprobar.classList.contains("oculto")) comprobar();
+        else if(!ui.btns.siguiente.classList.contains("oculto")) siguiente();
+    }
+    if(e.key==="ArrowRight" && !ui.btns.siguiente.classList.contains("oculto")) siguiente();
+    if(e.key==="ArrowLeft") anterior();
+});
+
+/* Inicio */
+mostrar(ui.inicio);
+</script>
+
+</body>
+</html>
