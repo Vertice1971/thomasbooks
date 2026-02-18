@@ -1,112 +1,138 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Simulador de Examen de Especialidad - Oposiciones Profesorado Secundaria</title>
   <link rel="stylesheet" href="styles.css">
+
   <style>
     /* Portada inicial a pantalla completa */
     #cover{
-      position:fixed;inset:0;
+      position:fixed;
+      inset:0;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      display:flex;justify-content:center;align-items:center;
+      display:flex;
+      justify-content:center;
+      align-items:center;
       z-index:9999;
     }
+
     #cover img{
-      max-width:100%;max-height:100%;
+      max-width:100%;
+      max-height:100%;
       border-radius:12px;
       box-shadow:0 20px 40px rgba(0,0,0,0.3);
     }
+
     /* Fondo semitransparente permanente */
     #bgOverlay{
-      position:fixed;inset:0;
+      position:fixed;
+      inset:0;
       background:url("Portada.png") no-repeat center center;
       background-size:contain;
       opacity:.15;
       z-index:1;
       pointer-events:none;
     }
-    /* Asegurar que el contenido principal queda por encima del overlay */
-    .container{position:relative;z-index:2}
+
+    /* Asegurar que el contenido queda por encima del overlay */
+    .container{
+      position:relative;
+      z-index:2;
+    }
   </style>
 </head>
+
 <body>
 
   <!-- Portada inicial -->
-
   <div id="cover">
     <img src="Portada.png" alt="Portada">
   </div>
 
   <!-- Fondo semitransparente -->
-
   <div id="bgOverlay"></div>
 
   <div class="container" id="contenedor-principal">
+
     <h2>Simulador de Examen de Especialidad - Oposiciones Profesorado Secundaria</h2>
-    <p style="font-size: 0.8em; margin-top: -1em;">
+
+    <p style="font-size:0.8em; margin-top:-1em;">
       <a href="https://www.amazon.es/dp/B0FQTNWMTP" target="_blank">
         Enlace al Manual para el diseño de la programación didáctica
       </a>
     </p>
-      <p style="font-size: 0.8em; margin-top: -0,5em;">
+
+    <p style="font-size:0.8em; margin-top:-0.5em;">
       <a href="https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Men%C3%BA.html" target="_blank">
         Enlace al Menú de Programas Gratuitos
       </a>
     </p>
-    <p style="font-size: 0.8em; color: #666; margin-top: -1em;">tomcue@iesjuandelacierva.com</p>
 
-```
-<p id="parte-1" style="font-size: medium; margin: 1em 0;"><strong>Parte 1</strong></p>
-<button id="btn-parte-2" class="boton-naranja">Pasar a Parte 2</button>
+    <p style="font-size:0.8em; color:#666; margin-top:-1em;">
+      tomcue@iesjuandelacierva.com
+    </p>
 
-<form id="especialidad-form">
-  <label for="especialidad">Selecciona una especialidad:</label>
-  <select id="especialidad" required>
-    <option value="">-- Elegir --</option>
-    <!-- Opciones se cargarán dinámicamente desde temas.js -->
-  </select>
+    <p id="parte-1" style="font-size:medium; margin:1em 0;">
+      <strong>Parte 1</strong>
+    </p>
 
-  <label for="modo">Selecciona el tipo de sorteo:</label>
-  <select id="modo" required>
-    <option value="">-- Elegir --</option>
-    <option value="completo">Temario completo </option>
-    <option value="intermedia">Preparación intermedia</option>
-  </select>
+    <button id="btn-parte-2" class="boton-naranja">
+      Pasar a Parte 2
+    </button>
 
-  <div id="intermedia-opciones" style="display:none">
-    <label for="cantidad">Número de temas a extraer:</label>
-    <input type="number" id="cantidad" min="1" max="71">
+    <form id="especialidad-form">
 
-    <label for="rango">Lista de temas disponibles (comas e intervalos con guiones):</label>
-    <input type="text" id="rango" placeholder="Ej: 1,2,3,6,7-12,17,19,20-40">
-  </div>
+      <label for="especialidad">Selecciona una especialidad:</label>
+      <select id="especialidad" required>
+        <option value="">-- Elegir --</option>
+      </select>
 
-  <button type="submit">Generar números</button>
-</form>
+      <label for="modo">Selecciona el tipo de sorteo:</label>
+      <select id="modo" required>
+        <option value="">-- Elegir --</option>
+        <option value="completo">Temario completo</option>
+        <option value="intermedia">Preparación intermedia</option>
+      </select>
 
-<div id="resultado" class="result" style="display:none"></div>
+      <div id="intermedia-opciones" style="display:none;">
 
-<!-- Botón para pasar a la pantalla de prueba -->
-<button id="btn-continuar" class="boton-rojo" style="display:none; margin-top: 1em;">Seleccionar tema</button>
+        <label for="cantidad">Número de temas a extraer:</label>
+        <input type="number" id="cantidad" min="1" max="71">
 
-<!-- Contenedor donde se cargará dinámicamente el temporizador de Parte 1 -->
-<div id="contenedor-prueba-a" style="margin-top: 2em;"></div>
-```
+        <label for="rango">
+          Lista de temas disponibles (comas e intervalos con guiones):
+        </label>
+        <input type="text" id="rango"
+               placeholder="Ej: 1,2,3,6,7-12,17,19,20-40">
+
+      </div>
+
+      <button type="submit">
+        Generar números
+      </button>
+
+    </form>
+
+    <div id="resultado" class="result" style="display:none;"></div>
+
+    <!-- Botón para pasar a la pantalla de prueba -->
+    <button id="btn-continuar"
+            class="boton-rojo"
+            style="display:none; margin-top:1em;">
+      Seleccionar tema
+    </button>
+
+    <!-- Contenedor donde se cargará dinámicamente el temporizador -->
+    <div id="contenedor-prueba-a" style="margin-top:2em;"></div>
 
   </div>
 
   <script src="temas.js"></script>
-
   <script src="script.js"></script>
-
   <script src="temporizador-parte1.js"></script>
-
   <script src="Prueba-A.js"></script>
-
   <script src="Prueba-B.js"></script>
-
   <script src="probabilidades.js"></script>
 
   <script>
