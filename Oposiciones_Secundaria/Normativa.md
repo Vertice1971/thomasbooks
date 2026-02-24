@@ -111,16 +111,26 @@ Regula el procedimiento administrativo en la gestión pública educativa.
 
 ### **3. Andalucía**
 
-17. [**Decreto 102/2023, de 9 de mayo (ESO)**](https://www.juntadeandalucia.es/boja/2023/90/3)  
+28. [**Decreto 147/2025, de 17 de septiembre (Formación Profesional)**](https://www.juntadeandalucia.es/boja/2025/179/c01/1)
+    Regula la ordenación del Sistema de Formación Profesional en Andalucía e implanta los grados D y E con formación en empresa obligatoria desde el primer curso.
+
+29. [**Orden de 18 de septiembre de 2025 (Grados D y E FP)**](https://www.juntadeandalucia.es/boja/2025/180/c01/1)
+    Regula la evaluación, certificación, acreditación y titulación del alumnado que cursa los grados D y E del Sistema de Formación Profesional.
+
+30. [**Orden de 26 de septiembre de 2025 (Formación en empresa FP)**](https://www.juntadeandalucia.es/eboja/2025/218701/BOJA25-218701-00037-12937-01_00326535.pdf)
+    Regula la fase de formación en empresa u organismo equiparado en los grados D y E del Sistema de Formación Profesional en Andalucía.
+
+
+31. [**Decreto 102/2023, de 9 de mayo (ESO)**](https://www.juntadeandalucia.es/boja/2023/90/3)  
 Ordena el currículo de la ESO en Andalucía.
 
-18. [**Orden de 30 de mayo de 2023 (ESO)**](https://www.juntadeandalucia.es/boja/2023/104/36)  
+32. [**Orden de 30 de mayo de 2023 (ESO)**](https://www.juntadeandalucia.es/boja/2023/104/36)  
 Desarrolla currículo, evaluación y atención a la diversidad en ESO.
 
-19. [**Decreto 103/2023, de 9 de mayo (Bachillerato)**](https://www.juntadeandalucia.es/boja/2023/90/4)  
+33. [**Decreto 103/2023, de 9 de mayo (Bachillerato)**](https://www.juntadeandalucia.es/boja/2023/90/4)  
 Ordena el currículo del Bachillerato en Andalucía.
 
-20. [**Orden de 30 de mayo de 2023 (Bachillerato)**](https://www.juntadeandalucia.es/boja/2023/104/37)  
+34. [**Orden de 30 de mayo de 2023 (Bachillerato)**](https://www.juntadeandalucia.es/boja/2023/104/37)  
 Desarrolla el currículo y organización del Bachillerato andaluz.
 
 ## **B) Normativa sobre el acceso al cuerpo de profesorado de Secundaria**
