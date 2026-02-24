@@ -29,50 +29,83 @@ Marco general del sistema educativo español.
 3. [**Ley Orgánica 3/2020, de 29 de diciembre (LOMLOE)**](https://www.boe.es/buscar/pdf/2020/BOE-A-2020-17264-consolidado.pdf)  
 Modifica la LOE y refuerza inclusión, currículo competencial y evaluación.
 
-4. [**Real Decreto 217/2022, de 29 de marzo (ESO)**](https://www.boe.es/buscar/pdf/2022/BOE-A-2022-4975-consolidado.pdf)  
+4. [**Real Decreto 497/2024, de 21 de mayo (Cursos de Especialización FP)**](https://www.boe.es/eli/es/rd/2024/05/21/497/dof/spa/pdf)
+   Modifica los reales decretos que regulan los cursos de especialización de Formación Profesional de grado medio y superior, actualizando sus enseñanzas mínimas.
+
+5. [**Real Decreto 498/2024, de 21 de mayo (Grado Básico FP)**](https://www.boe.es/boe/dias/2024/05/28/pdfs/BOE-A-2024-10683.pdf)
+   Modifica los reales decretos que establecen los títulos de Grado Básico, revisando sus enseñanzas mínimas y resultados de aprendizaje.
+
+6. [**Real Decreto 499/2024, de 21 de mayo (Grado Medio FP)**](https://www.boe.es/boe/dias/2024/05/28/pdfs/BOE-A-2024-10684.pdf)
+   Modifica los reales decretos de títulos de Grado Medio, ajustando contenidos y competencias a los nuevos estándares del sistema.
+
+7. [**Real Decreto 500/2024, de 21 de mayo (Grado Superior FP)**](https://www.boe.es/boe/dias/2024/05/28/pdfs/BOE-A-2024-10685.pdf)
+   Modifica los reales decretos de títulos de Grado Superior, actualizando enseñanzas mínimas, resultados de aprendizaje y criterios de evaluación.
+
+8. [**Real Decreto 659/2023, de 18 de julio (Formación Profesional)**](https://www.boe.es/boe/dias/2023/07/22/pdfs/BOE-A-2023-16889.pdf)
+   Regula la ordenación y organización del Sistema de Formación Profesional e implanta la estructura de grados A, B, C, D y E con carácter dual obligatorio.
+
+
+9. [**Real Decreto 217/2022, de 29 de marzo (ESO)**](https://www.boe.es/buscar/pdf/2022/BOE-A-2022-4975-consolidado.pdf)  
 Regula la ordenación y enseñanzas mínimas de la ESO.
 
-5. [**Real Decreto 243/2022, de 5 de abril (Bachillerato)**](https://www.boe.es/buscar/pdf/2022/BOE-A-2022-5521-consolidado.pdf)  
+10. [**Real Decreto 243/2022, de 5 de abril (Bachillerato)**](https://www.boe.es/buscar/pdf/2022/BOE-A-2022-5521-consolidado.pdf)  
 Establece la ordenación y enseñanzas mínimas del Bachillerato.
 
-6. [**Real Decreto 984/2021, de 16 de noviembre**](https://www.boe.es/boe/dias/2021/11/17/pdfs/BOE-A-2021-18812.pdf)  
+11. [**Real Decreto 984/2021, de 16 de noviembre**](https://www.boe.es/boe/dias/2021/11/17/pdfs/BOE-A-2021-18812.pdf)  
 Regula evaluación, promoción y titulación en ESO, Bachillerato y FP.
 
-7. [**Real Decreto 1105/2014, de 26 de diciembre**](https://www.boe.es/buscar/pdf/2015/BOE-A-2015-37-consolidado.pdf)  
+12. [**Real Decreto 1105/2014, de 26 de diciembre**](https://www.boe.es/buscar/pdf/2015/BOE-A-2015-37-consolidado.pdf)  
 Currículo básico de ESO y Bachillerato antes de la LOMLOE.
 
-8. [**Orden ECD/65/2015, de 21 de enero**](https://www.boe.es/buscar/pdf/2015/BOE-A-2015-738-consolidado.pdf)  
+13. [**Orden ECD/65/2015, de 21 de enero**](https://www.boe.es/buscar/pdf/2015/BOE-A-2015-738-consolidado.pdf)  
 Orientaciones para el trabajo competencial y la evaluación.
 
-9. [**Ley 39/2015, de 1 de octubre**](https://www.boe.es/buscar/pdf/2015/BOE-A-2015-10565-consolidado.pdf)  
+14. [**Ley 39/2015, de 1 de octubre**](https://www.boe.es/buscar/pdf/2015/BOE-A-2015-10565-consolidado.pdf)  
 Regula el procedimiento administrativo en la gestión pública educativa.
 
 ---
 
 ### **2. Madrid**
 
-10. [**Decreto 65/2022, de 20 de julio (ESO)**](https://www.bocm.es/eli/es-md/d/2022/07/20/65/con)  
-Ordena el currículo de ESO en la Comunidad de Madrid.
+15. [**Decreto 27/2025, de 21 de mayo (Formación Profesional)**](https://www.bocm.es/boletin/CM_Orden_BOCM/2025/05/22/BOCM-20250522-1.PDF)
+    Regula la ordenación y organización del sistema de Formación Profesional en la Comunidad de Madrid.
 
-11. [**Orden 1712/2023, de 19 de mayo (ESO)**](https://www.bocm.es/boletin/CM_Orden_BOCM/2023/05/31/BOCM-20230531-17.PDF)  
-Desarrolla aspectos del currículo y evaluación en ESO.
+16. [**Decreto 9/2025, de 26 de marzo (Grado Básico FP)**](https://www.bocm.es/boletin/CM_Orden_BOCM/2025/03/31/BOCM-20250331-1.PDF)
+    Establece los planes de estudios de veinticinco títulos de Formación Profesional de grado básico.
 
-12. [**Orden 1736/2023 y Orden 114/2025**](https://www.bocm.es/boletin/CM_Orden_BOCM/2023/05/31/BOCM-20230531-18.PDF)  
-Regulan y amplían el catálogo de optativas en ESO y Bachillerato.  
-[Orden 114/2025](https://www.bocm.es/boletin/CM_Orden_BOCM/2025/01/31/BOCM-20250131-18.PDF)
+17. [**Decreto 8/2025, de 26 de marzo (Cursos de Especialización FP)**](https://www.bocm.es/boletin/CM_Orden_BOCM/2025/03/28/BOCM-20250328-1.PDF)
+    Modifica los planes de estudios de cursos de especialización en Formación Profesional.
 
-13. [**Decreto 64/2022, de 20 de julio (Bachillerato)**](https://www.comunidad.madrid/sites/default/files/doc/educacion/univ/decreto_64_2022_de_20_de_julio_curriculo_bachillerato.pdf)  
-Ordena el currículo del Bachillerato en la Comunidad de Madrid.
+18. [**Orden 114/2025 (Optativas)**](https://www.bocm.es/boletin/CM_Orden_BOCM/2025/01/31/BOCM-20250131-18.PDF)
+    Modifica y amplía el catálogo de materias optativas en ESO y Bachillerato en la Comunidad de Madrid.
 
-14. [**Orden 2067/2023, de 11 de junio (Bachillerato)**](https://www.comunidad.madrid/sites/default/files/doc/educacion/univ/orden2067_2023_bachillerato.pdf)  
-Regula organización, funcionamiento y evaluación en Bachillerato.
+19. [**Decreto 103/2024, de 13 de noviembre (Grado Superior FP)**](https://www.bocm.es/boletin/CM_Orden_BOCM/2024/11/15/BOCM-20241115-2.PDF)
+    Modifica los planes de estudios de ciclos formativos de grado superior.
 
-15. [**Orden 1736/2023 y Orden 114/2025 (repetida)**](https://www.comunidad.madrid/sites/default/files/orden_1736_2023.pdf)  
-Catálogo de optativas en ESO y Bachillerato.  
-[Orden 114/2025](https://www.bocm.es/boletin/CM_Orden_BOCM/2025/01/31/BOCM-20250131-18.PDF)
+20. [**Decreto 102/2024, de 13 de noviembre (Grado Medio FP)**](https://www.bocm.es/boletin/CM_Orden_BOCM/2024/11/15/BOCM-20241115-1.PDF)
+    Modifica los planes de estudios de ciclos formativos de grado medio.
 
-16. [**Orden 457/2023, de 17 de febrero**](https://www.comunidad.madrid/sites/default/files/doc/educacion/orden_457_auton._centros.pdf)  
-Regula la autonomía de centros en ESO y Bachillerato.
+21. [**Orden 2067/2023, de 11 de junio (Bachillerato)**](https://www.comunidad.madrid/sites/default/files/doc/educacion/univ/orden2067_2023_bachillerato.pdf)
+    Regula la organización, funcionamiento y evaluación del Bachillerato en la Comunidad de Madrid.
+
+22. [**Orden 1736/2023, de 19 de mayo (Optativas)**](https://www.bocm.es/boletin/CM_Orden_BOCM/2025/01/31/BOCM-20250131-18.PDF)
+    Establece el catálogo de materias optativas en ESO y Bachillerato.
+
+23. [**Orden 1712/2023, de 19 de mayo (ESO)**](https://www.bocm.es/boletin/CM_Orden_BOCM/2023/05/31/BOCM-20230531-17.PDF)
+    Desarrolla aspectos del currículo y la evaluación en la Educación Secundaria Obligatoria.
+
+24. [**Orden 457/2023, de 17 de febrero (Autonomía de los centros)**](https://www.comunidad.madrid/sites/default/files/doc/educacion/orden_457_auton._centros.pdf)
+    Regula la autonomía organizativa y pedagógica de los centros docentes en ESO y Bachillerato.
+
+25. [**Decreto 65/2022, de 20 de julio (ESO)**](https://www.bocm.es/eli/es-md/d/2022/07/20/65/con)
+    Regula la ordenación y el currículo de la Educación Secundaria Obligatoria en la Comunidad de Madrid.
+
+26. [**Decreto 64/2022, de 20 de julio (Bachillerato)**](https://www.comunidad.madrid/sites/default/files/doc/educacion/univ/decreto_64_2022_de_20_de_julio_curriculo_bachillerato.pdf)
+    Regula la ordenación y el currículo del Bachillerato en la Comunidad de Madrid.
+
+27. [**Orden 893/2022, de 21 de abril (Formación Profesional)**](https://www.bocm.es/boletin/CM_Orden_BOCM/2022/05/04/BOCM-20220504-34.PDF)
+    Regula la matrícula, evaluación y acreditación en las enseñanzas de Formación Profesional.
+
 
 ---
 
