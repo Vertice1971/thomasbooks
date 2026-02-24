@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planificador de Oposiciones — Profesorado Secundaria</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- Portada inicial -->
+<div id="cover">
+  <img src="Portada.png" alt="Portada">
+</div>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Planificador de Oposiciones<br><span>Profesorado de Secundaria</span></h1>
+
+    <p style="margin-top:10px;">
+      <a href="https://www.amazon.es/dp/B0GP6QM85J"
+         target="_blank"
+        rel="noopener noreferrer"
+        style="color: #ffff00; font-weight: bold; text-decoration: none;">
+        Enlace al diseño y defensa de la Programación Didáctica
+      </a>
+    </p>
+
+    <p style="margin-top:6px;">
+      <a href="mailto:thomasbooks71@gmail.com">
+        thomasbooks71@gmail.com
+      </a>
+    </p>
+
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="form-card no-print">
+    <div class="section-title">Configuración del plan</div>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Fecha de inicio</label>
+        <input type="date" id="startDate">
+      </div>
+
+      <div class="form-group">
+        <label>Especialidad</label>
+        <select id="especialidadSelect"></select>
+      </div>
+
+      <div class="form-group">
+        <label>Temas seleccionados</label>
+        <div id="topicsCounter"
+             style="padding:10px 14px;border:1.5px solid var(--border);
+                    border-radius:7px;background:#fff;font-weight:700;">
+          0
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Días totales</label>
+        <input type="number" id="days" min="30" max="730" value="365">
+      </div>
+
+      <div class="form-group">
+        <label>Horas al día (Máximo)</label>
+        <input type="number" id="hours" min="1" max="12" step="0.5" value="5">
+      </div>
+
+      <div class="form-group">
+        <label>Días semanales de descanso</label>
+        <select id="restDays">
+          <option value="0">0</option>
+          <option value="1" selected>1</option>
+          <option value="2">2</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Horas estimadas por tema</label>
+        <input type="number" id="hoursPerTopic" min="4" max="40" value="12">
+      </div>
+
+      <div class="form-group">
+        <label>Tiempo para repasar un tema completo</label>
+        <select id="reviewTime">
+          <option value="0.5">30 min</option>
+          <option value="0.75" selected>45 min</option>
+          <option value="1">1 h</option>
+          <option value="1.5">1 h 30 min</option>
+          <option value="2">2 h</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Ciclo de repasos</label>
+        <select id="reviewCycle">
+          <option value="7">7 días</option>
+          <option value="14" selected>14 días</option>
+          <option value="21">21 días</option>
+          <option value="30">30 días</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Días finales intensivos</label>
+        <input type="number" id="finalDays" min="0" max="30" value="10">
+      </div>
+
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label>Preselección de temario</label>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+
+          <button type="button" class="btn-secondary" id="btnSelectAll">
+            Temario completo
+          </button>
+
+          <div style="display:flex;align-items:center;gap:6px">
+            <input type="number" id="rangeStart" placeholder="Desde" style="width:80px">
+            <span>–</span>
+            <input type="number" id="rangeEnd" placeholder="Hasta" style="width:80px">
+            <button type="button" class="btn-secondary" id="btnSelectRange">
+              Añadir intervalo
+            </button>
+          </div>
+
+          <button type="button" class="btn-secondary" id="btnClearSelection">
+            Limpiar
+          </button>
+
+        </div>
+
+        <label>Temas a planificar</label>
+        <div id="temasContainer"
+             style="max-height:220px;overflow:auto;border:1.5px solid var(--border);
+                    padding:12px;border-radius:7px;background:#fff">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="actions" style="margin-top:22px">
+      <button class="btn-primary" id="btnGenerate">Generar plan</button>
+      <button class="btn-secondary" id="btnExportPdf">Exportar PDF</button>
+      <button class="btn-secondary" id="btnPrintCalendar">Imprimir</button>
+    </div>
+
+  </div>
+
+  <div id="results">
+    <div id="timeline"></div>
+  </div>
+
+  <footer style="text-align:center;margin-top:40px;font-size:0.9rem;opacity:0.8;">
+    Software alojado en GitHub - Licencia MIT- Tomás Cuesta
+  </footer>
+
+</div>
+
+<script src="js/temas.js"></script>
+<script src="js/selector-temas.js"></script>
+<script src="js/planEngine.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/export.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  if (window.initSelector) initSelector();
+});
+
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    var cover = document.getElementById('cover');
+    if(cover) cover.style.display = 'none';
+  }, 3000);
+});
+</script>
+
+</body>
+</html>
+
