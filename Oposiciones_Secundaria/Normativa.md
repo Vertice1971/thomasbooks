@@ -154,13 +154,8 @@ Actualiza el sistema de concurso-oposición conforme a la LOMLOE, reajustando m�
 
 ### **Ejemplos de normativa específica para la última convocatoria**
 
-Estos ejemplos ya no tienen validez. Se presentan solo como una muestra de cómo se desarrollarán futuros procesos selectivos. La convocatoria tiene dos niveles normativos, primero el estatal y luego el desarrollo autonómico, por eso se incluyen dos ejemplos de Comunidades Autónomas.
+Algunos de estos ejemplos ya no tienen validez. Se presentan solo como una muestra de cómo se desarrollarán futuros procesos selectivos. La convocatoria tiene dos niveles normativos, primero el estatal y luego el desarrollo autonómico, por eso se incluyen dos ejemplos de Comunidades Autónomas.
 
-- [**Resolución de 27 de diciembre de 2024 (BOE‑A‑2024‑27552)**](https://www.boe.es/boe/dias/2024/12/31/pdfs/BOE-A-2024-27552.pdf)  
-Convoca el proceso selectivo mediante concurso‑oposición para el ingreso al cuerpo de Profesores de Enseñanza Secundaria y otros cuerpos docentes.
-
-- [**Resolución de 24 de marzo de 2025 (BOE‑A‑2025‑6824)**](https://www.boe.es/boe/dias/2025/04/04/pdfs/BOE-A-2025-6824.pdf)  
-Corrige errores de la convocatoria inicial y establece el plazo de presentación de solicitudes y la fecha de inicio de las pruebas selectivas.
 
 - [Convocatoria de Oposiciones en Andalucía 2026](https://www.juntadeandalucia.es/eboja/2026/38/c01/BOJA26-203801-00120-2586-01_00333808.pdf)  
 - [Convocatoria de Oposiciones en Madrid 2025](https://www.bocm.es/boletin/CM_Orden_BOCM/2025/02/28/BOCM-20250228-17.PDF)  
