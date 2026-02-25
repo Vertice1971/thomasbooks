@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Trivia Procesos Sanitarios – Temarios</title>
+<style>
+    :root{
+        --bg:#0a0c10; --card:#11151c; --text:#e7edf3; --muted:#9fb0c3;
+        --accent:#ffd23f; --accent2:#34c759; --danger:#ff453a; --focus:#2563eb;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+        margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+        background:linear-gradient(180deg,#0a0c10 0%, #0d1117 100%);
+        color:var(--text);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    }
+
+    body.bloqueado{overflow:hidden}
+    #cover{
+        position:fixed;inset:0;
+        background:#000;
+        display:flex;align-items:center;justify-content:center;
+        z-index:10000;
+        opacity:1;visibility:visible;
+        transition:opacity .6s ease, visibility 0s linear .6s;
+        pointer-events:auto;
+    }
+    #cover.oculta{opacity:0;visibility:hidden}
+    #cover img{
+        max-width:100%;max-height:100%;
+        border-radius:12px;
+        box-shadow:0 20px 40px rgba(0,0,0,.6);
+        filter:brightness(1.05) contrast(1.05);
+        user-select:none;
+    }
+
+    .contenedor{max-width:920px;margin:0 auto;padding:24px}
+    header{margin-bottom:16px}
+    h1{margin:0;font-weight:800;letter-spacing:.3px}
+    h2{margin:10px 0 0 0;font-weight:700;color:var(--muted);font-size:1.05rem}
+    .sub{margin:8px 0 0 0;color:var(--muted)}
+    .tarjeta{
+        background:var(--card);border:1px solid #1d2530;border-radius:16px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    .fila{display:flex;gap:16px;flex-wrap:wrap}
+    .col{flex:1 1 280px}
+    button{
+        background:#1a2330;color:var(--text);border:1px solid #283346;padding:12px 16px;border-radius:12px;
+        font-weight:700;cursor:pointer;transition:.15s transform ease,.15s background ease,.15s border-color ease,.15s opacity ease;
+    }
+    button:hover{transform:translateY(-1px);border-color:#3a4a63}
+    button:active{transform:translateY(0)}
+    .primario{background:var(--accent);color:#111;border-color:#b69500}
+    .exito{background:var(--accent2);color:#041;border-color:#1f7a3a}
+    .peligro{background:var(--danger);color:#2b0302;border-color:#c21e16}
+    .fantasma{background:transparent}
+    .oculto{display:none !important}
+
+    .panel-config label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
+    .panel-config input[type="number"], .panel-config select{
+        width:100%;padding:10px 12px;border-radius:10px;border:1px solid #283346;background:#0f1319;color:var(--text);outline:none;
+    }
+    .panel-config input[type="checkbox"]{transform:scale(1.2);margin-right:8px}
+    .grupo{margin-bottom:14px}
+
+    .estado{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    .progreso{width:100%;height:10px;background:#121923;border-radius:999px;overflow:hidden;border:1px solid #233047}
+    .barra{height:100%;width:0%;background:linear-gradient(90deg,#ffd23f,#ffb703);transition:width .3s ease}
+    .contador-puntos{min-width:120px;text-align:center;padding:8px 10px;border-radius:10px;border:1px solid #283346;background:#0f1319}
+
+    .pregunta{font-size:20px;line-height:1.35;margin:6px 0 12px 0;font-weight:700}
+    .opciones{display:grid;gap:10px}
+    .opcion{
+        padding:12px 14px;border-radius:12px;border:1px solid #2b3649;background:#0e141b;cursor:pointer;display:flex;gap:10px;align-items:flex-start;text-align:left
+    }
+    .opcion:hover{border-color:#3c4f6c}
+    .opcion.correcta{background:rgba(52,199,89,.12);border-color:rgba(52,199,89,.6)}
+    .opcion.incorrecta{background:rgba(255,69,58,.10);border-color:rgba(255,69,58,.55)}
+    .opcion .letra{
+        width:28px;height:28px;display:inline-grid;place-items:center;border-radius:8px;border:1px solid #344055;background:#121826;color:var(--muted);font-weight:700;flex:0 0 auto
+    }
+
+    .pie{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+
+    .resultado{font-size:18px;margin:0;color:var(--muted)}
+    .medalla{font-weight:800;color:var(--accent)}
+    .seleccionable{user-select:none}
+
+    .enlace-contenedor{margin-top:18px}
+    .enlace-constante{
+        color:var(--accent);
+        text-decoration:underline !important;
+        text-underline-offset:3px;
+        font-weight:700;
+    }
+    .enlace-constante:hover,
+    .enlace-constante:focus{filter:brightness(1.05)}
+
+    @media (prefers-reduced-motion:no-preference){
+        .aparece{animation:aparece .25s ease both}
+        @keyframes aparece{from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)}}
+    }
+</style>
+</head>
+
+<body class="bloqueado">
+<div id="cover" aria-hidden="true">
+  <img src="Portada.png" alt="">
+</div>
+
+<div class="contenedor" aria-live="polite">
+<header>
+    <h1>Oposiciones Secundaria: Procesos Sanitarios</h1>
+    <h2>Conforme al temario oficial (B.O.E. 21/09/1993)</h2>
+    <p id="cabecera-estado" class="sub" style="color: rgb(247, 227, 3);">Elige el tema y la cantidad de preguntas</p>
+    <p class="sub" style="font-size: 0.85em;">tomcue@iesjuandelacierva.com</p>
+</header>
+
+<section id="pantalla-inicio" class="tarjeta aparece">
+    <div class="fila">
+        <div class="col panel-config">
+            <div class="grupo">
+                <label for="tema">Temario</label>
+                <select id="tema">
+                    <option value="01-organizacion-del-sistema-sanitario-espanol.js">1 - Organización del sistema sanitario español</option>
+                    <option value="02-niveles-de-atencion-sanitaria.js">2 - Niveles de atención sanitaria</option>
+                    <option value="03-economia-de-la-salud.js">3 - Economía de la salud</option>
+                    <option value="04-empresa-y-gestion-sanitaria.js">4 - Empresa y gestión sanitaria</option>
+                    <option value="05-documentacion-clinica.js">5 - Documentación clínica</option>
+                    <option value="06-gestion-de-almacenes-sanitarios.js">6 - Gestión de almacenes sanitarios</option>
+                    <option value="07-documentacion-de-compraventa-sanitaria.js">7 - Documentación de compraventa sanitaria</option>
+                    <option value="08-concepto-y-determinantes-de-salud.js">8 - Concepto y determinantes de salud</option>
+                    <option value="09-educacion-sanitaria-modelos-y-agentes.js">9 - Educación sanitaria: modelos y agentes</option>
+                    <option value="10-planificacion-en-educacion-sanitaria.js">10 - Planificación en educación sanitaria</option>
+                    <option value="11-evaluacion-en-educacion-sanitaria.js">11 - Evaluación en educación sanitaria</option>
+                    <option value="12-tecnologia-educativa-en-salud.js">12 - Tecnología educativa en salud</option>
+                    <option value="13-psicologia-evolutiva.js">13 - Psicología evolutiva</option>
+                    <option value="14-comunicacion-con-el-paciente.js">14 - Comunicación con el paciente</option>
+                    <option value="15-encuestas-y-muestreo-sanitario.js">15 - Encuestas y muestreo sanitario</option>
+                    <option value="16-indicadores-del-estado-de-salud.js">16 - Indicadores del estado de salud</option>
+                    <option value="17-epidemiologia-y-riesgos.js">17 - Epidemiología y riesgos</option>
+                    <option value="18-estadistica-y-ensayo-clinico.js">18 - Estadística y ensayo clínico</option>
+                    <option value="19-informatica-en-gestion-sanitaria.js">19 - Informática en gestión sanitaria</option>
+                    <option value="20-calidad-y-deontologia-sanitaria.js">20 - Calidad y deontología sanitaria</option>
+                    <option value="21-desinfeccion-y-esterilizacion.js">21 - Desinfección y esterilización</option>
+                    <option value="22-necropsia-legislacion-y-documentacion.js">22 - Necropsia: legislación y documentación</option>
+                    <option value="23-muestras-necropsicas.js">23 - Muestras necrópsicas</option>
+                    <option value="24-acondicionamiento-del-cadaver.js">24 - Acondicionamiento del cadáver</option>
+                    <option value="25-apertura-y-evisceracion.js">25 - Apertura y evisceración</option>
+                    <option value="26-anatomia-patologica-snc.js">26 - Anatomía patológica: SNC</option>
+                    <option value="27-anatomia-patologica-torax.js">27 - Anatomía patológica: tórax</option>
+                    <option value="28-anatomia-patologica-abdomen.js">28 - Anatomía patológica: abdomen</option>
+                    <option value="29-anatomia-patologica-pelvis.js">29 - Anatomía patológica: pelvis</option>
+                    <option value="30-anatomia-patologica-piel-y-locomotor.js">30 - Anatomía patológica: piel y locomotor</option>
+                    <option value="31-diagnostico-citologico-ginecologico.js">31 - Diagnóstico citológico ginecológico</option>
+                    <option value="32-citopatologia-ginecologica-y-mamaria.js">32 - Citopatología ginecológica y mamaria</option>
+                    <option value="33-citologia-no-ginecologica-normal.js">33 - Citología no ginecológica: normal</option>
+                    <option value="34-citologia-no-ginecologica-tumoral.js">34 - Citología no ginecológica: tumoral</option>
+                    <option value="35-citologia-no-ginecologica-inflamatoria.js">35 - Citología no ginecológica: inflamatoria</option>
+                    <option value="36-trastornos-alimentarios.js">36 - Trastornos alimentarios</option>
+                    <option value="37-obesidad-y-tratamiento-dietetico.js">37 - Obesidad y tratamiento dietético</option>
+                    <option value="38-valoracion-nutricional.js">38 - Valoración nutricional</option>
+                    <option value="39-dislipemias-y-alimentacion.js">39 - Dislipemias y alimentación</option>
+                    <option value="40-malabsorcion-intestinal.js">40 - Malabsorción intestinal</option>
+                    <option value="41-patologia-hepatica-y-pancreatica.js">41 - Patología hepática y pancreática</option>
+                    <option value="42-alteraciones-hidroelectroliticas.js">42 - Alteraciones hidroelectrolíticas</option>
+                    <option value="43-dieta-y-diabetes.js">43 - Dieta y diabetes</option>
+                    <option value="44-soporte-nutricional-critico.js">44 - Soporte nutricional crítico</option>
+                    <option value="45-dietas-diagnosticas.js">45 - Dietas diagnósticas</option>
+                    <option value="46-nutricion-artificial.js">46 - Nutrición artificial</option>
+                    <option value="47-dieta-y-cardiovascular.js">47 - Dieta y cardiovascular</option>
+                    <option value="48-epidemiologia-nutricional.js">48 - Epidemiología nutricional</option>
+                    <option value="49-prevencion-odontologica.js">49 - Prevención odontológica</option>
+                    <option value="50-epidemiologia-oral.js">50 - Epidemiología oral</option>
+                    <option value="51-sistemas-de-informacion-sanitaria.js">51 - Sistemas de información sanitaria</option>
+                    <option value="52-gestion-de-informacion-sanitaria.js">52 - Gestión de información sanitaria</option>
+                    <option value="53-codificacion-clinica.js">53 - Codificación clínica</option>
+                    <option value="54-informatica-en-documentacion-sanitaria.js">54 - Informática en documentación sanitaria</option>
+                    <option value="55-proteccion-de-datos-sanitarios.js">55 - Protección de datos sanitarios</option>
+                    <option value="56-topografia-humana.js">56 - Topografía humana</option>
+                    <option value="57-aparato-locomotor.js">57 - Aparato locomotor</option>
+                    <option value="58-sistema-nervioso.js">58 - Sistema nervioso</option>
+                    <option value="59-sistema-endocrino.js">59 - Sistema endocrino</option>
+                    <option value="60-aparato-digestivo.js">60 - Aparato digestivo</option>
+                    <option value="61-aparato-respiratorio.js">61 - Aparato respiratorio</option>
+                    <option value="62-aparato-circulatorio.js">62 - Aparato circulatorio</option>
+                    <option value="63-aparato-urinario.js">63 - Aparato urinario</option>
+                    <option value="64-aparato-genital-femenino-y-mama.js">64 - Aparato genital femenino y mama</option>
+                    <option value="65-piel-macro-y-microscopia.js">65 - Piel: macro y microscopía</option>
+                    <option value="66-fisiologia-cutanea.js">66 - Fisiología cutánea</option>
+                    <option value="67-lesiones-cutaneas.js">67 - Lesiones cutáneas</option>
+                    <option value="68-urgencias-vitales.js">68 - Urgencias vitales</option>
+                    <option value="69-higiene-y-profilaxis.js">69 - Higiene y profilaxis</option>
+                    <option value="70-reglamentacion-sanitaria-profesional.js">70 - Reglamentación sanitaria profesional</option>
+                    <option value="71-sanidad-exterior-y-prevencion.js">71 - Sanidad exterior y prevención</option>
+                </select>
+            </div>
+
+            <div class="grupo">
+                <label for="cantidad">Número de preguntas</label>
+                <input id="cantidad" type="number" min="5" max="40" value="10" />
+            </div>
+        </div>
+
+        <div class="col">
+            <p style="color:var(--muted);margin-top:0">Selecciona "Comenzar" para hacer el test o "Modo estudio" para repasar todas las respuestas.</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <button id="btn-comenzar" class="primario">Comenzar</button>
+                <button id="btn-aprender" title="Muestra todas las preguntas del temario en modo estudio">Modo estudio</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="enlace-contenedor">
+        <a class="enlace-constante" href="https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Men%C3%BA.html" target="_blank" rel="noopener">
+            Enlace al Menú inicial con acceso a todos los recursos online gratuitos
+        </a>
+    </div>
+</section>
+
+<section id="pantalla-juego" class="tarjeta oculto">
+    <div class="estado">
+        <div class="contador-puntos"><strong id="xIndex">1</strong>/<span id="xTotal">12</span> · Puntos: <strong id="xPuntos">0</strong></div>
+        <div class="progreso" aria-hidden="true"><div id="barra" class="barra" style="width:0%"></div></div>
+    </div>
+
+    <div id="enunciado" class="pregunta"></div>
+    <div id="opciones" class="opciones"></div>
+
+    <div class="pie">
+        <div>
+            <button id="btn-anterior" class="fantasma">Anterior</button>
+            <button id="btn-saltar">Saltar</button>
+        </div>
+        <div>
+            <button id="btn-comprobar" class="primario">Comprobar</button>
+            <button id="btn-siguiente" class="exito oculto">Siguiente</button>
+            <button id="btn-terminar" class="peligro oculto">Terminar</button>
+        </div>
+    </div>
+</section>
+
+<section id="pantalla-final" class="tarjeta oculto">
+    <p class="resultado" id="resumen"></p>
+    <div class="fila" style="margin-top:12px">
+        <button id="btn-repetir" class="primario">Repetir configuración</button>
+        <button id="btn-inicio">Volver al inicio</button>
+        <button id="btn-estudio">Repasar preguntas</button>
+    </div>
+</section>
+
+<section id="pantalla-estudio" class="tarjeta oculto">
+    <div id="lista-estudio"></div>
+    <div class="pie"><button id="btn-salir-estudio">Salir</button></div>
+</section>
+
+</div>
+
+<script>
+/* Portada: bloquea, desvanece y libera scroll */
+(function(){
+    const cover = document.getElementById('cover');
+    const liberar = ()=>{ document.body.classList.remove('bloqueado'); };
+    window.addEventListener('load', function(){
+        const T = 3000;
+        setTimeout(function(){
+            if(!cover) { liberar(); return; }
+            cover.classList.add('oculta');
+            cover.addEventListener('transitionend', function onEnd(){
+                cover.removeEventListener('transitionend', onEnd);
+                if (cover && cover.parentNode) cover.parentNode.removeChild(cover);
+                liberar();
+            });
+        }, T);
+    }, {once:true});
+})();
+
+/* ===== Utilidades ===== */
+function barajar(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+/* ===== Sistema de sonido (WebAudio) ===== */
+class SistemaSonido{
+    constructor(){
+        this.ctx = null;
+        this.master = null;
+        this.enabled = true;
+        this.initialized = false;
+        this.volume = 0.15;
+        this._unlocked = false;
+    }
+    init(){
+        if(this.initialized) return;
+        try{
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            this.master = this.ctx.createGain();
+            this.master.gain.value = this.volume;
+            this.master.connect(this.ctx.destination);
+            this.initialized = true;
+        }catch(e){}
+    }
+    ensure(){
+        if(!this.initialized) this.init();
+        if(this.ctx && this.ctx.state === "suspended") this.ctx.resume();
+    }
+    unlockOnce(){
+        if(this._unlocked) return;
+        this._unlocked = true;
+        this.ensure();
+    }
+    tone(freq=440, dur=0.18, type="square"){
+        if(!this.enabled) return;
+        this.ensure();
+        if(!this.ctx) return;
+        const t0 = this.ctx.currentTime + 0.01;
+        const o = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        o.type = type;
+        o.frequency.setValueAtTime(freq, t0);
+        o.connect(g); g.connect(this.master);
+        g.gain.setValueAtTime(1, t0);
+        g.gain.exponentialRampToValueAtTime(0.0008, t0 + dur);
+        o.start(t0);
+        o.stop(t0 + dur);
+    }
+    reproducirAcierto(){
+        this.tone(880, 0.16, "square");
+        setTimeout(()=>this.tone(1245, 0.18, "square"), 120);
+    }
+    reproducirError(){
+        this.tone(220, 0.22, "triangle");
+    }
+    mute(on){ this.enabled = !on; }
+}
+const sonido = new SistemaSonido();
+
+["pointerdown","keydown"].forEach(ev=>{
+    window.addEventListener(ev, ()=>sonido.unlockOnce(), { once:false, passive:true });
+});
+document.addEventListener("visibilitychange", ()=>{
+    if(document.visibilityState==="visible") sonido.ensure();
+});
+
+/* ===== Carga de temarios ===== */
+let BANCO = [];
+
+function cargarTemario(nombreArchivo){
+    return new Promise((resolve, reject)=>{
+        delete window.PREGUNTAS;
+        const prev = document.getElementById("temario-script");
+        if(prev) prev.remove();
+
+        const s = document.createElement("script");
+        s.id = "temario-script";
+        s.async = true;
+        s.src = `temarios/${nombreArchivo}?t=${Date.now()}`;
+        s.onload = ()=>{
+            if(typeof window.PREGUNTAS === "undefined" || !Array.isArray(window.PREGUNTAS)){
+                reject(new Error("El temario no define PREGUNTAS válidas."));
+                return;
+            }
+            BANCO = convertirPreguntas(window.PREGUNTAS);
+            resolve(BANCO);
+        };
+        s.onerror = ()=>reject(new Error("No se pudo cargar el temario."));
+        document.body.appendChild(s);
+    });
+}
+
+function convertirPreguntas(arr){
+    return arr.map(p=>{
+        const opciones = [p.correcta, ...(p.incorrectas||[])];
+        const idxs = opciones.map((_,i)=>i);
+        barajar(idxs);
+        const opsBarajadas = idxs.map(i=>opciones[i]);
+        const indiceCorrecta = idxs.indexOf(0);
+        return {
+            pregunta: p.enunciado,
+            opciones: opsBarajadas,
+            correcta: indiceCorrecta,
+            explicacion: ""
+        };
+    });
+}
+
+/* ===== Estado/UI ===== */
+const ui = {
+    inicio:      document.getElementById("pantalla-inicio"),
+    juego:       document.getElementById("pantalla-juego"),
+    final:       document.getElementById("pantalla-final"),
+    estudio:     document.getElementById("pantalla-estudio"),
+    tema:        document.getElementById("tema"),
+    cantidad:    document.getElementById("cantidad"),
+    enunciado:   document.getElementById("enunciado"),
+    opciones:    document.getElementById("opciones"),
+    idx:         document.getElementById("xIndex"),
+    total:       document.getElementById("xTotal"),
+    puntos:      document.getElementById("xPuntos"),
+    barra:       document.getElementById("barra"),
+    resumen:     document.getElementById("resumen"),
+    listaEstudio:document.getElementById("lista-estudio"),
+    cabecera:    document.getElementById("cabecera-estado"),
+    btns:{
+        comenzar: document.getElementById("btn-comenzar"),
+        aprender: document.getElementById("btn-aprender"),
+        anterior: document.getElementById("btn-anterior"),
+        saltar:   document.getElementById("btn-saltar"),
+        comprobar:document.getElementById("btn-comprobar"),
+        siguiente:document.getElementById("btn-siguiente"),
+        terminar: document.getElementById("btn-terminar"),
+        repetir:  document.getElementById("btn-repetir"),
+        inicio:   document.getElementById("btn-inicio"),
+        estudio:  document.getElementById("btn-estudio"),
+        salirEst: document.getElementById("btn-salir-estudio")
+    }
+};
+
+let estado = { preguntas: [], orden: [], actual: 0, puntos: 0, seleccion: null };
+
+/* ===== Cabecera dinámica ===== */
+const CABECERA_INICIAL = ui.cabecera.textContent;
+function setCabeceraTituloFromSelect(){
+    const opt = ui.tema.options[ui.tema.selectedIndex];
+    if(opt) ui.cabecera.textContent = opt.textContent;
+}
+function resetCabecera(){ ui.cabecera.textContent = CABECERA_INICIAL; }
+
+/* ===== Navegación ===== */
+function mostrar(section){
+    for(const s of [ui.inicio, ui.juego, ui.final, ui.estudio]) s.classList.add("oculto");
+    section.classList.remove("oculto");
+    section.classList.add("aparece");
+}
+
+/* ===== Preparación desde BANCO ===== */
+function prepararJuego(opts){
+    const conjunto = barajar([...BANCO]);
+    const n = Math.max(5, Math.min(opts.cantidad, conjunto.length));
+    const seleccion = conjunto.slice(0, n).map(clonarYBarajarOpciones);
+
+    estado.preguntas = seleccion;
+    estado.orden = [...Array(estado.preguntas.length).keys()];
+    estado.actual = 0; estado.puntos = 0; estado.seleccion = null;
+
+    ui.total.textContent = String(estado.preguntas.length);
+    ui.puntos.textContent = "0";
+    ui.barra.style.width = "0%";
+
+    setCabeceraTituloFromSelect();
+    pintarPregunta();
+    mostrar(ui.juego);
+}
+
+function clonarYBarajarOpciones(qo){
+    const copia = JSON.parse(JSON.stringify(qo));
+    const idxs = copia.opciones.map((_,i)=>i);
+    barajar(idxs);
+    const ops = idxs.map(i=>copia.opciones[i]);
+    const corr = idxs.indexOf(copia.correcta);
+    copia.opciones = ops; copia.correcta = corr;
+    return copia;
+}
+
+/* ===== Pintado ===== */
+function pintarPregunta(){
+    const i = estado.actual;
+    const q = estado.preguntas[i];
+    ui.idx.textContent = String(i+1);
+    ui.enunciado.textContent = q.pregunta;
+    ui.opciones.innerHTML = "";
+    ui.btns.siguiente.classList.add("oculto"); ui.btns.terminar.classList.add("oculto");
+    ui.btns.comprobar.classList.remove("oculto");
+
+    const letras = "ABCD".split("");
+    q.opciones.forEach((texto, idx)=>{
+        const btn = document.createElement("button");
+        btn.className = "opcion";
+        btn.setAttribute("data-idx", idx);
+        btn.innerHTML = `<span class="letra">${letras[idx]||"?"}</span><span>${texto}</span>`;
+        btn.addEventListener("click", ()=>{
+            sonido.unlockOnce();
+            seleccionar(idx);
+        });
+        ui.opciones.appendChild(btn);
+    });
+
+    actualizarProgreso(); estado.seleccion = null;
+}
+
+function seleccionar(idx){
+    if(ui.btns.comprobar.classList.contains("oculto")) return;
+    estado.seleccion = idx;
+    [...ui.opciones.children].forEach(el=>el.style.outline="none");
+    const el = ui.opciones.querySelector(`[data-idx="${idx}"]`);
+    el.style.outline = `2px solid var(--focus)`;
+    el.scrollIntoView({block:"nearest", behavior:"smooth"});
+}
+
+function actualizarProgreso(){
+    const pct = (estado.actual/estado.preguntas.length)*100;
+    ui.barra.style.width = `${pct}%`;
+}
+
+/* ===== Comprobación/flujo ===== */
+function comprobar(){
+    const q = estado.preguntas[estado.actual];
+    const sel = estado.seleccion;
+    const acierto = sel === q.correcta;
+
+    [...ui.opciones.children].forEach((btn, idx)=>{
+        if(idx===q.correcta) btn.classList.add("correcta");
+        if(sel!==null && idx===sel && sel!==q.correcta) btn.classList.add("incorrecta");
+        btn.style.cursor="default";
+    });
+
+    if(sel !== null){
+        if(acierto){
+            estado.puntos++;
+            ui.puntos.textContent = String(estado.puntos);
+            sonido.reproducirAcierto();
+        }else{
+            sonido.reproducirError();
+        }
+    }
+
+    ui.btns.comprobar.classList.add("oculto");
+    const ultima = estado.actual === estado.preguntas.length - 1;
+    if(ultima){ ui.btns.terminar.classList.remove("oculto"); }
+    else{ ui.btns.siguiente.classList.remove("oculto"); }
+}
+
+function siguiente(){ estado.actual++; pintarPregunta(); }
+function anterior(){ if(estado.actual===0) return; estado.actual--; pintarPregunta(); }
+function saltar(){ estado.seleccion = null; comprobar(); }
+
+/* ===== Final ===== */
+function terminar(){
+    mostrar(ui.final);
+    const n = estado.preguntas.length, p = estado.puntos, r = p/n;
+    const med = r>=0.85 ? "Oro" : r>=0.65 ? "Plata" : r>=0.45 ? "Bronce" : "Finalista";
+    ui.resumen.innerHTML = `Resultado: <span class="medalla">${med}</span>. Aciertos ${p}/${n}.`;
+}
+
+/* ===== Estudio ===== */
+function entrarEstudio(pregs = BANCO){
+    ui.listaEstudio.innerHTML = "";
+    const frag = document.createDocumentFragment();
+    const letras = "ABCD".split("");
+    pregs.forEach((q,i)=>{
+        const card = document.createElement("div");
+        card.className = "tarjeta"; card.style.marginBottom = "12px";
+        const h = document.createElement("div"); h.className = "pregunta"; h.textContent = `${i+1}. ${q.pregunta}`;
+        const lista = document.createElement("div"); lista.className = "opciones";
+        q.opciones.forEach((op,idx)=>{
+            const p = document.createElement("div");
+            p.className = "opcion " + (idx===q.correcta?"correcta":"");
+            p.innerHTML = `<span class="letra">${letras[idx]}</span><span>${op}</span>`;
+            lista.appendChild(p);
+        });
+        const ex = document.createElement("div"); ex.className = "explicacion"; ex.textContent = q.explicacion || "";
+        card.append(h, lista, ex); frag.appendChild(card);
+    });
+    ui.listaEstudio.appendChild(frag);
+    mostrar(ui.estudio);
+}
+
+/* ===== Eventos ===== */
+async function iniciarDesdeTemario(archivo, opts){
+    await cargarTemario(archivo);
+    prepararJuego(opts);
+}
+
+ui.btns.comenzar.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
+    await iniciarDesdeTemario(ui.tema.value, { cantidad: Number(ui.cantidad.value || 12) });
+});
+
+ui.btns.aprender.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
+    await cargarTemario(ui.tema.value);
+    setCabeceraTituloFromSelect();
+    entrarEstudio(barajar([...BANCO]));
+});
+
+ui.btns.comprobar.addEventListener("click", comprobar);
+ui.btns.siguiente.addEventListener("click", siguiente);
+ui.btns.anterior.addEventListener("click", anterior);
+ui.btns.saltar.addEventListener("click", saltar);
+ui.btns.terminar.addEventListener("click", terminar);
+
+ui.btns.repetir.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
+    await iniciarDesdeTemario(ui.tema.value, { cantidad: estado.preguntas.length });
+});
+
+ui.btns.inicio.addEventListener("click", ()=>{
+    resetCabecera();
+    mostrar(ui.inicio);
+});
+ui.btns.estudio.addEventListener("click", ()=>entrarEstudio(estado.preguntas));
+ui.btns.salirEst.addEventListener("click", ()=>mostrar(ui.final));
+
+document.addEventListener("keydown", (e)=>{
+    if(ui.juego.classList.contains("oculto")) return;
+    if(e.key==="Enter") {
+        if(!ui.btns.comprobar.classList.contains("oculto")) comprobar();
+        else if(!ui.btns.siguiente.classList.contains("oculto")) siguiente();
+    }
+    if(e.key==="ArrowRight" && !ui.btns.siguiente.classList.contains("oculto")) siguiente();
+    if(e.key==="ArrowLeft") anterior();
+});
+
+/* Inicio */
+mostrar(ui.inicio);
+</script>
+</body>
+</html>
