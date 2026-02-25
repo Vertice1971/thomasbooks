@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Trivia FOL – Temarios</title>
+<style>
+    :root{
+        --bg:#0a0c10; --card:#11151c; --text:#e7edf3; --muted:#9fb0c3;
+        --accent:#ffd23f; --accent2:#34c759; --danger:#ff453a; --focus:#2563eb;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+        margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+        background:linear-gradient(180deg,#0a0c10 0%, #0d1117 100%);
+        color:var(--text);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    }
+
+    body.bloqueado{overflow:hidden}
+    #cover{
+        position:fixed;inset:0;
+        background:#000;
+        display:flex;align-items:center;justify-content:center;
+        z-index:10000;
+        opacity:1;visibility:visible;
+        transition:opacity .6s ease, visibility 0s linear .6s;
+        pointer-events:auto;
+    }
+    #cover.oculta{opacity:0;visibility:hidden}
+    #cover img{
+        max-width:100%;max-height:100%;
+        border-radius:12px;
+        box-shadow:0 20px 40px rgba(0,0,0,.6);
+        filter:brightness(1.05) contrast(1.05);
+        user-select:none;
+    }
+
+    .contenedor{max-width:920px;margin:0 auto;padding:24px}
+    header{margin-bottom:16px}
+    h1{margin:0;font-weight:800;letter-spacing:.3px}
+    h2{margin:10px 0 0 0;font-weight:700;color:var(--muted);font-size:1.05rem}
+    .sub{margin:8px 0 0 0;color:var(--muted)}
+    .tarjeta{
+        background:var(--card);border:1px solid #1d2530;border-radius:16px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    .fila{display:flex;gap:16px;flex-wrap:wrap}
+    .col{flex:1 1 280px}
+    button{
+        background:#1a2330;color:var(--text);border:1px solid #283346;padding:12px 16px;border-radius:12px;
+        font-weight:700;cursor:pointer;transition:.15s transform ease,.15s background ease,.15s border-color ease,.15s opacity ease;
+    }
+    button:hover{transform:translateY(-1px);border-color:#3a4a63}
+    button:active{transform:translateY(0)}
+    .primario{background:var(--accent);color:#111;border-color:#b69500}
+    .exito{background:var(--accent2);color:#041;border-color:#1f7a3a}
+    .peligro{background:var(--danger);color:#2b0302;border-color:#c21e16}
+    .fantasma{background:transparent}
+    .oculto{display:none !important}
+
+    .panel-config label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
+    .panel-config input[type="number"], .panel-config select{
+        width:100%;padding:10px 12px;border-radius:10px;border:1px solid #283346;background:#0f1319;color:var(--text);outline:none;
+    }
+    .panel-config input[type="checkbox"]{transform:scale(1.2);margin-right:8px}
+    .grupo{margin-bottom:14px}
+
+    .estado{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    .progreso{width:100%;height:10px;background:#121923;border-radius:999px;overflow:hidden;border:1px solid #233047}
+    .barra{height:100%;width:0%;background:linear-gradient(90deg,#ffd23f,#ffb703);transition:width .3s ease}
+    .contador-puntos{min-width:120px;text-align:center;padding:8px 10px;border-radius:10px;border:1px solid #283346;background:#0f1319}
+
+    .pregunta{font-size:20px;line-height:1.35;margin:6px 0 12px 0;font-weight:700}
+    .opciones{display:grid;gap:10px}
+    .opcion{
+        padding:12px 14px;border-radius:12px;border:1px solid #2b3649;background:#0e141b;cursor:pointer;display:flex;gap:10px;align-items:flex-start;text-align:left
+    }
+    .opcion:hover{border-color:#3c4f6c}
+    .opcion.correcta{background:rgba(52,199,89,.12);border-color:rgba(52,199,89,.6)}
+    .opcion.incorrecta{background:rgba(255,69,58,.10);border-color:rgba(255,69,58,.55)}
+    .opcion .letra{
+        width:28px;height:28px;display:inline-grid;place-items:center;border-radius:8px;border:1px solid #344055;background:#121826;color:var(--muted);font-weight:700;flex:0 0 auto
+    }
+
+    .pie{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+
+    .resultado{font-size:18px;margin:0;color:var(--muted)}
+    .medalla{font-weight:800;color:var(--accent)}
+    .seleccionable{user-select:none}
+
+    .enlace-contenedor{margin-top:18px}
+    .enlace-constante{
+        color:var(--accent);
+        text-decoration:underline !important;
+        text-underline-offset:3px;
+        font-weight:700;
+    }
+    .enlace-constante:hover,
+    .enlace-constante:focus{filter:brightness(1.05)}
+
+    @media (prefers-reduced-motion:no-preference){
+        .aparece{animation:aparece .25s ease both}
+        @keyframes aparece{from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)}}
+    }
+</style>
+</head>
+
+<body class="bloqueado">
+<div id="cover" aria-hidden="true">
+  <img src="Portada.png" alt="">
+</div>
+
+<div class="contenedor" aria-live="polite">
+<header>
+    <h1>Oposiciones Secundaria: Formación y Orientación Laboral</h1>
+    <h2>Conforme al temario oficial (B.O.E. 21/09/1993)</h2>
+    <p id="cabecera-estado" class="sub" style="color: rgb(247, 227, 3);">Elige el tema y la cantidad de preguntas</p>
+    <p class="sub" style="font-size: 0.85em;">tomcue@iesjuandelacierva.com</p>
+</header>
+
+<section id="pantalla-inicio" class="tarjeta aparece">
+    <div class="fila">
+        <div class="col panel-config">
+            <div class="grupo">
+                <label for="tema">Temario</label>
+                <select id="tema">
+                    <option value="01-orientacion-como-actividad-educativa.js">1 - La Orientación como actividad educativa</option>
+                    <option value="02-orientacion-profesional-y-laboral.js">2 - La orientación profesional y laboral</option>
+                    <option value="03-orientacion-en-la-union-europea.js">3 - La orientación educativa y profesional en la Unión Europea</option>
+                    <option value="04-sistema-de-orientacion-en-espana.js">4 - Organización del sistema de orientación en España</option>
+                    <option value="05-departamento-de-orientacion.js">5 - El departamento de Orientación</option>
+                    <option value="06-transicion-a-la-vida-activa.js">6 - Programas de transición a la vida activa</option>
+                    <option value="07-igualdad-de-oportunidades-en-orientacion.js">7 - Igualdad de oportunidades en orientación</option>
+                    <option value="08-evaluacion-del-potencial-profesional.js">8 - Evaluación del potencial profesional</option>
+                    <option value="09-informacion-profesional-en-orientacion.js">9 - Información profesional en orientación</option>
+                    <option value="10-organizacion-ocupacional-y-itinerarios.js">10 - Organización ocupacional e itinerarios</option>
+                    <option value="11-toma-de-decisiones-profesionales.js">11 - Toma de decisiones profesionales</option>
+                    <option value="12-busqueda-de-empleo-y-autoempleo.js">12 - Búsqueda de empleo y autoempleo</option>
+                    <option value="13-mercado-de-trabajo-y-politicas-de-empleo.js">13 - Mercado de trabajo y políticas de empleo</option>
+                    <option value="14-adaptacion-al-medio-laboral.js">14 - Adaptación al medio laboral</option>
+                    <option value="15-discapacidad-y-apoyos-especificos.js">15 - Discapacidad y apoyos específicos</option>
+                    <option value="16-grupos-y-organizacion.js">16 - Grupos y organización</option>
+                    <option value="17-liderazgo-y-poder-en-la-organizacion.js">17 - Liderazgo y poder en la organización</option>
+                    <option value="18-equipos-de-trabajo-y-dinamica-de-grupos.js">18 - Equipos de trabajo y dinámica de grupos</option>
+                    <option value="19-motivacion-laboral.js">19 - Motivación laboral</option>
+                    <option value="20-empresa-y-recursos-humanos.js">20 - Empresa y recursos humanos</option>
+                    <option value="21-derecho-del-trabajo.js">21 - Derecho del trabajo</option>
+                    <option value="22-derecho-laboral-supranacional.js">22 - Derecho laboral supranacional</option>
+                    <option value="23-la-profesion-como-realidad-juridica.js">23 - La profesión como realidad jurídica</option>
+                    <option value="24-relacion-laboral-en-espana.js">24 - La relación laboral en España</option>
+                    <option value="25-contrato-de-trabajo.js">25 - El contrato de trabajo</option>
+                    <option value="26-modalidades-de-contratacion.js">26 - Modalidades de contratación</option>
+                    <option value="27-derechos-y-deberes-del-trabajador.js">27 - Derechos y deberes del trabajador</option>
+                    <option value="28-tiempo-de-trabajo-y-descansos.js">28 - Prestación básica del trabajador</option>
+                    <option value="29-el-salario.js">29 - Prestación básica del empresario</option>
+                    <option value="30-recibo-de-salarios-y-cotizacion.js">30 - Recibo de salarios y cotización</option>
+                    <option value="31-representacion-de-los-trabajadores.js">31 - Participación de los trabajadores</option>
+                    <option value="32-sindicatos-y-libertad-sindical.js">32 - Sindicatos y libertad sindical</option>
+                    <option value="33-convenios-colectivos.js">33 - Convenios colectivos</option>
+                    <option value="34-modificacion-y-suspension-del-contrato.js">34 - Modificación y suspensión del contrato</option>
+                    <option value="35-extincion-del-contrato-de-trabajo.js">35 - Extinción del contrato de trabajo</option>
+                    <option value="36-conflictos-individuales-de-trabajo.js">36 - Conflictos individuales de trabajo</option>
+                    <option value="37-conflictos-colectivos-y-huelga.js">37 - Conflictos colectivos y huelga</option>
+                    <option value="38-seguridad-social-estructura.js">38 - Seguridad Social: estructura</option>
+                    <option value="39-prestaciones-de-seguridad-social.js">39 - Prestaciones de Seguridad Social</option>
+                    <option value="40-economia-conceptos-basicos.js">40 - Economía: conceptos básicos</option>
+                    <option value="41-sistemas-economicos-y-mercado.js">41 - Sistemas económicos y mercado</option>
+                    <option value="42-oferta-demanda-y-equilibrio.js">42 - Oferta, demanda y equilibrio</option>
+                    <option value="43-flujo-circular-de-la-renta.js">43 - Flujo circular de la renta</option>
+                    <option value="44-politica-economica-y-monetaria.js">44 - Política económica y monetaria</option>
+                    <option value="45-relaciones-economicas-internacionales.js">45 - Relaciones económicas internacionales</option>
+                    <option value="46-la-empresa-elementos-y-objetivos.js">46 - La empresa: elementos y objetivos</option>
+                    <option value="47-organizacion-empresarial.js">47 - Organización empresarial</option>
+                    <option value="48-comunicacion-en-la-empresa.js">48 - Comunicación en la empresa</option>
+                    <option value="49-investigacion-de-mercados.js">49 - Investigación de mercados</option>
+                    <option value="50-negociacion-y-mediacion.js">50 - Negociación y mediación</option>
+                    <option value="51-resolucion-de-problemas-laborales.js">51 - Resolución de problemas laborales</option>
+                    <option value="52-direccion-de-empresas.js">52 - Dirección de empresas</option>
+                    <option value="53-financiacion-y-costes-empresariales.js">53 - Financiación y costes empresariales</option>
+                    <option value="54-documentacion-y-fiscalidad-empresarial.js">54 - Documentación y fiscalidad empresarial</option>
+                    <option value="55-analisis-economico-financiero.js">55 - Análisis económico-financiero</option>
+                    <option value="56-creacion-de-una-pequena-empresa.js">56 - Creación de una pequeña empresa</option>
+                    <option value="57-prevencion-de-riesgos-laborales-conceptos-basicos.js">57 - PRL: conceptos básicos</option>
+                    <option value="58-factores-de-riesgo-laboral.js">58 - Factores de riesgo laboral</option>
+                    <option value="59-accidente-de-trabajo.js">59 - Accidente de trabajo</option>
+                    <option value="60-enfermedad-profesional.js">60 - Enfermedad profesional</option>
+                    <option value="61-medidas-de-prevencion-y-proteccion.js">61 - Medidas de prevención y protección</option>
+                    <option value="62-accion-preventiva-e-investigacion-de-accidentes.js">62 - Acción preventiva e investigación de accidentes</option>
+                    <option value="63-condiciones-de-los-centros-de-trabajo.js">63 - Condiciones de los centros de trabajo</option>
+                    <option value="64-factor-humano-y-prevencion.js">64 - Factor humano y prevención</option>
+                    <option value="65-organizacion-de-la-prevencion.js">65 - Organización de la prevención</option>
+                    <option value="66-proteccion-frente-a-riesgos-tecnicos.js">66 - Protección frente a riesgos técnicos</option>
+                    <option value="67-salud-laboral-y-nuevas-tecnologias.js">67 - Salud laboral y nuevas tecnologías</option>
+                    <option value="68-salud-laboral-y-calidad-de-vida.js">68 - Salud laboral y calidad de vida</option>
+                    <option value="69-primeros-auxilios-en-la-empresa.js">69 - Primeros auxilios en la empresa</option>
+                </select>
+            </div>
+
+            <div class="grupo">
+                <label for="cantidad">Número de preguntas</label>
+                <input id="cantidad" type="number" min="5" max="40" value="10" />
+            </div>
+        </div>
+
+        <div class="col">
+            <p style="color:var(--muted);margin-top:0">Selecciona "Comenzar" para hacer el test o "Modo estudio" para repasar todas las respuestas.</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <button id="btn-comenzar" class="primario">Comenzar</button>
+                <button id="btn-aprender" title="Muestra todas las preguntas del temario en modo estudio">Modo estudio</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="enlace-contenedor">
+        <a class="enlace-constante" href="https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Men%C3%BA.html" target="_blank" rel="noopener">
+            Enlace al Menú inicial con acceso a todos los recursos online gratuitos
+        </a>
+    </div>
+</section>
+
+<section id="pantalla-juego" class="tarjeta oculto">
+    <div class="estado">
+        <div class="contador-puntos"><strong id="xIndex">1</strong>/<span id="xTotal">12</span> · Puntos: <strong id="xPuntos">0</strong></div>
+        <div class="progreso" aria-hidden="true"><div id="barra" class="barra" style="width:0%"></div></div>
+    </div>
+
+    <div id="enunciado" class="pregunta"></div>
+    <div id="opciones" class="opciones"></div>
+
+    <div class="pie">
+        <div>
+            <button id="btn-anterior" class="fantasma">Anterior</button>
+            <button id="btn-saltar">Saltar</button>
+        </div>
+        <div>
+            <button id="btn-comprobar" class="primario">Comprobar</button>
+            <button id="btn-siguiente" class="exito oculto">Siguiente</button>
+            <button id="btn-terminar" class="peligro oculto">Terminar</button>
+        </div>
+    </div>
+</section>
+
+<section id="pantalla-final" class="tarjeta oculto">
+    <p class="resultado" id="resumen"></p>
+    <div class="fila" style="margin-top:12px">
+        <button id="btn-repetir" class="primario">Repetir configuración</button>
+        <button id="btn-inicio">Volver al inicio</button>
+        <button id="btn-estudio">Repasar preguntas</button>
+    </div>
+</section>
+
+<section id="pantalla-estudio" class="tarjeta oculto">
+    <div id="lista-estudio"></div>
+    <div class="pie"><button id="btn-salir-estudio">Salir</button></div>
+</section>
+
+</div>
+
+<script>
+/* Portada: bloquea, desvanece y libera scroll */
+(function(){
+    const cover = document.getElementById('cover');
+    const liberar = ()=>{ document.body.classList.remove('bloqueado'); };
+    window.addEventListener('load', function(){
+        const T = 3000;
+        setTimeout(function(){
+            if(!cover) { liberar(); return; }
+            cover.classList.add('oculta');
+            cover.addEventListener('transitionend', function onEnd(){
+                cover.removeEventListener('transitionend', onEnd);
+                if (cover && cover.parentNode) cover.parentNode.removeChild(cover);
+                liberar();
+            });
+        }, T);
+    }, {once:true});
+})();
+
+/* ===== Utilidades ===== */
+function barajar(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+/* ===== Sistema de sonido (WebAudio) ===== */
+class SistemaSonido{
+    constructor(){
+        this.ctx = null;
+        this.master = null;
+        this.enabled = true;
+        this.initialized = false;
+        this.volume = 0.15;
+        this._unlocked = false;
+    }
+    init(){
+        if(this.initialized) return;
+        try{
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            this.master = this.ctx.createGain();
+            this.master.gain.value = this.volume;
+            this.master.connect(this.ctx.destination);
+            this.initialized = true;
+        }catch(e){}
+    }
+    ensure(){
+        if(!this.initialized) this.init();
+        if(this.ctx && this.ctx.state === "suspended") this.ctx.resume();
+    }
+    unlockOnce(){
+        if(this._unlocked) return;
+        this._unlocked = true;
+        this.ensure();
+    }
+    tone(freq=440, dur=0.18, type="square"){
+        if(!this.enabled) return;
+        this.ensure();
+        if(!this.ctx) return;
+        const t0 = this.ctx.currentTime + 0.01;
+        const o = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        o.type = type;
+        o.frequency.setValueAtTime(freq, t0);
+        o.connect(g); g.connect(this.master);
+        g.gain.setValueAtTime(1, t0);
+        g.gain.exponentialRampToValueAtTime(0.0008, t0 + dur);
+        o.start(t0);
+        o.stop(t0 + dur);
+    }
+    reproducirAcierto(){
+        this.tone(880, 0.16, "square");
+        setTimeout(()=>this.tone(1245, 0.18, "square"), 120);
+    }
+    reproducirError(){
+        this.tone(220, 0.22, "triangle");
+    }
+    mute(on){ this.enabled = !on; }
+}
+const sonido = new SistemaSonido();
+
+["pointerdown","keydown"].forEach(ev=>{
+    window.addEventListener(ev, ()=>sonido.unlockOnce(), { once:false, passive:true });
+});
+document.addEventListener("visibilitychange", ()=>{
+    if(document.visibilityState==="visible") sonido.ensure();
+});
+
+/* ===== Carga de temarios ===== */
+let BANCO = [];
+
+function cargarTemario(nombreArchivo){
+    return new Promise((resolve, reject)=>{
+        delete window.PREGUNTAS;
+        const prev = document.getElementById("temario-script");
+        if(prev) prev.remove();
+
+        const s = document.createElement("script");
+        s.id = "temario-script";
+        s.async = true;
+        s.src = `temarios/${nombreArchivo}?t=${Date.now()}`;
+        s.onload = ()=>{
+            if(typeof window.PREGUNTAS === "undefined" || !Array.isArray(window.PREGUNTAS)){
+                reject(new Error("El temario no define PREGUNTAS válidas."));
+                return;
+            }
+            BANCO = convertirPreguntas(window.PREGUNTAS);
+            resolve(BANCO);
+        };
+        s.onerror = ()=>reject(new Error("No se pudo cargar el temario."));
+        document.body.appendChild(s);
+    });
+}
+
+function convertirPreguntas(arr){
+    return arr.map(p=>{
+        const opciones = [p.correcta, ...(p.incorrectas||[])];
+        const idxs = opciones.map((_,i)=>i);
+        barajar(idxs);
+        const opsBarajadas = idxs.map(i=>opciones[i]);
+        const indiceCorrecta = idxs.indexOf(0);
+        return {
+            pregunta: p.enunciado,
+            opciones: opsBarajadas,
+            correcta: indiceCorrecta,
+            explicacion: ""
+        };
+    });
+}
+
+/* ===== Estado/UI ===== */
+const ui = {
+    inicio:      document.getElementById("pantalla-inicio"),
+    juego:       document.getElementById("pantalla-juego"),
+    final:       document.getElementById("pantalla-final"),
+    estudio:     document.getElementById("pantalla-estudio"),
+    tema:        document.getElementById("tema"),
+    cantidad:    document.getElementById("cantidad"),
+    enunciado:   document.getElementById("enunciado"),
+    opciones:    document.getElementById("opciones"),
+    idx:         document.getElementById("xIndex"),
+    total:       document.getElementById("xTotal"),
+    puntos:      document.getElementById("xPuntos"),
+    barra:       document.getElementById("barra"),
+    resumen:     document.getElementById("resumen"),
+    listaEstudio:document.getElementById("lista-estudio"),
+    cabecera:    document.getElementById("cabecera-estado"),
+    btns:{
+        comenzar: document.getElementById("btn-comenzar"),
+        aprender: document.getElementById("btn-aprender"),
+        anterior: document.getElementById("btn-anterior"),
+        saltar:   document.getElementById("btn-saltar"),
+        comprobar:document.getElementById("btn-comprobar"),
+        siguiente:document.getElementById("btn-siguiente"),
+        terminar: document.getElementById("btn-terminar"),
+        repetir:  document.getElementById("btn-repetir"),
+        inicio:   document.getElementById("btn-inicio"),
+        estudio:  document.getElementById("btn-estudio"),
+        salirEst: document.getElementById("btn-salir-estudio")
+    }
+};
+
+let estado = { preguntas: [], orden: [], actual: 0, puntos: 0, seleccion: null };
+
+/* ===== Cabecera dinámica ===== */
+const CABECERA_INICIAL = ui.cabecera.textContent;
+function setCabeceraTituloFromSelect(){
+    const opt = ui.tema.options[ui.tema.selectedIndex];
+    if(opt) ui.cabecera.textContent = opt.textContent;
+}
+function resetCabecera(){ ui.cabecera.textContent = CABECERA_INICIAL; }
+
+/* ===== Navegación ===== */
+function mostrar(section){
+    for(const s of [ui.inicio, ui.juego, ui.final, ui.estudio]) s.classList.add("oculto");
+    section.classList.remove("oculto");
+    section.classList.add("aparece");
+}
+
+/* ===== Preparación desde BANCO ===== */
+function prepararJuego(opts){
+    const conjunto = barajar([...BANCO]);
+    const n = Math.max(5, Math.min(opts.cantidad, conjunto.length));
+    const seleccion = conjunto.slice(0, n).map(clonarYBarajarOpciones);
+
+    estado.preguntas = seleccion;
+    estado.orden = [...Array(estado.preguntas.length).keys()];
+    estado.actual = 0; estado.puntos = 0; estado.seleccion = null;
+
+    ui.total.textContent = String(estado.preguntas.length);
+    ui.puntos.textContent = "0";
+    ui.barra.style.width = "0%";
+
+    setCabeceraTituloFromSelect();
+    pintarPregunta();
+    mostrar(ui.juego);
+}
+
+function clonarYBarajarOpciones(qo){
+    const copia = JSON.parse(JSON.stringify(qo));
+    const idxs = copia.opciones.map((_,i)=>i);
+    barajar(idxs);
+    const ops = idxs.map(i=>copia.opciones[i]);
+    const corr = idxs.indexOf(copia.correcta);
+    copia.opciones = ops; copia.correcta = corr;
+    return copia;
+}
+
+/* ===== Pintado ===== */
+function pintarPregunta(){
+    const i = estado.actual;
+    const q = estado.preguntas[i];
+    ui.idx.textContent = String(i+1);
+    ui.enunciado.textContent = q.pregunta;
+    ui.opciones.innerHTML = "";
+    ui.btns.siguiente.classList.add("oculto"); ui.btns.terminar.classList.add("oculto");
+    ui.btns.comprobar.classList.remove("oculto");
+
+    const letras = "ABCD".split("");
+    q.opciones.forEach((texto, idx)=>{
+        const btn = document.createElement("button");
+        btn.className = "opcion";
+        btn.setAttribute("data-idx", idx);
+        btn.innerHTML = `<span class="letra">${letras[idx]||"?"}</span><span>${texto}</span>`;
+        btn.addEventListener("click", ()=>{
+            sonido.unlockOnce();
+            seleccionar(idx);
+        });
+        ui.opciones.appendChild(btn);
+    });
+
+    actualizarProgreso(); estado.seleccion = null;
+}
+
+function seleccionar(idx){
+    if(ui.btns.comprobar.classList.contains("oculto")) return;
+    estado.seleccion = idx;
+    [...ui.opciones.children].forEach(el=>el.style.outline="none");
+    const el = ui.opciones.querySelector(`[data-idx="${idx}"]`);
+    el.style.outline = `2px solid var(--focus)`;
+    el.scrollIntoView({block:"nearest", behavior:"smooth"});
+}
+
+function actualizarProgreso(){
+    const pct = (estado.actual/estado.preguntas.length)*100;
+    ui.barra.style.width = `${pct}%`;
+}
+
+/* ===== Comprobación/flujo ===== */
+function comprobar(){
+    const q = estado.preguntas[estado.actual];
+    const sel = estado.seleccion;
+    const acierto = sel === q.correcta;
+
+    [...ui.opciones.children].forEach((btn, idx)=>{
+        if(idx===q.correcta) btn.classList.add("correcta");
+        if(sel!==null && idx===sel && sel!==q.correcta) btn.classList.add("incorrecta");
+        btn.style.cursor="default";
+    });
+
+    if(sel !== null){
+        if(acierto){
+            estado.puntos++;
+            ui.puntos.textContent = String(estado.puntos);
+            sonido.reproducirAcierto();
+        }else{
+            sonido.reproducirError();
+        }
+    }
+
+    ui.btns.comprobar.classList.add("oculto");
+    const ultima = estado.actual === estado.preguntas.length - 1;
+    if(ultima){ ui.btns.terminar.classList.remove("oculto"); }
+    else{ ui.btns.siguiente.classList.remove("oculto"); }
+}
+
+function siguiente(){ estado.actual++; pintarPregunta(); }
+function anterior(){ if(estado.actual===0) return; estado.actual--; pintarPregunta(); }
+function saltar(){ estado.seleccion = null; comprobar(); }
+
+/* ===== Final ===== */
+function terminar(){
+    mostrar(ui.final);
+    const n = estado.preguntas.length, p = estado.puntos, r = p/n;
+    const med = r>=0.85 ? "Oro" : r>=0.65 ? "Plata" : r>=0.45 ? "Bronce" : "Finalista";
+    ui.resumen.innerHTML = `Resultado: <span class="medalla">${med}</span>. Aciertos ${p}/${n}.`;
+}
+
+/* ===== Estudio ===== */
+function entrarEstudio(pregs = BANCO){
+    ui.listaEstudio.innerHTML = "";
+    const frag = document.createDocumentFragment();
+    const letras = "ABCD".split("");
+    pregs.forEach((q,i)=>{
+        const card = document.createElement("div");
+        card.className = "tarjeta"; card.style.marginBottom = "12px";
+        const h = document.createElement("div"); h.className = "pregunta"; h.textContent = `${i+1}. ${q.pregunta}`;
+        const lista = document.createElement("div"); lista.className = "opciones";
+        q.opciones.forEach((op,idx)=>{
+            const p = document.createElement("div");
+            p.className = "opcion " + (idx===q.correcta?"correcta":"");
+            p.innerHTML = `<span class="letra">${letras[idx]}</span><span>${op}</span>`;
+            lista.appendChild(p);
+        });
+        const ex = document.createElement("div"); ex.className = "explicacion"; ex.textContent = q.explicacion || "";
+        card.append(h, lista, ex); frag.appendChild(card);
+    });
+    ui.listaEstudio.appendChild(frag);
+    mostrar(ui.estudio);
+}
+
+/* ===== Eventos ===== */
+async function iniciarDesdeTemario(archivo, opts){
+    await cargarTemario(archivo);
+    prepararJuego(opts);
+}
+
+ui.btns.comenzar.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
+    await iniciarDesdeTemario(ui.tema.value, { cantidad: Number(ui.cantidad.value || 12) });
+});
+
+ui.btns.aprender.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
+    await cargarTemario(ui.tema.value);
+    setCabeceraTituloFromSelect();
+    entrarEstudio(barajar([...BANCO]));
+});
+
+ui.btns.comprobar.addEventListener("click", comprobar);
+ui.btns.siguiente.addEventListener("click", siguiente);
+ui.btns.anterior.addEventListener("click", anterior);
+ui.btns.saltar.addEventListener("click", saltar);
+ui.btns.terminar.addEventListener("click", terminar);
+
+ui.btns.repetir.addEventListener("click", async ()=>{
+    sonido.unlockOnce();
+    await iniciarDesdeTemario(ui.tema.value, { cantidad: estado.preguntas.length });
+});
+
+ui.btns.inicio.addEventListener("click", ()=>{
+    resetCabecera();
+    mostrar(ui.inicio);
+});
+ui.btns.estudio.addEventListener("click", ()=>entrarEstudio(estado.preguntas));
+ui.btns.salirEst.addEventListener("click", ()=>mostrar(ui.final));
+
+document.addEventListener("keydown", (e)=>{
+    if(ui.juego.classList.contains("oculto")) return;
+    if(e.key==="Enter") {
+        if(!ui.btns.comprobar.classList.contains("oculto")) comprobar();
+        else if(!ui.btns.siguiente.classList.contains("oculto")) siguiente();
+    }
+    if(e.key==="ArrowRight" && !ui.btns.siguiente.classList.contains("oculto")) siguiente();
+    if(e.key==="ArrowLeft") anterior();
+});
+
+/* Inicio */
+mostrar(ui.inicio);
+</script>
+</body>
+</html>
