@@ -18,6 +18,24 @@
   <img src="Portada.png" alt="Portada">
 </div>
 
+<!-- Modal explicación -->
+<div id="introModal" aria-hidden="true">
+  <div id="introBox" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+    <h2 id="introTitle">Qué es y cómo se usa</h2>
+    <p>
+      Este planificador genera un calendario de estudio para preparar las oposiciones de Secundaria.
+      Distribuye el avance de temas, programa repasos y permite exportar el calendario.
+    </p>
+    <ul>
+      <li>Configura fechas, horas disponibles y parámetros de repaso.</li>
+      <li>Selecciona los temas que quieres preparar. Podrás acumular varios tramos del temario.</li>
+      <li>Selecciona horas aproximadas de estudio diario y tu ritmo de repaso.</li>
+      <li>Puedes configurar un ciclo final de repaso intensivo de todos tus temas.</li>
+    </ul>
+    <button id="introBtn" type="button" onclick="cerrarIntro()">Entendido</button>
+  </div>
+</div>
+
 <div class="header">
   <div class="header-inner">
     <h1>Planificador de Oposiciones<br><span>Profesorado de Secundaria</span></h1>
@@ -25,8 +43,8 @@
     <p style="margin-top:10px;">
       <a href="https://www.amazon.es/dp/B0GP6QM85J"
          target="_blank"
-        rel="noopener noreferrer"
-        style="color: #ffff00; font-weight: bold; text-decoration: none;">
+         rel="noopener noreferrer"
+         style="color: #ffff00; font-weight: bold; text-decoration: none;">
         Enlace al diseño y defensa de la Programación Didáctica
       </a>
     </p>
@@ -34,18 +52,17 @@
     <p style="font-size:0.8em;">
       <a href="https://vertice1971.github.io/thomasbooks/Oposiciones_Secundaria/Men%C3%BA.html"
          target="_blank"
-        rel="noopener noreferrer"
-        style="color: #ffff00; font-weight: bold; text-decoration: none;">
+         rel="noopener noreferrer"
+         style="color: #ffff00; font-weight: bold; text-decoration: none;">
         Enlace al Menú de Programas Gratuitos
       </a>
     </p>
-    
+
     <p style="margin-top:6px;">
       <a href="mailto:thomasbooks71@gmail.com">
         thomasbooks71@gmail.com
       </a>
     </p>
-
   </div>
 </div>
 
@@ -67,7 +84,7 @@
       </div>
 
       <div class="form-group">
-        <label>Temas seleccionados</label>
+        <label>Temas seleccionados (conteo automático)</label>
         <div id="topicsCounter"
              style="padding:10px 14px;border:1.5px solid var(--border);
                     border-radius:7px;background:#fff;font-weight:700;">
@@ -171,7 +188,7 @@
   </div>
 
   <footer style="text-align:center;margin-top:40px;font-size:0.9rem;opacity:0.8;">
-    Software alojado en GitHub - Licencia MIT- Tomás Cuesta
+    Software alojado en GitHub - Licencia MIT - Tomás Cuesta
   </footer>
 
 </div>
@@ -187,14 +204,27 @@ document.addEventListener("DOMContentLoaded", function(){
   if (window.initSelector) initSelector();
 });
 
+function cerrarIntro(){
+  var m = document.getElementById('introModal');
+  if(m) m.style.display = 'none';
+}
+
+function mostrarIntroSiPrimeraVez(){
+  if(!sessionStorage.getItem('introPlanificador')){
+    var m = document.getElementById('introModal');
+    if(m) m.style.display = 'flex';
+    sessionStorage.setItem('introPlanificador','si');
+  }
+}
+
 window.addEventListener('load', function(){
   setTimeout(function(){
     var cover = document.getElementById('cover');
     if(cover) cover.style.display = 'none';
+    mostrarIntroSiPrimeraVez();
   }, 3000);
 });
 </script>
 
 </body>
 </html>
-
