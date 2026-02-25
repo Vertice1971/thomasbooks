@@ -162,7 +162,7 @@ Convoca el proceso selectivo mediante concurso‑oposición para el ingreso al c
 - [**Resolución de 24 de marzo de 2025 (BOE‑A‑2025‑6824)**](https://www.boe.es/boe/dias/2025/04/04/pdfs/BOE-A-2025-6824.pdf)  
 Corrige errores de la convocatoria inicial y establece el plazo de presentación de solicitudes y la fecha de inicio de las pruebas selectivas.
 
-- [Convocatoria de Oposiciones en Andalucía 2025](https://www.juntadeandalucia.es/boja/2025/38/BOJA25-038-00071-2616-01_00316223.pdf)  
+- [Convocatoria de Oposiciones en Andalucía 2026](https://www.juntadeandalucia.es/eboja/2026/38/c01/BOJA26-203801-00120-2586-01_00333808.pdf)  
 - [Convocatoria de Oposiciones en Madrid 2025](https://www.bocm.es/boletin/CM_Orden_BOCM/2025/02/28/BOCM-20250228-17.PDF)  
 - [Rúbrica publicada en Andalucía 2025](https://www.juntadeandalucia.es/educacion/portales/documents/20123/1771905/Criterios%20de%20actuaci%C3%B3n%20y%20homogenizaci%C3%B3n%20Cuerpo%20590%20sin%20FP.pdf/ecfd3eab-e635-71ca-6d7e-6babf3122ca1?version=1.0)  
 - [Rúbrica publicada en Madrid 2025](https://www.comunidad.madrid/sites/default/files/doc/educacion/rh03/rh03_257_2025_ce_590001_250625.pdf)
