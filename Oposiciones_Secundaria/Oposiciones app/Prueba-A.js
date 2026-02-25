@@ -9,7 +9,7 @@ function iniciarPruebaA(temas) {
 
   // Encabezado
   const encabezado = document.createElement('h3');
-  encabezado.textContent = 'Temas seleccionados';
+  encabezado.textContent = 'Temas del sorteo';
   zona.appendChild(encabezado);
 
   // Instrucción

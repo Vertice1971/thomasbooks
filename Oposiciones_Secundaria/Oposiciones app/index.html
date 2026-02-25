@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="styles.css">
 
   <style>
-    /* Portada inicial a pantalla completa */
+    /* Portada inicial */
     #cover{
       position:fixed;
       inset:0;
@@ -35,10 +35,39 @@
       pointer-events:none;
     }
 
-    /* Asegurar que el contenido queda por encima del overlay */
     .container{
       position:relative;
       z-index:2;
+    }
+
+    /* Ventana explicativa */
+    #introModal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.65);
+      display:none;
+      justify-content:center;
+      align-items:center;
+      z-index:9998;
+    }
+
+    #introBox{
+      background:white;
+      padding:30px;
+      max-width:600px;
+      border-radius:12px;
+      box-shadow:0 20px 50px rgba(0,0,0,0.4);
+      text-align:left;
+    }
+
+    #introBox h2{
+      margin-top:0;
+    }
+
+    #introBox button{
+      margin-top:20px;
+      padding:8px 18px;
+      cursor:pointer;
     }
   </style>
 </head>
@@ -50,7 +79,23 @@
     <img src="Portada.png" alt="Portada">
   </div>
 
-  <!-- Fondo semitransparente -->
+  <!-- Modal explicación -->
+  <div id="introModal">
+    <div id="introBox">
+      <h2>¿Qué es este simulador?</h2>
+      <p>
+        Este programa muestra el funcionamiento real del escenario del examen de oposición.
+        Tienes una pequeña calculadora de probabilidades además.
+        Primero eliges especialidad y tipo de sorteo (temario completo o solo una parte)
+        El sistema genera los números como en un tribunal oficial. 
+        Después puedes seleccionar un tema para ir practicando tu repaso del tema con temporizador.
+        Este programa no controla los contenidos, solo te presenta el escenario de tu examen.
+      </p>
+      <button onclick="cerrarIntro()">Entendido</button>
+    </div>
+  </div>
+
+  <!-- Fondo permanente -->
   <div id="bgOverlay"></div>
 
   <div class="container" id="contenedor-principal">
@@ -96,7 +141,6 @@
       </select>
 
       <div id="intermedia-opciones" style="display:none;">
-
         <label for="cantidad">Número de temas a extraer:</label>
         <input type="number" id="cantidad" min="1" max="71">
 
@@ -105,7 +149,6 @@
         </label>
         <input type="text" id="rango"
                placeholder="Ej: 1,2,3,6,7-12,17,19,20-40">
-
       </div>
 
       <button type="submit">
@@ -116,14 +159,12 @@
 
     <div id="resultado" class="result" style="display:none;"></div>
 
-    <!-- Botón para pasar a la pantalla de prueba -->
     <button id="btn-continuar"
             class="boton-rojo"
             style="display:none; margin-top:1em;">
-      Seleccionar tema
+      Pasa a Seleccionar Tema
     </button>
 
-    <!-- Contenedor donde se cargará dinámicamente el temporizador -->
     <div id="contenedor-prueba-a" style="margin-top:2em;"></div>
 
   </div>
@@ -136,14 +177,25 @@
   <script src="probabilidades.js"></script>
 
   <script>
+    function cerrarIntro(){
+      document.getElementById("introModal").style.display = "none";
+    }
+
+    function mostrarIntroSiPrimeraVez(){
+      if(!sessionStorage.getItem("introSimulador")){
+        document.getElementById("introModal").style.display = "flex";
+        sessionStorage.setItem("introSimulador","si");
+      }
+    }
+
     window.addEventListener('load', function () {
       setTimeout(function () {
         var cover = document.getElementById('cover');
         if (cover) cover.style.display = 'none';
+        mostrarIntroSiPrimeraVez();
       }, 3000);
     });
   </script>
 
 </body>
 </html>
-
