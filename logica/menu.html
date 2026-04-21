@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lógica para Bachillerato</title>
 
+<style>
+  :root{
+    --fondo: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --principal:#2c3e50;
+    --secundario:#34495e;
+    --acento:#5c6bc0;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+
+  body{
+    font-family: Georgia, "Times New Roman", serif;
+    min-height:100vh;
+    background: var(--fondo);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--principal);
+  }
+
+  /* PORTADA */
+  #cover{
+    position:fixed;
+    inset:0;
+    background: var(--fondo);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+  }
+
+  #cover img{
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+    box-shadow:0 20px 40px rgba(0,0,0,0.4);
+  }
+
+  /* MENÚ */
+  .container{
+    width:min(800px, 95vw);
+    background:rgba(255,255,255,0.95);
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.2);
+    text-align:center;
+    display:none;
+  }
+
+  h1{
+    font-size:2rem;
+    margin-bottom:20px;
+  }
+
+  .menu{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+
+  .card{
+    background:#f8f9fa;
+    border-radius:12px;
+    padding:20px;
+    text-decoration:none;
+    color:var(--principal);
+    border:2px solid transparent;
+    transition:0.25s;
+  }
+
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:var(--acento);
+    background:#ffffff;
+  }
+
+  .label{
+    font-weight:bold;
+    margin-bottom:6px;
+  }
+
+  .info{
+    font-size:0.9rem;
+    color:var(--secundario);
+  }
+
+  @media(max-width:600px){
+    .menu{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+
+<body>
+
+<!-- PORTADA -->
+<div id="cover">
+  <img src="Portada.jpg" alt="Portada del libro">
+</div>
+
+<!-- MENÚ -->
+<div class="container" id="main">
+  <h1>Lógica para Bachillerato</h1>
+
+  <div class="menu">
+    <a href="#" class="card">
+      <div class="label">Unidad 1</div>
+      <div class="info">En obras</div>
+    </a>
+
+    <a href="#" class="card">
+      <div class="label">Unidad 2</div>
+      <div class="info">En obras</div>
+    </a>
+
+    <a href="#" class="card">
+      <div class="label">Unidad 3</div>
+      <div class="info">En obras</div>
+    </a>
+
+    <a href="#" class="card">
+      <div class="label">Unidad 4</div>
+      <div class="info">En obras</div>
+    </a>
+  </div>
+</div>
+
+<script>
+  window.addEventListener("load", function(){
+    setTimeout(function(){
+      document.getElementById("cover").style.display = "none";
+      document.getElementById("main").style.display = "block";
+    }, 5000);
+  });
+</script>
+
+</body>
+</html>
