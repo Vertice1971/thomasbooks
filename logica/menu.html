@@ -20,7 +20,6 @@
     color: #e8e2d9;
   }
 
-  /* ── PORTADA ── */
   #cover {
     position: fixed;
     inset: 0;
@@ -31,13 +30,13 @@
     z-index: 9999;
     transition: opacity 0.9s ease;
   }
+
   #cover img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
   }
 
-  /* ── MENÚ ── */
   #main {
     display: none;
     width: 100vw;
@@ -58,6 +57,7 @@
     text-align: center;
     margin-bottom: 48px;
   }
+
   .eyebrow {
     font-size: 11px;
     letter-spacing: 0.38em;
@@ -66,6 +66,7 @@
     font-weight: 300;
     margin-bottom: 12px;
   }
+
   h1 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(2rem, 4vw, 3rem);
@@ -75,6 +76,7 @@
     line-height: 1.15;
     margin-bottom: 16px;
   }
+
   .rule {
     width: 48px;
     height: 1px;
@@ -105,21 +107,28 @@
     overflow: hidden;
     transition: background 0.22s, border-color 0.22s, transform 0.2s;
   }
+
   .card::before {
     content: '';
     position: absolute;
-    left: 0; top: 0; bottom: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
     width: 2px;
     background: #c9a84c;
     opacity: 0;
     transition: opacity 0.22s;
   }
+
   .card:hover {
     background: #1a1824;
     border-color: #3d3849;
     transform: translateY(-3px);
   }
-  .card:hover::before { opacity: 1; }
+
+  .card:hover::before {
+    opacity: 1;
+  }
 
   .num {
     font-size: 10px;
@@ -128,12 +137,14 @@
     color: #c9a84c;
     font-weight: 300;
   }
+
   .label {
     font-family: 'Playfair Display', serif;
     font-size: 19px;
     font-weight: 600;
     color: #ede7dd;
   }
+
   .info {
     font-size: 13.5px;
     color: #4e4860;
@@ -153,19 +164,22 @@
   }
 
   @media (max-width: 620px) {
-    #main { padding: 40px 24px 36px; }
-    .menu { grid-template-columns: 1fr; }
+    #main {
+      padding: 40px 24px 36px;
+    }
+
+    .menu {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 </head>
 <body>
 
-<!-- PORTADA -->
 <div id="cover">
   <img src="Portada.jpg" alt="Portada del libro">
 </div>
 
-<!-- MENÚ -->
 <div class="container" id="main">
   <div class="header">
     <div class="eyebrow">Filosofía · Bachillerato</div>
@@ -174,21 +188,16 @@
   </div>
 
   <div class="menu">
-    <!-- Unidad ya operativa -->
     <a href="https://vertice1971.github.io/Filosofia-Bachillerato/Tablas%20de%20verdad.html" class="card">
       <span class="label">Tablas de verdad</span>
     </a>
 
-    <!-- Unidad ya operativa -->
     <a href="https://vertice1971.github.io/Filosofia-Bachillerato/silogismos.html" class="card">
       <span class="label">Silogismos</span>
     </a>
 
-    <!-- En desarrollo -->
-    <a href="#" class="card">
-      <span class="num">Unidad 03</span>
-      <span class="label">Unidad 3</span>
-      <span class="info">En obras</span>
+    <a href="https://drive.google.com/file/d/1ABCDEF234567890/view" class="card" target="_blank" rel="noopener noreferrer">
+      <span class="label">Solucionario de las reglas de inferencia</span>
     </a>
 
     <a href="#" class="card">
@@ -207,9 +216,10 @@
       var cover = document.getElementById("cover");
       var main  = document.getElementById("main");
       cover.style.opacity = "0";
+      cover.style.transition = "opacity 0.9s ease";
       setTimeout(function () {
         cover.style.display = "none";
-        main.style.display  = "flex";
+        main.style.display = "flex";
       }, 900);
     }, 4000);
   });
