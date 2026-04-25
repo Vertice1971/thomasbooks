@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lógica para Bachillerato</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 
@@ -87,10 +88,10 @@
 
   .menu {
     display: grid;
-    grid-template-columns: repeat(2, minmax(260px, 380px));
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
     gap: 18px;
     width: 100%;
-    max-width: 820px;
+    max-width: 980px;
   }
 
   .card {
@@ -174,6 +175,7 @@
   }
 </style>
 </head>
+
 <body>
 
 <div id="cover">
@@ -181,6 +183,7 @@
 </div>
 
 <div class="container" id="main">
+
   <div class="header">
     <div class="eyebrow">Filosofía · Bachillerato</div>
     <h1>Lógica para Bachillerato</h1>
@@ -188,6 +191,21 @@
   </div>
 
   <div class="menu">
+
+    <!-- FILA 1 -->
+    <a href="https://www.amazon.es/dp/B0GXXSMN2M" class="card" target="_blank" rel="noopener noreferrer">
+      <span class="label">El manual</span>
+    </a>
+
+    <a href="https://drive.google.com/" class="card" target="_blank" rel="noopener noreferrer">
+      <span class="label">Material complementario</span>
+    </a>
+
+    <a href="https://drive.google.com/file/d/1BmcZMleElMjmna-WW8ErJeu1knhmZu5K/view?usp=sharing" class="card" target="_blank" rel="noopener noreferrer">
+      <span class="label">Solucionario de las reglas de inferencia</span>
+    </a>
+
+    <!-- FILA 2 -->
     <a href="https://vertice1971.github.io/Filosofia-Bachillerato/Tablas%20de%20verdad.html" class="card">
       <span class="label">Tablas de verdad</span>
     </a>
@@ -196,18 +214,35 @@
       <span class="label">Silogismos</span>
     </a>
 
-    <a href="https://drive.google.com/file/d/1BmcZMleElMjmna-WW8ErJeu1knhmZu5K/view?usp=sharing" class="card" target="_blank" rel="noopener noreferrer">
-      <span class="label">Solucionario de las reglas de inferencia</span>
+    <a href="#" class="card">
+      <span class="num">Unidad 05</span>
+      <span class="label">Unidad 5</span>
+      <span class="info">En proceso</span>
+    </a>
+
+    <!-- FILA 3 -->
+    <a href="#" class="card">
+      <span class="num">Unidad 06</span>
+      <span class="label">Unidad 6</span>
+      <span class="info">En proceso</span>
     </a>
 
     <a href="#" class="card">
-      <span class="num">Unidad 04</span>
-      <span class="label">Unidad 4</span>
-      <span class="info">En obras</span>
+      <span class="num">Unidad 07</span>
+      <span class="label">Unidad 7</span>
+      <span class="info">En proceso</span>
     </a>
+
+    <a href="#" class="card">
+      <span class="num">Unidad 08</span>
+      <span class="label">Unidad 8</span>
+      <span class="info">En proceso</span>
+    </a>
+
   </div>
 
   <div class="footer">Selecciona una unidad para comenzar</div>
+
 </div>
 
 <script>
