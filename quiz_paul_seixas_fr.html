@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Défi Paul Seixas · Quiz Cyclisme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo+Black&family=Space+Mono:wght@400;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --amarillo:#FFE600;
+    --amarillo-fuerte:#FFD500;
+    --rosa:#FF2E63;
+    --azul:#0044FF;
+    --verde:#00E676;
+    --negro:#0A0A0A;
+    --blanco:#FFFCF0;
+    --gris:#1A1A1A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Outfit',sans-serif;
+    background:var(--blanco);
+    color:var(--negro);
+    overflow-x:hidden;
+    min-height:100vh;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(255,230,0,0.15) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(255,46,99,0.12) 0%, transparent 40%),
+      repeating-linear-gradient(45deg, transparent 0 19px, rgba(10,10,10,0.025) 19px 20px);
+  }
+  .road-stripe{
+    position:fixed;top:0;left:0;right:0;height:6px;
+    background:repeating-linear-gradient(90deg, var(--negro) 0 30px, transparent 30px 50px);
+    z-index:100;
+  }
+  .road-stripe.bottom{top:auto;bottom:0}
+
+  .container{
+    max-width:780px;margin:0 auto;padding:50px 24px 80px;
+    position:relative;
+  }
+
+  header{
+    margin-bottom:30px;
+    position:relative;
+  }
+  .dorsal{
+    display:inline-block;
+    background:var(--amarillo);
+    border:3px solid var(--negro);
+    padding:6px 18px;
+    font-family:'Space Mono',monospace;
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:2px;
+    transform:rotate(-2deg);
+    box-shadow:5px 5px 0 var(--negro);
+    margin-bottom:20px;
+  }
+  h1{
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(46px, 9vw, 84px);
+    line-height:0.88;
+    letter-spacing:-2px;
+    text-transform:uppercase;
+  }
+  h1 .stroke{
+    -webkit-text-stroke:2px var(--negro);
+    color:transparent;
+    display:inline-block;
+  }
+  h1 .yellow{
+    background:var(--amarillo);
+    padding:0 8px;
+    display:inline-block;
+    transform:rotate(-1deg);
+    box-shadow:6px 6px 0 var(--negro);
+  }
+  .subtitle{
+    font-family:'Space Mono',monospace;
+    font-size:14px;
+    margin-top:18px;
+    letter-spacing:1px;
+    color:var(--gris);
+  }
+  .subtitle::before{content:"// ";color:var(--rosa);font-weight:700}
+
+  .screen{display:none;animation:fadeIn .5s ease}
+  .screen.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  .start-card{
+    background:var(--negro);
+    color:var(--blanco);
+    padding:40px 32px;
+    border:3px solid var(--negro);
+    box-shadow:10px 10px 0 var(--amarillo), 10px 10px 0 4px var(--negro);
+    margin-top:30px;
+    position:relative;
+    overflow:hidden;
+  }
+  .start-card::before{
+    content:"";position:absolute;top:-50%;right:-20%;width:300px;height:300px;
+    background:radial-gradient(circle, var(--rosa) 0%, transparent 70%);
+    opacity:.4;pointer-events:none;
+  }
+  .start-card h2{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:42px;letter-spacing:2px;line-height:1;
+    margin-bottom:16px;
+  }
+  .start-card p{
+    font-size:16px;line-height:1.6;margin-bottom:10px;
+    opacity:.9;
+  }
+  .start-card .stat-row{
+    display:flex;gap:18px;margin:24px 0;flex-wrap:wrap;
+  }
+  .stat-pill{
+    background:var(--amarillo);color:var(--negro);
+    padding:10px 16px;font-family:'Space Mono',monospace;font-weight:700;
+    font-size:13px;letter-spacing:1px;
+    border:2px solid var(--blanco);
+    transform:rotate(-1deg);
+  }
+  .stat-pill:nth-child(2){background:var(--rosa);color:var(--blanco);transform:rotate(1deg)}
+  .stat-pill:nth-child(3){background:var(--verde);color:var(--negro);transform:rotate(-2deg)}
+
+  .btn{
+    font-family:'Archivo Black',sans-serif;
+    font-size:22px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    background:var(--amarillo);
+    color:var(--negro);
+    border:3px solid var(--negro);
+    padding:18px 32px;
+    cursor:pointer;
+    box-shadow:6px 6px 0 var(--negro);
+    transition:transform .15s, box-shadow .15s;
+    width:100%;
+    display:block;
+    margin-top:10px;
+  }
+  .btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--negro)}
+  .btn:active{transform:translate(3px,3px);box-shadow:3px 3px 0 var(--negro)}
+  .btn.secondary{background:var(--blanco);}
+  .btn.pink{background:var(--rosa);color:var(--blanco)}
+
+  .progress-bar{
+    background:var(--blanco);
+    border:3px solid var(--negro);
+    height:36px;
+    position:relative;
+    margin-bottom:24px;
+    overflow:hidden;
+    box-shadow:4px 4px 0 var(--negro);
+  }
+  .progress-fill{
+    background:repeating-linear-gradient(45deg, var(--amarillo) 0 12px, var(--amarillo-fuerte) 12px 24px);
+    height:100%;
+    width:0%;
+    transition:width .4s cubic-bezier(.4,0,.2,1);
+    border-right:3px solid var(--negro);
+  }
+  .progress-info{
+    position:absolute;top:0;left:0;right:0;bottom:0;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 14px;
+    font-family:'Space Mono',monospace;font-weight:700;font-size:13px;
+    letter-spacing:1px;
+    z-index:2;
+  }
+  .progress-info .score{color:var(--rosa)}
+
+  .question-card{
+    background:var(--blanco);
+    border:3px solid var(--negro);
+    padding:28px 26px;
+    box-shadow:8px 8px 0 var(--negro);
+    margin-bottom:24px;
+    position:relative;
+  }
+  .km-marker{
+    position:absolute;top:-18px;left:20px;
+    background:var(--rosa);color:var(--blanco);
+    font-family:'Space Mono',monospace;font-weight:700;
+    font-size:12px;letter-spacing:1.5px;
+    padding:6px 14px;
+    border:3px solid var(--negro);
+    transform:rotate(-2deg);
+  }
+  .question-text{
+    font-family:'Outfit',sans-serif;
+    font-weight:800;
+    font-size:clamp(20px,3.5vw,26px);
+    line-height:1.3;
+    margin:14px 0 24px;
+  }
+  .options{display:flex;flex-direction:column;gap:12px}
+  .option{
+    background:var(--blanco);
+    border:3px solid var(--negro);
+    padding:16px 20px;
+    cursor:pointer;
+    font-family:'Outfit',sans-serif;
+    font-size:16px;
+    font-weight:600;
+    text-align:left;
+    transition:all .15s;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    box-shadow:4px 4px 0 var(--negro);
+    line-height:1.4;
+  }
+  .option:hover:not(:disabled){
+    background:var(--amarillo);
+    transform:translate(-2px,-2px);
+    box-shadow:6px 6px 0 var(--negro);
+  }
+  .option:disabled{cursor:not-allowed}
+  .option .letter{
+    background:var(--negro);color:var(--amarillo);
+    width:34px;height:34px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Archivo Black',sans-serif;font-size:18px;
+    border-radius:50%;
+  }
+  .option.correct{
+    background:var(--verde);
+    color:var(--negro);
+    animation:pulse .4s ease;
+  }
+  .option.correct .letter{background:var(--negro);color:var(--verde)}
+  .option.wrong{
+    background:var(--rosa);
+    color:var(--blanco);
+  }
+  .option.wrong .letter{background:var(--blanco);color:var(--rosa)}
+  @keyframes pulse{
+    0%{transform:scale(1)}
+    50%{transform:scale(1.03)}
+    100%{transform:scale(1)}
+  }
+
+  .feedback{
+    margin-top:18px;
+    padding:14px 18px;
+    background:var(--negro);
+    color:var(--blanco);
+    border:3px solid var(--negro);
+    font-family:'Space Mono',monospace;
+    font-size:14px;
+    line-height:1.5;
+    display:none;
+  }
+  .feedback.show{display:block;animation:fadeIn .3s ease}
+  .feedback strong{color:var(--amarillo)}
+
+  .next-btn{
+    margin-top:18px;
+    display:none;
+  }
+  .next-btn.show{display:block;animation:fadeIn .3s ease}
+
+  .result-card{
+    background:var(--amarillo);
+    border:3px solid var(--negro);
+    padding:40px 28px;
+    box-shadow:10px 10px 0 var(--negro);
+    text-align:center;
+    margin-top:30px;
+    position:relative;
+    overflow:hidden;
+  }
+  .result-card::before{
+    content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(135deg,transparent 0 30px, rgba(0,0,0,0.04) 30px 31px);
+    pointer-events:none;
+  }
+  .medal{
+    font-family:'Archivo Black',sans-serif;
+    font-size:96px;line-height:1;
+    margin-bottom:10px;
+    position:relative;
+  }
+  .result-title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:48px;letter-spacing:2px;line-height:1;
+    margin-bottom:14px;
+    text-transform:uppercase;
+  }
+  .result-score{
+    font-family:'Space Mono',monospace;
+    font-size:20px;font-weight:700;
+    margin-bottom:22px;
+    background:var(--negro);color:var(--amarillo);
+    display:inline-block;padding:10px 20px;
+    border:3px solid var(--negro);
+  }
+  .result-message{
+    font-size:17px;line-height:1.5;
+    margin-bottom:26px;
+    font-weight:600;
+  }
+
+  .bike-icon{
+    position:absolute;top:30px;right:24px;
+    font-size:48px;
+    transform:rotate(-8deg);
+    opacity:.85;
+  }
+  @media (max-width:520px){
+    .bike-icon{font-size:36px;top:20px;right:16px}
+    .container{padding:36px 16px 60px}
+  }
+</style>
+</head>
+<body>
+
+<div class="road-stripe"></div>
+<div class="road-stripe bottom"></div>
+
+<div class="container">
+  <header>
+    <div class="bike-icon">🚴</div>
+    <div class="dorsal">DOSSARD · 06 · LYON</div>
+    <h1>
+      <span class="stroke">DÉFI</span><br>
+      <span class="yellow">SEIXAS</span>
+    </h1>
+    <p class="subtitle">Quiz cyclisme · 15 étapes · arriveras-tu jusqu'au bout ?</p>
+  </header>
+
+  <!-- ÉCRAN ACCUEIL -->
+  <section id="screen-start" class="screen active">
+    <div class="start-card">
+      <h2>Bienvenue dans le peloton !</h2>
+      <p>Paul Seixas est le grand espoir français du cyclisme. Professionnel à seulement 17 ans, grimpeur, rouleur et champion du monde junior. Que sais-tu de sa vie et de ses victoires ?</p>
+      <div class="stat-row">
+        <div class="stat-pill">15 QUESTIONS</div>
+        <div class="stat-pill">3 RÉPONSES</div>
+        <div class="stat-pill">1 ARRIVÉE</div>
+      </div>
+      <p>Chaque question a trois réponses : une vraie, une crédible mais fausse… et une rigolote ! Une seule est correcte. À toi de pédaler avec la tête !</p>
+      <button class="btn" style="margin-top:24px" onclick="startGame()">C'est parti !</button>
+    </div>
+  </section>
+
+  <!-- ÉCRAN QUESTION -->
+  <section id="screen-quiz" class="screen">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+      <div class="progress-info">
+        <span id="progress-text">ÉTAPE 1 / 15</span>
+        <span class="score" id="score-text">★ 0 PTS</span>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="km-marker" id="km-marker">KM 1</div>
+      <p class="question-text" id="question-text"></p>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="btn next-btn" id="next-btn" onclick="nextQuestion()">Étape suivante →</button>
+    </div>
+  </section>
+
+  <!-- ÉCRAN RÉSULTAT -->
+  <section id="screen-result" class="screen">
+    <div class="result-card">
+      <div class="medal" id="medal">🏆</div>
+      <div class="result-title" id="result-title">ARRIVÉE !</div>
+      <div class="result-score" id="result-score">0 / 15</div>
+      <p class="result-message" id="result-message"></p>
+      <button class="btn pink" onclick="restartGame()">Refaire une course</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ============================================================
+   BANQUE DE 80 QUESTIONS · PAUL SEIXAS
+   ============================================================ */
+const QUESTIONS = [
+  {
+    q: "Où est né Paul Seixas ?",
+    options: [
+      {text:"À Lyon, en France", type:"correct"},
+      {text:"À Bordeaux, en France", type:"plausible"},
+      {text:"Sur un vélo, en plein milieu d'un rond-point", type:"joke"}
+    ]
+  },
+  {
+    q: "En quelle année est né Paul Seixas ?",
+    options: [
+      {text:"En 2006", type:"correct"},
+      {text:"En 2004", type:"plausible"},
+      {text:"L'année de la première baguette de son grand-père", type:"joke"}
+    ]
+  },
+  {
+    q: "Quel sport ses parents pratiquaient-ils en compétition ?",
+    options: [
+      {text:"Le karaté", type:"correct"},
+      {text:"L'athlétisme", type:"plausible"},
+      {text:"Le lancer de croissant", type:"joke"}
+    ]
+  },
+  {
+    q: "Qui lui a fait découvrir le Tour de France à la télévision quand il était petit ?",
+    options: [
+      {text:"Son grand-père", type:"correct"},
+      {text:"Son oncle", type:"plausible"},
+      {text:"Le facteur, qui restait pour le regarder", type:"joke"}
+    ]
+  },
+  {
+    q: "Comment était son premier vélo ?",
+    options: [
+      {text:"Rouge avec des petites roues", type:"correct"},
+      {text:"Bleu avec un panier", type:"plausible"},
+      {text:"Un tricycle avec un klaxon en forme de canard", type:"joke"}
+    ]
+  },
+  {
+    q: "Vers quel âge a-t-il commencé à faire du vélo plus sérieusement ?",
+    options: [
+      {text:"Vers neuf ans", type:"correct"},
+      {text:"Vers douze ans", type:"plausible"},
+      {text:"Quand on lui a échangé ses billes contre des coups de pédale", type:"joke"}
+    ]
+  },
+  {
+    q: "Comment était Paul à l'école ?",
+    options: [
+      {text:"Timide et discret", type:"correct"},
+      {text:"Le plus populaire de la classe", type:"plausible"},
+      {text:"Celui qui arrivait en vélo jusqu'à la récréation", type:"joke"}
+    ]
+  },
+  {
+    q: "À quel âge est-il entré au club Lyon Sprint Évolution ?",
+    options: [
+      {text:"À huit ans", type:"correct"},
+      {text:"À onze ans", type:"plausible"},
+      {text:"Juste après avoir appris à faire ses lacets", type:"joke"}
+    ]
+  },
+  {
+    q: "Comment s'appelle le club où il a commencé à s'entraîner ?",
+    options: [
+      {text:"Lyon Sprint Évolution", type:"correct"},
+      {text:"Vélo Club Lyonnais", type:"plausible"},
+      {text:"Les Pédales Volantes du Rhône", type:"joke"}
+    ]
+  },
+  {
+    q: "Quel surnom ses entraîneurs lui ont-ils donné ?",
+    options: [
+      {text:"Texas Instrument", type:"correct"},
+      {text:"Le Professeur", type:"plausible"},
+      {text:"Le Croissant Volant", type:"joke"}
+    ]
+  },
+  {
+    q: "Pourquoi lui ont-ils donné ce surnom ?",
+    options: [
+      {text:"Pour sa précision avec les données", type:"correct"},
+      {text:"Pour son accent quand il parle anglais", type:"plausible"},
+      {text:"Parce qu'il portait toujours un chapeau de cow-boy", type:"joke"}
+    ]
+  },
+  {
+    q: "Comment était Paul en dehors du vélo ?",
+    options: [
+      {text:"Tête en l'air", type:"correct"},
+      {text:"Très ordonné et méthodique", type:"plausible"},
+      {text:"Il marchait toujours en zigzag par habitude", type:"joke"}
+    ]
+  },
+  {
+    q: "À part le vélo, qu'est-ce qu'il aimait faire ?",
+    options: [
+      {text:"La musique, les films et être avec ses amis", type:"correct"},
+      {text:"Les échecs et les jeux vidéo de stratégie", type:"plausible"},
+      {text:"Collectionner des cailloux en forme de vélo", type:"joke"}
+    ]
+  },
+  {
+    q: "En quelle année est-il devenu champion de France cadet sur route ?",
+    options: [
+      {text:"En 2021", type:"correct"},
+      {text:"En 2022", type:"plausible"},
+      {text:"Le jour où il a arrêté les épinards", type:"joke"}
+    ]
+  },
+  {
+    q: "Dans quelle autre discipline cycliste s'est-il distingué ?",
+    options: [
+      {text:"Le cyclo-cross", type:"correct"},
+      {text:"Le cyclisme sur piste", type:"plausible"},
+      {text:"Le vélo sous-marin avec tuba", type:"joke"}
+    ]
+  },
+  {
+    q: "Qu'est-ce qui caractérise le cyclo-cross ?",
+    options: [
+      {text:"Il y a de la boue et des obstacles", type:"correct"},
+      {text:"On court toujours en descente", type:"plausible"},
+      {text:"Il faut saluer le public à chaque tour", type:"joke"}
+    ]
+  },
+  {
+    q: "Quelle est la grande spécialité de Paul Seixas ?",
+    options: [
+      {text:"La montagne : c'est un grimpeur", type:"correct"},
+      {text:"Le sprint final", type:"plausible"},
+      {text:"Faire des roues arrière sur le podium", type:"joke"}
+    ]
+  },
+  {
+    q: "Dans quelle autre discipline excelle-t-il en plus de la montagne ?",
+    options: [
+      {text:"Le contre-la-montre", type:"correct"},
+      {text:"Les courses aux points sur piste", type:"plausible"},
+      {text:"Le toboggan aquatique à vélo", type:"joke"}
+    ]
+  },
+  {
+    q: "Où a-t-il gagné le Championnat du monde junior du contre-la-montre en 2024 ?",
+    options: [
+      {text:"À Zurich", type:"correct"},
+      {text:"À Glasgow", type:"plausible"},
+      {text:"Au pôle Nord, contre un manchot", type:"joke"}
+    ]
+  },
+  {
+    q: "À quelle vitesse moyenne a-t-il roulé au Mondial junior du contre-la-montre 2024 ?",
+    options: [
+      {text:"À plus de 53 km/h", type:"correct"},
+      {text:"À plus de 60 km/h", type:"plausible"},
+      {text:"À la vitesse de l'éclair McQueen", type:"joke"}
+    ]
+  },
+  {
+    q: "Combien de victoires a-t-il obtenu pendant la saison 2024 chez les juniors ?",
+    options: [
+      {text:"Treize victoires", type:"correct"},
+      {text:"Vingt-deux victoires", type:"plausible"},
+      {text:"Une pour chaque pain au chocolat avalé", type:"joke"}
+    ]
+  },
+  {
+    q: "À quel âge est-il devenu professionnel ?",
+    options: [
+      {text:"À dix-sept ans", type:"correct"},
+      {text:"À dix-neuf ans", type:"plausible"},
+      {text:"Dès que sa moustache a commencé à pousser", type:"joke"}
+    ]
+  },
+  {
+    q: "Combien d'heures peut-il passer sur son vélo lors d'une journée d'entraînement normale ?",
+    options: [
+      {text:"Jusqu'à six heures", type:"correct"},
+      {text:"Jusqu'à dix heures", type:"plausible"},
+      {text:"Le temps que ses chaussettes tiennent", type:"joke"}
+    ]
+  },
+  {
+    q: "Quel appareil utilise-t-il pour mesurer la force exacte de chaque coup de pédale ?",
+    options: [
+      {text:"Un capteur de puissance", type:"correct"},
+      {text:"Un compteur de vitesse numérique", type:"plausible"},
+      {text:"Une balance de cuisine collée à la pédale", type:"joke"}
+    ]
+  },
+  {
+    q: "Combien de calories peut-il dépenser pendant une étape de montagne ?",
+    options: [
+      {text:"Entre 4 000 et 6 000 calories", type:"correct"},
+      {text:"Entre 2 000 et 3 000 calories", type:"plausible"},
+      {text:"Autant que douze grands-mères qui font un gâteau", type:"joke"}
+    ]
+  },
+  {
+    q: "Que mange-t-il au petit-déjeuner avant de courir ?",
+    options: [
+      {text:"Du riz, des pâtes, des œufs ou des tartines", type:"correct"},
+      {text:"Seulement du jus d'orange et du café", type:"plausible"},
+      {text:"Un saladier de spaghettis froids au ketchup", type:"joke"}
+    ]
+  },
+  {
+    q: "Que mange-t-il pendant les courses ?",
+    options: [
+      {text:"Des barres, des gels, des bananes et des gâteaux de riz", type:"correct"},
+      {text:"Des sandwichs au fromage et des barres chocolatées", type:"plausible"},
+      {text:"Des macaronis tout chauds servis sur un plateau", type:"joke"}
+    ]
+  },
+  {
+    q: "Pourquoi boit-il des boissons isotoniques pendant les étapes ?",
+    options: [
+      {text:"Pour récupérer les sels minéraux", type:"correct"},
+      {text:"Parce qu'elles améliorent la vue", type:"plausible"},
+      {text:"Parce qu'elles ont des couleurs trop cool", type:"joke"}
+    ]
+  },
+  {
+    q: "De quoi a-t-il besoin après une course pour récupérer ses muscles ?",
+    options: [
+      {text:"De protéines", type:"correct"},
+      {text:"De beaucoup de caféine", type:"plausible"},
+      {text:"D'une sieste sur son guidon", type:"joke"}
+    ]
+  },
+  {
+    q: "Combien d'heures essaie-t-il de dormir chaque nuit ?",
+    options: [
+      {text:"Au moins huit heures", type:"correct"},
+      {text:"Au moins douze heures", type:"plausible"},
+      {text:"Le temps d'une série regardée d'une traite", type:"joke"}
+    ]
+  },
+  {
+    q: "Quelles méthodes utilise-t-il pour récupérer après les courses ?",
+    options: [
+      {text:"Des massages, des bains froids et des étirements", type:"correct"},
+      {text:"Seulement bien dormir", type:"plausible"},
+      {text:"Se mettre dans le frigo dans le noir", type:"joke"}
+    ]
+  },
+  {
+    q: "Dans quelle école est-il inscrit en plus de courir comme professionnel ?",
+    options: [
+      {text:"À l'Emlyon Business School", type:"correct"},
+      {text:"À la Sorbonne de Paris", type:"plausible"},
+      {text:"À l'École Secrète du Pédalage Avancé", type:"joke"}
+    ]
+  },
+  {
+    q: "Pourquoi Paul continue-t-il ses études en plus de courir ?",
+    options: [
+      {text:"Parce qu'il faut penser à l'avenir après le vélo", type:"correct"},
+      {text:"Parce que ses parents l'obligent", type:"plausible"},
+      {text:"Pour avoir de bonnes notes et qu'on lui achète d'autres vélos", type:"joke"}
+    ]
+  },
+  {
+    q: "En quel matériau est fabriqué son vélo professionnel ?",
+    options: [
+      {text:"En fibre de carbone", type:"correct"},
+      {text:"En aluminium renforcé", type:"plausible"},
+      {text:"En carton peint en noir", type:"joke"}
+    ]
+  },
+  {
+    q: "Combien pèse son vélo professionnel ?",
+    options: [
+      {text:"Moins de sept kilos", type:"correct"},
+      {text:"Environ dix kilos", type:"plausible"},
+      {text:"Autant que trois baguettes mouillées", type:"joke"}
+    ]
+  },
+  {
+    q: "Qu'est-ce qui peut affecter ses performances s'il y a un petit changement ?",
+    options: [
+      {text:"La hauteur de la selle", type:"correct"},
+      {text:"La couleur du maillot", type:"plausible"},
+      {text:"Le goût du chewing-gum qu'il mâche", type:"joke"}
+    ]
+  },
+  {
+    q: "Pourquoi le casque, le maillot et les chaussures sont-ils conçus comme ça ?",
+    options: [
+      {text:"Pour améliorer la vitesse et l'aérodynamique", type:"correct"},
+      {text:"Pour mieux apparaître sur les photos", type:"plausible"},
+      {text:"Pour faire peur aux pigeons au départ", type:"joke"}
+    ]
+  },
+  {
+    q: "Quelle place a-t-il obtenue en avril 2025 sur Paris-Camembert ?",
+    options: [
+      {text:"Deuxième", type:"correct"},
+      {text:"Quatrième", type:"plausible"},
+      {text:"La meilleure place du concours de fromage", type:"joke"}
+    ]
+  },
+  {
+    q: "Qu'est-ce qui distinguait Paul au Critérium du Dauphiné 2025 ?",
+    options: [
+      {text:"Il était le coureur le plus jeune du peloton", type:"correct"},
+      {text:"Il a gagné deux étapes", type:"plausible"},
+      {text:"Il a porté son cartable d'école pendant toute la course", type:"joke"}
+    ]
+  },
+  {
+    q: "À quelle place a-t-il terminé le classement général du Dauphiné 2025 ?",
+    options: [
+      {text:"Huitième", type:"correct"},
+      {text:"Cinquième", type:"plausible"},
+      {text:"À la place « j'ai failli tomber mais j'étais classe »", type:"joke"}
+    ]
+  },
+  {
+    q: "Au Dauphiné 2025, qu'a été Paul parmi les coureurs français ?",
+    options: [
+      {text:"Le mieux classé", type:"correct"},
+      {text:"Le deuxième mieux classé", type:"plausible"},
+      {text:"Celui qui a signé le plus d'autographes à l'arrivée", type:"joke"}
+    ]
+  },
+  {
+    q: "À quelle place a-t-il terminé le contre-la-montre du Dauphiné 2025 ?",
+    options: [
+      {text:"Dixième", type:"correct"},
+      {text:"Quinzième", type:"plausible"},
+      {text:"À la place « chrono cassé »", type:"joke"}
+    ]
+  },
+  {
+    q: "Quelle course par étapes espoirs a-t-il gagnée en août 2025 ?",
+    options: [
+      {text:"Le Tour de l'Avenir", type:"correct"},
+      {text:"Le Tour de Belgique espoirs", type:"plausible"},
+      {text:"Le Tour du « Pas Encore le Permis »", type:"joke"}
+    ]
+  },
+  {
+    q: "Dans quel état est-il arrivé au Tour de l'Avenir 2025 ?",
+    options: [
+      {text:"Pas à cent pour cent physiquement", type:"correct"},
+      {text:"Dans sa meilleure forme", type:"plausible"},
+      {text:"En empruntant le vélo du facteur", type:"joke"}
+    ]
+  },
+  {
+    q: "Où a-t-il gagné le contre-la-montre final du Tour de l'Avenir 2025 ?",
+    options: [
+      {text:"Dans la montée de La Rosière", type:"correct"},
+      {text:"Dans la montée de l'Alpe d'Huez", type:"plausible"},
+      {text:"Dans la côte devant chez lui", type:"joke"}
+    ]
+  },
+  {
+    q: "Avec quelle avance a-t-il gagné le Tour de l'Avenir 2025 ?",
+    options: [
+      {text:"Quarante secondes", type:"correct"},
+      {text:"Deux minutes pile", type:"plausible"},
+      {text:"Le temps que met le sandwich à arriver", type:"joke"}
+    ]
+  },
+  {
+    q: "Depuis quelle année aucun Français n'avait gagné le Tour de l'Avenir avant lui ?",
+    options: [
+      {text:"Depuis 2016", type:"correct"},
+      {text:"Depuis 2010", type:"plausible"},
+      {text:"Depuis l'invention du croissant", type:"joke"}
+    ]
+  },
+  {
+    q: "Quelle médaille a-t-il gagnée au Championnat d'Europe d'octobre 2025 ?",
+    options: [
+      {text:"Le bronze", type:"correct"},
+      {text:"L'argent", type:"plausible"},
+      {text:"Une médaille en forme de fromage", type:"joke"}
+    ]
+  },
+  {
+    q: "Avec quels deux célèbres cyclistes a-t-il partagé le podium à l'Euro 2025 ?",
+    options: [
+      {text:"Pogacar et Evenepoel", type:"correct"},
+      {text:"Vingegaard et Roglic", type:"plausible"},
+      {text:"Astérix et Obélix", type:"joke"}
+    ]
+  },
+  {
+    q: "Où a-t-il obtenu sa première victoire sur le WorldTour en février 2026 ?",
+    options: [
+      {text:"Sur le Tour d'Algarve", type:"correct"},
+      {text:"Sur le Tour d'Andalousie", type:"plausible"},
+      {text:"Sur le Tour de la cour de récré", type:"joke"}
+    ]
+  },
+  {
+    q: "Comment a-t-il gagné l'étape de l'Alto da Foia sur le Tour d'Algarve 2026 ?",
+    options: [
+      {text:"Aux centimètres, dans un photo-finish", type:"correct"},
+      {text:"Avec deux minutes d'avance", type:"plausible"},
+      {text:"En levant les bras cent mètres avant la ligne", type:"joke"}
+    ]
+  },
+  {
+    q: "Pourquoi sa victoire en Algarve était-elle spéciale ?",
+    options: [
+      {text:"Parce que sa famille a des racines portugaises", type:"correct"},
+      {text:"Parce que c'était sa première fois hors de France", type:"plausible"},
+      {text:"Parce qu'il avait gagné au loto le même jour", type:"joke"}
+    ]
+  },
+  {
+    q: "À qui a-t-il annoncé tout ému en mai 2026 qu'il allait courir le Tour de France ?",
+    options: [
+      {text:"À ses grands-parents", type:"correct"},
+      {text:"À ses copains de classe", type:"plausible"},
+      {text:"À son poisson rouge Marcel", type:"joke"}
+    ]
+  },
+  {
+    q: "À quelle course italienne a-t-il participé pour la première fois en mars 2026 ?",
+    options: [
+      {text:"Aux Strade Bianche", type:"correct"},
+      {text:"À Milan-San Remo", type:"plausible"},
+      {text:"À la Course du Spaghetti", type:"joke"}
+    ]
+  },
+  {
+    q: "Pourquoi les Strade Bianche sont-elles célèbres ?",
+    options: [
+      {text:"Pour leurs chemins de terre blanche en Toscane", type:"correct"},
+      {text:"Pour traverser les vignobles du Piémont", type:"plausible"},
+      {text:"Parce que les coureurs finissent avec une tête de clown", type:"joke"}
+    ]
+  },
+  {
+    q: "À combien de kilomètres de l'arrivée Pogacar a-t-il attaqué sur les Strade Bianche 2026 ?",
+    options: [
+      {text:"À 78 kilomètres", type:"correct"},
+      {text:"À 50 kilomètres", type:"plausible"},
+      {text:"Juste en sortant de chez lui ce matin-là", type:"joke"}
+    ]
+  },
+  {
+    q: "Où Paul a-t-il été le seul à pouvoir suivre Pogacar quelques secondes ?",
+    options: [
+      {text:"Sur le Monte Sante Marie", type:"correct"},
+      {text:"Sur le Mur du Poggio", type:"plausible"},
+      {text:"Sur la montagne où vit Heidi", type:"joke"}
+    ]
+  },
+  {
+    q: "À quelle place a-t-il terminé les Strade Bianche 2026 ?",
+    options: [
+      {text:"Deuxième, juste derrière Pogacar", type:"correct"},
+      {text:"Troisième, derrière Pogacar et Van der Poel", type:"plausible"},
+      {text:"À la place « oui mais c'était trop poussiéreux »", type:"joke"}
+    ]
+  },
+  {
+    q: "Qu'a reconnu Pogacar après les Strade Bianche 2026 ?",
+    options: [
+      {text:"Qu'il a dû se donner à fond pour lâcher Paul", type:"correct"},
+      {text:"Qu'il avait pensé le laisser gagner", type:"plausible"},
+      {text:"Que Paul lui avait piqué son sandwich à l'arrivée", type:"joke"}
+    ]
+  },
+  {
+    q: "À quelle course du Pays basque a-t-il participé pour la première fois en avril 2026 ?",
+    options: [
+      {text:"À l'Itzulia", type:"correct"},
+      {text:"À la Clásica de San Sebastián", type:"plausible"},
+      {text:"Au « Tour du Pintxo Éternel »", type:"joke"}
+    ]
+  },
+  {
+    q: "Où a-t-il gagné le contre-la-montre initial de l'Itzulia 2026 ?",
+    options: [
+      {text:"Dans les rues de Bilbao", type:"correct"},
+      {text:"Dans les rues de Vitoria", type:"plausible"},
+      {text:"Sur le parking du musée Guggenheim", type:"joke"}
+    ]
+  },
+  {
+    q: "Quels deux spécialistes a-t-il battus dans le contre-la-montre de l'Itzulia 2026 ?",
+    options: [
+      {text:"Primoz Roglic et Juan Ayuso", type:"correct"},
+      {text:"Remco Evenepoel et Filippo Ganna", type:"plausible"},
+      {text:"Son entraîneur et sa maman", type:"joke"}
+    ]
+  },
+  {
+    q: "Comment a-t-il gagné l'étape de montagne de l'Itzulia 2026 ?",
+    options: [
+      {text:"Avec une attaque dans la dernière montée", type:"correct"},
+      {text:"Lors d'un sprint massif", type:"plausible"},
+      {text:"En chantant une chanson pour distraire le peloton", type:"joke"}
+    ]
+  },
+  {
+    q: "Quel maillot a-t-il défendu pendant toute l'Itzulia 2026 ?",
+    options: [
+      {text:"Le maillot jaune de leader", type:"correct"},
+      {text:"Le maillot vert des points", type:"plausible"},
+      {text:"Un maillot avec des dessins de super-héros", type:"joke"}
+    ]
+  },
+  {
+    q: "À combien de kilomètres de l'arrivée a-t-il attaqué en solitaire sur la dernière étape de l'Itzulia 2026 ?",
+    options: [
+      {text:"À plus de cinquante kilomètres", type:"correct"},
+      {text:"À environ vingt kilomètres", type:"plausible"},
+      {text:"Dès la ligne de départ, sans prévenir", type:"joke"}
+    ]
+  },
+  {
+    q: "Quel record a-t-il battu en gagnant l'Itzulia 2026 ?",
+    options: [
+      {text:"Être le plus jeune vainqueur de l'histoire de la course", type:"correct"},
+      {text:"Être le premier Français à la gagner dans l'histoire", type:"plausible"},
+      {text:"Être le premier coureur à franchir la ligne en chantant", type:"joke"}
+    ]
+  },
+  {
+    q: "En plus du général, quels autres maillots a-t-il gagnés à l'Itzulia 2026 ?",
+    options: [
+      {text:"Celui de la montagne, des points et du meilleur jeune", type:"correct"},
+      {text:"Seulement celui du meilleur jeune", type:"plausible"},
+      {text:"Celui de la « plus belle coiffure du peloton »", type:"joke"}
+    ]
+  },
+  {
+    q: "Quelle classique belge a-t-il gagnée en avril 2026 ?",
+    options: [
+      {text:"La Flèche Wallonne", type:"correct"},
+      {text:"L'Amstel Gold Race", type:"plausible"},
+      {text:"La « Course aux Gaufres »", type:"joke"}
+    ]
+  },
+  {
+    q: "Où a-t-il attaqué pour gagner la Flèche Wallonne 2026 ?",
+    options: [
+      {text:"Dans les derniers mètres du Mur de Huy", type:"correct"},
+      {text:"Sur le Cauberg", type:"plausible"},
+      {text:"Dans le premier virage, en criant « salut ! »", type:"joke"}
+    ]
+  },
+  {
+    q: "Depuis quelle année il n'y avait pas eu de vainqueur aussi jeune sur la Flèche Wallonne ?",
+    options: [
+      {text:"Depuis 1936", type:"correct"},
+      {text:"Depuis 1985", type:"plausible"},
+      {text:"Depuis l'invention de la roue", type:"joke"}
+    ]
+  },
+  {
+    q: "À combien d'attaques consécutives de Pogacar a-t-il résisté sur Liège-Bastogne-Liège 2026 ?",
+    options: [
+      {text:"À trois", type:"correct"},
+      {text:"À cinq", type:"plausible"},
+      {text:"À toutes, jusqu'à ce qu'il s'ennuie", type:"joke"}
+    ]
+  },
+  {
+    q: "Quelle place a-t-il obtenue sur Liège-Bastogne-Liège 2026 ?",
+    options: [
+      {text:"Deuxième, derrière Pogacar", type:"correct"},
+      {text:"Troisième", type:"plausible"},
+      {text:"On lui a donné un trophée par sympathie", type:"joke"}
+    ]
+  },
+  {
+    q: "Qu'a fait Pogacar quand Paul a franchi la ligne sur Liège-Bastogne-Liège 2026 ?",
+    options: [
+      {text:"Il l'a félicité personnellement", type:"correct"},
+      {text:"Il lui a fait un signe de respect à distance", type:"plausible"},
+      {text:"Il l'a invité à manger une glace à la fraise", type:"joke"}
+    ]
+  },
+  {
+    q: "Qu'est-ce qui se distinguait déjà chez lui à douze ou treize ans ?",
+    options: [
+      {text:"Il était un grand espoir du cyclisme français", type:"correct"},
+      {text:"Il gagnait toutes les courses", type:"plausible"},
+      {text:"Il pédalait en dormant", type:"joke"}
+    ]
+  },
+  {
+    q: "Que faisait-il mieux que les autres coureurs de son âge ?",
+    options: [
+      {text:"Il comprenait les courses", type:"correct"},
+      {text:"Il sprintait à l'arrivée", type:"plausible"},
+      {text:"Il tirait la langue pendant l'effort", type:"joke"}
+    ]
+  },
+  {
+    q: "Quand il s'entraînait, que faisait-il même quand il faisait mauvais temps ?",
+    options: [
+      {text:"Il sortait quand même s'entraîner", type:"correct"},
+      {text:"Il remplaçait la séance par de la salle de sport", type:"plausible"},
+      {text:"Il pédalait dans sa baignoire", type:"joke"}
+    ]
+  },
+  {
+    q: "Que faisait-il avec les données de fréquence cardiaque et de cadence ?",
+    options: [
+      {text:"Il les utilisait pour s'entraîner", type:"correct"},
+      {text:"Il les regardait seulement à la fin de l'année", type:"plausible"},
+      {text:"Il les notait dans un carnet d'espion secret", type:"joke"}
+    ]
+  },
+  {
+    q: "Comment Paul se sent-il quand il pédale ?",
+    options: [
+      {text:"Libre et heureux", type:"correct"},
+      {text:"Concentré et sérieux", type:"plausible"},
+      {text:"Comme un kangourou pressé", type:"joke"}
+    ]
+  },
+  {
+    q: "Quel rôle a joué la discipline dans sa progression comme cycliste ?",
+    options: [
+      {text:"C'était une des clés de son progrès", type:"correct"},
+      {text:"Elle n'a compté que pendant l'adolescence", type:"plausible"},
+      {text:"Elle l'a aidé à ne pas perdre ses chaussettes", type:"joke"}
+    ]
+  },
+  {
+    q: "Qu'a-t-il appris des défaites dans les courses importantes ?",
+    options: [
+      {text:"Beaucoup, même quand ça faisait mal", type:"correct"},
+      {text:"Que ça ne valait pas la peine de continuer", type:"plausible"},
+      {text:"À pleurer sur son vélo sans que ça se voie", type:"joke"}
+    ]
+  },
+  {
+    q: "Qu'est-ce qui lui a donné encore plus envie de progresser comme cycliste ?",
+    options: [
+      {text:"Sa première victoire dans une course pour enfants près de Lyon", type:"correct"},
+      {text:"Une défaite très douloureuse à onze ans", type:"plausible"},
+      {text:"Que son chien le poursuive dans la rue", type:"joke"}
+    ]
+  }
+];
+
+/* ============================================================
+   ÉTAT DU JEU
+   ============================================================ */
+let currentQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+
+const TOTAL_QUESTIONS = 15;
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function startGame(){
+  currentQuestions = shuffle(QUESTIONS).slice(0, TOTAL_QUESTIONS);
+  currentIndex = 0;
+  score = 0;
+  answered = false;
+  document.getElementById('screen-start').classList.remove('active');
+  document.getElementById('screen-result').classList.remove('active');
+  document.getElementById('screen-quiz').classList.add('active');
+  showQuestion();
+}
+
+function showQuestion(){
+  answered = false;
+  const q = currentQuestions[currentIndex];
+  const shuffledOpts = shuffle(q.options);
+
+  const pct = ((currentIndex) / TOTAL_QUESTIONS) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `ÉTAPE ${currentIndex+1} / ${TOTAL_QUESTIONS}`;
+  document.getElementById('score-text').textContent = `★ ${score} PTS`;
+  document.getElementById('km-marker').textContent = `KM ${(currentIndex+1)*10}`;
+
+  document.getElementById('question-text').textContent = q.q;
+
+  const optsContainer = document.getElementById('options');
+  optsContainer.innerHTML = '';
+  const letters = ['A','B','C'];
+  shuffledOpts.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.innerHTML = `<span class="letter">${letters[idx]}</span><span>${opt.text}</span>`;
+    btn.onclick = () => selectAnswer(btn, opt);
+    optsContainer.appendChild(btn);
+  });
+
+  document.getElementById('feedback').classList.remove('show');
+  document.getElementById('feedback').innerHTML = '';
+  document.getElementById('next-btn').classList.remove('show');
+  document.getElementById('next-btn').textContent = (currentIndex === TOTAL_QUESTIONS - 1) ? '🏁 Voir l\'arrivée' : 'Étape suivante →';
+}
+
+function selectAnswer(btn, opt){
+  if(answered) return;
+  answered = true;
+  const allOpts = document.querySelectorAll('.option');
+  allOpts.forEach(o => o.disabled = true);
+
+  const feedback = document.getElementById('feedback');
+  if(opt.type === 'correct'){
+    btn.classList.add('correct');
+    score++;
+    feedback.innerHTML = '<strong>BRAVO !</strong> Bien pédalé, tu restes dans le groupe de tête !';
+  } else {
+    btn.classList.add('wrong');
+    allOpts.forEach(o => {
+      const letterText = o.querySelector('span:nth-child(2)').textContent;
+      const original = currentQuestions[currentIndex].options.find(x => x.text === letterText);
+      if(original && original.type === 'correct'){
+        o.classList.add('correct');
+      }
+    });
+    if(opt.type === 'joke'){
+      feedback.innerHTML = '<strong>RATÉ !</strong> C\'était la réponse rigolote 😅 Crevaison !';
+    } else {
+      feedback.innerHTML = '<strong>RATÉ !</strong> Presque, mais non… C\'était le piège crédible.';
+    }
+  }
+  feedback.classList.add('show');
+  document.getElementById('next-btn').classList.add('show');
+  document.getElementById('score-text').textContent = `★ ${score} PTS`;
+}
+
+function nextQuestion(){
+  currentIndex++;
+  if(currentIndex >= TOTAL_QUESTIONS){
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult(){
+  document.getElementById('screen-quiz').classList.remove('active');
+  document.getElementById('screen-result').classList.add('active');
+
+  const medal = document.getElementById('medal');
+  const title = document.getElementById('result-title');
+  const scoreEl = document.getElementById('result-score');
+  const msg = document.getElementById('result-message');
+
+  scoreEl.textContent = `${score} / ${TOTAL_QUESTIONS}`;
+
+  if(score >= 13){
+    medal.textContent = '🏆';
+    title.textContent = 'Maillot jaune !';
+    msg.textContent = 'Tu es un vrai champion ! Tu sais presque tout sur Paul Seixas. Tu es son entraîneur secret ou quoi ?';
+  } else if(score >= 10){
+    medal.textContent = '🥈';
+    title.textContent = 'Sur le podium !';
+    msg.textContent = 'Bien joué ! Tu arrives avec le groupe des favoris. Pogacar devrait te jeter un coup d\'œil !';
+  } else if(score >= 7){
+    medal.textContent = '🥉';
+    title.textContent = 'Dans le peloton';
+    msg.textContent = 'Tu finis avec le groupe principal. Tu as tenu dans les côtes mais il te reste de la marge pour t\'échapper.';
+  } else if(score >= 4){
+    medal.textContent = '🚴';
+    title.textContent = 'Queue de peloton';
+    msg.textContent = 'Tu as fini la course ! Il faut s\'entraîner un peu plus, mais le vélo, c\'est de la persévérance.';
+  } else {
+    medal.textContent = '🛠️';
+    title.textContent = 'La voiture-balai !';
+    msg.textContent = 'La voiture-balai t\'a ramassé… mais ne baisse pas les bras ! Refais une course et tu vas tous les surprendre.';
+  }
+}
+
+function restartGame(){
+  startGame();
+}
+</script>
+
+</body>
+</html>
