@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silogismos — Filosofia</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e17;
+    --surface: #1a1929;
+    --surface2: #232236;
+    --accent: #e8c547;
+    --accent2: #7b61ff;
+    --green: #3ddc84;
+    --red: #ff5c6a;
+    --text: #fffffe;
+    --text-dim: #a8a7b8;
+    --border: rgba(255,255,255,0.08);
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── PORTADA ── */
+  #cover {
+    position: fixed;
+    inset: 0;
+    background: #0f0e17;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.9s ease;
+  }
+
+  #cover img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  #main {
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+    animation: fadeIn 0.9s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 2.5rem 2rem 1.5rem;
+    text-align: center;
+    position: relative;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(232,197,71,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(232,197,71,0.3);
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--text);
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  header p {
+    margin-top: 0.75rem;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    font-weight: 300;
+  }
+
+  /* ── NAV TABS ── */
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.5rem 1rem;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    padding: 0.6rem 1.4rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { border-color: rgba(232,197,71,0.4); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    margin-bottom: 0.4rem;
+  }
+  .section-desc {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+  }
+
+  /* ── SYLLOGISM DISPLAY ── */
+  .syl-box {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 1.2rem 1.4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    line-height: 2;
+    margin-bottom: 1.2rem;
+  }
+  .syl-box .premise { color: var(--text); }
+  .syl-box .divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    margin: 0.4rem 0;
+  }
+  .syl-box .conclusion { color: var(--accent); }
+
+  /* ── RECOGNITION BUTTONS ── */
+  .choice-row {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .choice-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .choice-btn:hover { border-color: var(--accent2); }
+  .choice-btn.correct { background: rgba(61,220,132,0.15); border-color: var(--green); color: var(--green); }
+  .choice-btn.wrong   { background: rgba(255,92,106,0.15); border-color: var(--red);   color: var(--red);   }
+
+  .feedback {
+    margin-top: 1rem;
+    padding: 0.9rem 1.1rem;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok  { background: rgba(61,220,132,0.1);  border: 1px solid rgba(61,220,132,0.3);  color: var(--green); }
+  .feedback.bad { background: rgba(255,92,106,0.1);  border: 1px solid rgba(255,92,106,0.3);  color: var(--red); }
+
+  .score-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+  .score-val { font-family: 'DM Mono', monospace; color: var(--accent); font-size: 1rem; }
+
+  .next-btn {
+    margin-top: 1rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: 100px;
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: none;
+  }
+  .next-btn.show { display: inline-block; }
+  .next-btn:hover { background: var(--accent); color: var(--bg); }
+
+  /* ── BUILD PANEL ── */
+  .build-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+  @media (max-width: 600px) { .build-grid { grid-template-columns: 1fr; } }
+
+  .field-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .field-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .field-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.18s;
+    width: 100%;
+  }
+  .field-input:focus { border-color: var(--accent2); }
+  .field-input::placeholder { color: var(--text-dim); opacity: 0.5; }
+
+  .build-btn {
+    width: 100%;
+    padding: 0.85rem;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent2);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.18s;
+    margin-bottom: 1.2rem;
+  }
+  .build-btn:hover { opacity: 0.85; }
+
+  .preview-box {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 1.2rem 1.4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.88rem;
+    line-height: 2;
+    min-height: 120px;
+    border: 1px dashed var(--border);
+    color: var(--text-dim);
+  }
+  .preview-box .p-line { color: var(--text); }
+  .preview-box .p-conc { color: var(--accent); }
+  .preview-box .p-div {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    margin: 0.3rem 0;
+  }
+
+  .validity-badge {
+    display: inline-block;
+    margin-top: 0.8rem;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+  .validity-badge.valid   { background: rgba(61,220,132,0.15); color: var(--green); border: 1px solid rgba(61,220,132,0.4); }
+  .validity-badge.invalid { background: rgba(255,92,106,0.15); color: var(--red);   border: 1px solid rgba(255,92,106,0.4); }
+  .validity-badge.neutral { background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); }
+
+  .explain-box {
+    margin-top: 0.8rem;
+    padding: 0.9rem 1.1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    background: var(--surface2);
+    color: var(--text-dim);
+    border-left: 3px solid var(--accent2);
+  }
+
+  /* ── DRAG PANEL ── */
+  .drag-instructions {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 1.2rem;
+    line-height: 1.6;
+  }
+
+  .drag-game {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  @media (max-width: 600px) { .drag-game { grid-template-columns: 1fr; } }
+
+  .chips-pool {
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 1rem;
+    min-height: 120px;
+    border: 1px solid var(--border);
+  }
+  .chips-pool-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.8rem;
+  }
+  .chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    min-height: 60px;
+  }
+
+  .chip {
+    padding: 0.45rem 0.9rem;
+    border-radius: 100px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    cursor: grab;
+    user-select: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--accent2); transform: translateY(-1px); }
+  .chip.dragging { opacity: 0.4; cursor: grabbing; }
+  .chip.placed-correct { background: rgba(61,220,132,0.15); border-color: var(--green); color: var(--green); cursor: default; }
+  .chip.placed-wrong   { background: rgba(255,92,106,0.15); border-color: var(--red);   color: var(--red);   cursor: default; }
+
+  .syl-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .slot-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .slot-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    width: 70px;
+    flex-shrink: 0;
+  }
+  .slot {
+    flex: 1;
+    min-height: 42px;
+    border-radius: 8px;
+    border: 1px dashed rgba(255,255,255,0.2);
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    padding: 0 0.8rem;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .slot.drag-over { border-color: var(--accent2); background: rgba(123,97,255,0.1); }
+  .slot.filled    { border-style: solid; border-color: var(--border); color: var(--text); }
+  .slot.correct   { border-color: var(--green); background: rgba(61,220,132,0.08); }
+  .slot.wrong     { border-color: var(--red);   background: rgba(255,92,106,0.08); }
+
+  .slot-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    margin: 0.2rem 0;
+  }
+
+  .drag-actions {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1.2rem;
+    flex-wrap: wrap;
+  }
+  .action-btn {
+    padding: 0.65rem 1.3rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .action-btn.primary { background: var(--accent2); border-color: var(--accent2); color: white; }
+  .action-btn:hover { opacity: 0.8; }
+
+  .drag-feedback {
+    margin-top: 1rem;
+    padding: 0.9rem 1.1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    display: none;
+  }
+  .drag-feedback.show { display: block; }
+  .drag-feedback.ok  { background: rgba(61,220,132,0.1); border: 1px solid rgba(61,220,132,0.3); color: var(--green); }
+  .drag-feedback.bad { background: rgba(255,92,106,0.1); border: 1px solid rgba(255,92,106,0.3); color: var(--red); }
+
+  .drag-exercise-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  .ex-counter {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+  .ex-dots {
+    display: flex;
+    gap: 0.4rem;
+  }
+  .ex-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .ex-dot.done { background: var(--accent); border-color: var(--accent); }
+  .ex-dot.active { background: var(--accent2); border-color: var(--accent2); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-dim);
+    font-size: 0.78rem;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+</style>
+</head>
+<body>
+
+<div id="cover">
+  <img src="Portada_bra.jpg" alt="Capa do livro">
+</div>
+
+<div id="main">
+
+<header>
+  <div class="tag">Filosofia · 1.º Ano do Ensino Médio</div>
+  <h1>A arte do<br><em>silogismo</em></h1>
+  <p>Raciocine com estrutura. Três modos de praticar.</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showPanel('reconoce')">① Reconhecer</button>
+  <button class="tab-btn" onclick="showPanel('construye')">② Construir</button>
+  <button class="tab-btn" onclick="showPanel('arrastra')">③ Ordenar</button>
+</nav>
+
+<main>
+
+  <!-- ══════════════════════════════════════════
+       PANEL 1 — RECONHECER
+  ══════════════════════════════════════════ -->
+  <div class="panel active" id="panel-reconoce">
+    <p class="section-title">Reconheça o silogismo</p>
+    <p class="section-desc">Leia cada raciocínio e decida se é <strong>válido</strong> (a conclusão se segue necessariamente das premissas) ou <strong>inválido</strong> (há um erro na estrutura).</p>
+
+    <div class="score-bar">
+      Acertos: <span class="score-val" id="rec-score">0 / 0</span>
+    </div>
+
+    <div class="card" id="rec-card">
+      <div class="card-label" id="rec-num">Raciocínio 1 de 8</div>
+      <div class="syl-box" id="rec-syl"></div>
+      <div class="choice-row">
+        <button class="choice-btn" id="btn-valid" onclick="checkRec(true)">✓ Válido</button>
+        <button class="choice-btn" id="btn-invalid" onclick="checkRec(false)">✗ Inválido</button>
+      </div>
+      <div class="feedback" id="rec-feedback"></div>
+      <button class="next-btn" id="rec-next" onclick="nextRec()">Próximo →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PANEL 2 — CONSTRUIR
+  ══════════════════════════════════════════ -->
+  <div class="panel" id="panel-construye">
+    <p class="section-title">Construa seu silogismo</p>
+    <p class="section-desc">Preencha os campos com suas próprias ideias. O sistema verificará se a estrutura está correta e explicará por quê.</p>
+
+    <div class="card">
+      <div class="card-label">Insira os termos</div>
+      <div class="build-grid">
+        <div class="field-group">
+          <label class="field-label">Termo maior (grupo amplo)</label>
+          <input class="field-input" id="b-mayor" placeholder="ex: pessoas que estudam à noite" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Termo médio (grupo intermediário)</label>
+          <input class="field-input" id="b-medio" placeholder="ex: streamers da Twitch" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Sujeito (indivíduo ou grupo)</label>
+          <input class="field-input" id="b-sujeto" placeholder="ex: Gaules" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Tipo de premissa 1</label>
+          <select class="field-input" id="b-tipo">
+            <option value="todo">Todo P é Q  (universal afirmativa)</option>
+            <option value="ninguno">Nenhum P é Q  (universal negativa)</option>
+            <option value="algun">Algum P é Q  (particular afirmativa)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-bottom:1rem">
+        <label class="field-label">Premissa 2 — relação do sujeito com o termo médio</label>
+        <select class="field-input" id="b-rel">
+          <option value="es">S é P  (o sujeito pertence ao grupo intermediário)</option>
+          <option value="no-es">S não é P  (o sujeito NÃO pertence ao grupo intermediário)</option>
+          <option value="es-q">S é Q  (o sujeito pertence ao grupo amplo)</option>
+        </select>
+      </div>
+
+      <button class="build-btn" onclick="buildSyl()">Construir silogismo</button>
+
+      <div class="card-label">Pré-visualização</div>
+      <div class="preview-box" id="build-preview">
+        <span style="opacity:0.4">Preencha os campos e clique em «Construir»...</span>
+      </div>
+      <div id="build-badge"></div>
+      <div class="explain-box" id="build-explain" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PANEL 3 — ORDENAR
+  ══════════════════════════════════════════ -->
+  <div class="panel" id="panel-arrastra">
+    <p class="section-title">Ordene as peças</p>
+    <p class="section-desc">Arraste cada ficha para o lugar correto: Premissa 1, Premissa 2 ou Conclusão.</p>
+
+    <div class="drag-exercise-nav">
+      <span class="ex-counter" id="drag-counter">Exercício 1 de 6</span>
+      <div class="ex-dots" id="drag-dots"></div>
+    </div>
+
+    <div class="drag-game">
+      <div class="chips-pool">
+        <div class="chips-pool-label">Fichas disponíveis</div>
+        <div class="chips-container" id="chips-pool"></div>
+      </div>
+
+      <div class="syl-slots">
+        <div class="slot-row">
+          <span class="slot-label">Premissa 1</span>
+          <div class="slot" id="slot-p1" data-slot="p1"
+               ondragover="dragOver(event)" ondrop="drop(event,'p1')"
+               ondragleave="dragLeave(event)">
+            Solte aqui
+          </div>
+        </div>
+        <div class="slot-row">
+          <span class="slot-label">Premissa 2</span>
+          <div class="slot" id="slot-p2" data-slot="p2"
+               ondragover="dragOver(event)" ondrop="drop(event,'p2')"
+               ondragleave="dragLeave(event)">
+            Solte aqui
+          </div>
+        </div>
+        <hr class="slot-divider">
+        <div class="slot-row">
+          <span class="slot-label">Conclusão</span>
+          <div class="slot" id="slot-conc" data-slot="conc"
+               ondragover="dragOver(event)" ondrop="drop(event,'conc')"
+               ondragleave="dragLeave(event)">
+            Solte aqui
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drag-actions">
+      <button class="action-btn primary" onclick="checkDrag()">Verificar</button>
+      <button class="action-btn" onclick="resetDrag()">Reiniciar</button>
+      <button class="action-btn" onclick="nextDrag()">Próximo exercício →</button>
+    </div>
+    <div class="drag-feedback" id="drag-feedback"></div>
+  </div>
+
+</main>
+
+<footer>filosofia · ensino médio · silogismos</footer>
+
+</div><!-- fim #main -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+// TROCA DE PAINÉIS
+// ═══════════════════════════════════════════════════════
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════
+// PAINEL 1 — RECONHECER
+// ═══════════════════════════════════════════════════════
+const recExercises = [
+  {
+    premises: ["Todo streamer da Twitch passa muitas horas em frente à tela.",
+               "Gaules é um streamer da Twitch."],
+    conclusion: "Gaules passa muitas horas em frente à tela.",
+    valid: true,
+    explain: "✓ Estrutura correta. Gaules pertence ao grupo dos streamers, e todos os streamers pertencem ao grupo dos que passam muitas horas em frente à tela. A cadeia funciona."
+  },
+  {
+    premises: ["Todos os que usam fone de ouvido no metrô querem evitar conversas.",
+               "Carolina quer evitar conversas."],
+    conclusion: "Carolina usa fone de ouvido no metrô.",
+    valid: false,
+    explain: "✗ Erro clássico: afirmar o consequente. Querer evitar conversas não implica necessariamente usar fone de ouvido. Pode haver outras formas de conseguir isso. O grupo dos que evitam conversas é maior do que o dos usuários de fone."
+  },
+  {
+    premises: ["Nenhuma prova surpresa avisa com antecedência.",
+               "Esta avaliação é uma prova surpresa."],
+    conclusion: "Esta avaliação não avisa com antecedência.",
+    valid: true,
+    explain: "✓ Silogismo negativo válido. Se nenhum membro do grupo avisa, e o sujeito está nesse grupo, o sujeito também não avisa."
+  },
+  {
+    premises: ["Todas as pessoas que passam no ENEM estudam muito.",
+               "Marta estuda muito."],
+    conclusion: "Marta vai passar no ENEM.",
+    valid: false,
+    explain: "✗ Estudar muito é condição dos que passam, mas não é suficiente por si só para garantir a aprovação. Marta pode estudar muito e ainda assim não passar por outros fatores."
+  },
+  {
+    premises: ["Todo videogame com mais de 90 no Metacritic é considerado um clássico.",
+               "The Legend of Zelda: Breath of the Wild tem mais de 90 no Metacritic."],
+    conclusion: "The Legend of Zelda: Breath of the Wild é considerado um clássico.",
+    valid: true,
+    explain: "✓ Estrutura perfeita. O jogo entra no grupo dos que superam 90 no Metacritic, e todos os desse grupo são considerados clássicos."
+  },
+  {
+    premises: ["Alguns youtubers de tecnologia sabem programar.",
+               "Carlos é youtuber de tecnologia."],
+    conclusion: "Carlos sabe programar.",
+    valid: false,
+    explain: "✗ A premissa 1 diz «alguns», não «todos». Carlos pode ser youtuber de tecnologia sem saber programar. A particular afirmativa não permite concluir nada sobre um indivíduo concreto."
+  },
+  {
+    premises: ["Todo algoritmo de rede social maximiza o tempo de tela.",
+               "O TikTok tem um algoritmo de rede social."],
+    conclusion: "O algoritmo do TikTok maximiza o tempo de tela.",
+    valid: true,
+    explain: "✓ Silogismo válido. O TikTok está dentro do grupo das redes sociais, e todos os algoritmos desse grupo maximizam o tempo de tela."
+  },
+  {
+    premises: ["Nenhum spoiler avisa o que vai acontecer antes de acontecer.",
+               "Ninguém avisa o que vai acontecer antes de acontecer."],
+    conclusion: "Todo mundo dá spoiler.",
+    valid: false,
+    explain: "✗ As premissas falam do que os spoilers fazem e de quem não avisa, mas não permitem concluir nada sobre «todo mundo». A conclusão é muito mais ampla do que o que as premissas autorizam."
+  }
+];
+
+let recIdx = 0;
+let recCorrect = 0;
+let recAnswered = 0;
+let recDone = false;
+
+function renderRec() {
+  const ex = recExercises[recIdx];
+  document.getElementById('rec-num').textContent = `Raciocínio ${recIdx + 1} de ${recExercises.length}`;
+  const box = document.getElementById('rec-syl');
+  box.innerHTML = ex.premises.map(p => `<div class="premise">${p}</div>`).join('') +
+    `<hr class="divider"><div class="conclusion">∴ ${ex.conclusion}</div>`;
+  document.getElementById('rec-feedback').className = 'feedback';
+  document.getElementById('rec-feedback').textContent = '';
+  document.getElementById('rec-next').className = 'next-btn';
+  document.getElementById('btn-valid').className = 'choice-btn';
+  document.getElementById('btn-invalid').className = 'choice-btn';
+  recDone = false;
+}
+
+function checkRec(userSaysValid) {
+  if (recDone) return;
+  recDone = true;
+  recAnswered++;
+  const ex = recExercises[recIdx];
+  const correct = userSaysValid === ex.valid;
+  if (correct) recCorrect++;
+  document.getElementById('rec-score').textContent = `${recCorrect} / ${recAnswered}`;
+
+  const fb = document.getElementById('rec-feedback');
+  fb.textContent = ex.explain;
+  fb.className = 'feedback show ' + (correct ? 'ok' : 'bad');
+
+  document.getElementById('btn-valid').className = 'choice-btn' + (ex.valid ? ' correct' : ' wrong');
+  document.getElementById('btn-invalid').className = 'choice-btn' + (!ex.valid ? ' correct' : ' wrong');
+  document.getElementById('rec-next').className = 'next-btn show';
+}
+
+function nextRec() {
+  recIdx = (recIdx + 1) % recExercises.length;
+  renderRec();
+}
+
+renderRec();
+
+// ═══════════════════════════════════════════════════════
+// PAINEL 2 — CONSTRUIR
+// ═══════════════════════════════════════════════════════
+function buildSyl() {
+  const maior  = document.getElementById('b-mayor').value.trim();
+  const medio  = document.getElementById('b-medio').value.trim();
+  const sujeto = document.getElementById('b-sujeto').value.trim();
+  const tipo   = document.getElementById('b-tipo').value;
+  const rel    = document.getElementById('b-rel').value;
+
+  if (!maior || !medio || !sujeto) {
+    document.getElementById('build-preview').innerHTML = '<span style="color:var(--red)">Preencha todos os campos antes de continuar.</span>';
+    return;
+  }
+
+  let p1, p2, conc, valid, explain;
+
+  if (tipo === 'todo')    p1 = `Todo ${medio} é ${maior}.`;
+  if (tipo === 'ninguno') p1 = `Nenhum ${medio} é ${maior}.`;
+  if (tipo === 'algun')   p1 = `Algum ${medio} é ${maior}.`;
+
+  if (rel === 'es') {
+    p2 = `${sujeto} é ${medio}.`;
+    if (tipo === 'todo') {
+      conc = `${sujeto} é ${maior}.`;
+      valid = true;
+      explain = `A estrutura está correta. ${sujeto} pertence ao grupo «${medio}», e todos desse grupo pertencem a «${maior}». A cadeia P → M → Maior funciona.`;
+    } else if (tipo === 'ninguno') {
+      conc = `${sujeto} não é ${maior}.`;
+      valid = true;
+      explain = `Silogismo negativo válido. Se nenhum ${medio} é ${maior}, e ${sujeto} é ${medio}, então ${sujeto} também não pode ser ${maior}.`;
+    } else {
+      conc = `${sujeto} é ${maior}.`;
+      valid = false;
+      explain = `Atenção: a premissa 1 diz «algum», não «todos». Que alguns ${medio} sejam ${maior} não permite concluir nada seguro sobre ${sujeto} em particular. O silogismo não é válido.`;
+    }
+  } else if (rel === 'no-es') {
+    p2 = `${sujeto} não é ${medio}.`;
+    conc = `${sujeto} não é ${maior}.`;
+    valid = false;
+    explain = `Erro estrutural: que ${sujeto} não seja ${medio} não implica que não seja ${maior}. Pode pertencer a «${maior}» por outro caminho. As premissas não autorizam esta conclusão.`;
+  } else {
+    p2 = `${sujeto} é ${maior}.`;
+    conc = `${sujeto} é ${medio}.`;
+    valid = false;
+    explain = `Erro clássico: afirmar o consequente. Pertencer a «${maior}» não implica pertencer a «${medio}». O grupo «${maior}» pode conter muitas outras coisas além de «${medio}».`;
+  }
+
+  document.getElementById('build-preview').innerHTML =
+    `<div class="p-line">${p1}</div>` +
+    `<div class="p-line">${p2}</div>` +
+    `<hr class="p-div">` +
+    `<div class="p-conc">∴ ${conc}</div>`;
+
+  const badge = document.getElementById('build-badge');
+  badge.innerHTML = `<span class="validity-badge ${valid ? 'valid' : 'invalid'}">${valid ? '✓ Silogismo válido' : '✗ Silogismo inválido'}</span>`;
+
+  const expl = document.getElementById('build-explain');
+  expl.style.display = 'block';
+  expl.textContent = explain;
+}
+
+// ═══════════════════════════════════════════════════════
+// PAINEL 3 — ORDENAR
+// ═══════════════════════════════════════════════════════
+const dragExercises = [
+  {
+    chips: [
+      "∴ Bad Bunny é muito ouvido no mundo inteiro.",
+      "Todo artista latino com mais de 50 milhões de ouvintes mensais é muito ouvido no mundo inteiro.",
+      "Bad Bunny tem mais de 50 milhões de ouvintes mensais no Spotify.",
+      "As segundas-feiras são difíceis."
+    ],
+    answer: {
+      p1:   "Todo artista latino com mais de 50 milhões de ouvintes mensais é muito ouvido no mundo inteiro.",
+      p2:   "Bad Bunny tem mais de 50 milhões de ouvintes mensais no Spotify.",
+      conc: "∴ Bad Bunny é muito ouvido no mundo inteiro."
+    }
+  },
+  {
+    chips: [
+      "∴ Inception não é fácil de assistir distraído.",
+      "Nenhum filme do Nolan é fácil de assistir distraído.",
+      "Assistir séries no celular é cômodo.",
+      "Inception é um filme do Nolan."
+    ],
+    answer: {
+      p1:   "Nenhum filme do Nolan é fácil de assistir distraído.",
+      p2:   "Inception é um filme do Nolan.",
+      conc: "∴ Inception não é fácil de assistir distraído."
+    }
+  },
+  {
+    chips: [
+      "∴ Esta partida da Champions será imprevisível.",
+      "Toda partida da Champions com dois times em boa fase é imprevisível.",
+      "Hoje há trânsito na cidade.",
+      "Esta partida da Champions tem dois times em boa fase."
+    ],
+    answer: {
+      p1:   "Toda partida da Champions com dois times em boa fase é imprevisível.",
+      p2:   "Esta partida da Champions tem dois times em boa fase.",
+      conc: "∴ Esta partida da Champions será imprevisível."
+    }
+  },
+  {
+    chips: [
+      "∴ Este restaurante tem fila de espera.",
+      "Todo restaurante com mais de 4,8 no Google tem fila de espera.",
+      "O tempo em Florianópolis é bom no verão.",
+      "Este restaurante tem 4,9 no Google."
+    ],
+    answer: {
+      p1:   "Todo restaurante com mais de 4,8 no Google tem fila de espera.",
+      p2:   "Este restaurante tem 4,9 no Google.",
+      conc: "∴ Este restaurante tem fila de espera."
+    }
+  },
+  {
+    chips: [
+      "∴ Fortnite consome muita RAM.",
+      "Todo jogo com gráficos em tempo real consome muita RAM.",
+      "Fortnite tem gráficos em tempo real.",
+      "Os tênis de basquete são caros."
+    ],
+    answer: {
+      p1:   "Todo jogo com gráficos em tempo real consome muita RAM.",
+      p2:   "Fortnite tem gráficos em tempo real.",
+      conc: "∴ Fortnite consome muita RAM."
+    }
+  },
+  {
+    chips: [
+      "∴ Este meme já não tem graça.",
+      "Todo meme que circula há mais de duas semanas já não tem graça.",
+      "Este meme circula há três semanas.",
+      "O café com leite é bom de manhã."
+    ],
+    answer: {
+      p1:   "Todo meme que circula há mais de duas semanas já não tem graça.",
+      p2:   "Este meme circula há três semanas.",
+      conc: "∴ Este meme já não tem graça."
+    }
+  }
+];
+
+let dragIdx = 0;
+let dragPlaced = { p1: null, p2: null, conc: null };
+let dragChecked = false;
+
+function initDragDots() {
+  const dots = document.getElementById('drag-dots');
+  dots.innerHTML = dragExercises.map((_, i) =>
+    `<div class="ex-dot ${i === 0 ? 'active' : ''}" id="dot-${i}"></div>`
+  ).join('');
+}
+
+function renderDrag() {
+  const ex = dragExercises[dragIdx];
+  dragPlaced = { p1: null, p2: null, conc: null };
+  dragChecked = false;
+
+  document.getElementById('drag-counter').textContent = `Exercício ${dragIdx + 1} de ${dragExercises.length}`;
+
+  document.querySelectorAll('.ex-dot').forEach((d, i) => {
+    d.className = 'ex-dot' + (i < dragIdx ? ' done' : i === dragIdx ? ' active' : '');
+  });
+
+  const shuffled = [...ex.chips].sort(() => Math.random() - 0.5);
+  const pool = document.getElementById('chips-pool');
+  pool.innerHTML = '';
+  shuffled.forEach((text, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.id = `chip-${i}`;
+    chip.textContent = text;
+    chip.draggable = true;
+    chip.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', text);
+      chip.classList.add('dragging');
+    });
+    chip.addEventListener('dragend', () => chip.classList.remove('dragging'));
+    pool.appendChild(chip);
+  });
+
+  ['p1','p2','conc'].forEach(s => {
+    const slot = document.getElementById('slot-' + s);
+    slot.textContent = 'Solte aqui';
+    slot.className = 'slot';
+    slot.dataset.value = '';
+  });
+
+  const fb = document.getElementById('drag-feedback');
+  fb.className = 'drag-feedback';
+  fb.textContent = '';
+}
+
+function dragOver(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('drag-over');
+}
+function dragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+function drop(e, slotId) {
+  e.preventDefault();
+  if (dragChecked) return;
+  const text = e.dataTransfer.getData('text/plain');
+  const slot = document.getElementById('slot-' + slotId);
+  slot.classList.remove('drag-over');
+
+  const prev = slot.dataset.value;
+  if (prev) {
+    const pool = document.getElementById('chips-pool');
+    const returnChip = document.createElement('div');
+    returnChip.className = 'chip';
+    returnChip.textContent = prev;
+    returnChip.draggable = true;
+    returnChip.addEventListener('dragstart', ev => {
+      ev.dataTransfer.setData('text/plain', prev);
+      returnChip.classList.add('dragging');
+    });
+    returnChip.addEventListener('dragend', () => returnChip.classList.remove('dragging'));
+    pool.appendChild(returnChip);
+  }
+
+  Array.from(document.getElementById('chips-pool').children).forEach(c => {
+    if (c.textContent === text) c.remove();
+  });
+
+  slot.textContent = text;
+  slot.dataset.value = text;
+  slot.className = 'slot filled';
+  dragPlaced[slotId] = text;
+}
+
+function checkDrag() {
+  const ex = dragExercises[dragIdx];
+  if (!dragPlaced.p1 || !dragPlaced.p2 || !dragPlaced.conc) {
+    const fb = document.getElementById('drag-feedback');
+    fb.textContent = 'Coloque uma ficha em cada posição antes de verificar.';
+    fb.className = 'drag-feedback show bad';
+    return;
+  }
+  dragChecked = true;
+
+  let allOk = true;
+  ['p1','p2','conc'].forEach(s => {
+    const slot = document.getElementById('slot-' + s);
+    const correct = dragPlaced[s] === ex.answer[s];
+    slot.className = 'slot filled ' + (correct ? 'correct' : 'wrong');
+    if (!correct) allOk = false;
+  });
+
+  const fb = document.getElementById('drag-feedback');
+  if (allOk) {
+    fb.textContent = '✓ Perfeito. As três peças estão no lugar certo. A cadeia do silogismo funciona.';
+    fb.className = 'drag-feedback show ok';
+  } else {
+    fb.textContent = '✗ Há alguma peça fora do lugar. Observe qual é a premissa universal, qual conecta o sujeito ao termo médio, e qual é a conclusão (precedida de ∴).';
+    fb.className = 'drag-feedback show bad';
+  }
+}
+
+function resetDrag() {
+  dragChecked = false;
+  renderDrag();
+}
+
+function nextDrag() {
+  dragIdx = (dragIdx + 1) % dragExercises.length;
+  renderDrag();
+}
+
+initDragDots();
+renderDrag();
+
+window.addEventListener("load", function () {
+  setTimeout(function () {
+    var cover = document.getElementById("cover");
+    var main  = document.getElementById("main");
+
+    cover.style.opacity = "0";
+    cover.style.transition = "opacity 0.9s ease";
+
+    setTimeout(function () {
+      cover.style.display = "none";
+      main.style.display = "block";
+    }, 900);
+  }, 4000);
+});
+</script>
+</body>
+</html>
