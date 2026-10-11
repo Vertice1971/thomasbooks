@@ -384,7 +384,7 @@
 
 <script>
 /* ============================================================
-   BANQUE DE 96 QUESTIONS · PAUL SEIXAS
+   BANQUE DE QUESTIONS · PAUL SEIXAS
    ============================================================ */
 const QUESTIONS = [
   {
@@ -1154,6 +1154,48 @@ const QUESTIONS = [
       {text:"Il est devenu le premier Français sur le podium depuis quarante ans", type:"plausible"},
       {text:"Il a gagné le droit de garder le vélo pour aller au lycée", type:"joke"}
     ]
+  },
+
+  /* ---------- TOUR DE LOMBARDIE 2026 ---------- */
+  {
+    q: "Quelle grande classique italienne Paul Seixas a-t-il gagnée pour terminer sa saison 2026 ?",
+    options: [
+      {text:"Le Tour de Lombardie", type:"correct"},
+      {text:"Milan-Turin", type:"plausible"},
+      {text:"Le Grand Prix de la Pizza Margherita", type:"joke"}
+    ]
+  },
+  {
+    q: "Sur quelle montée Paul Seixas a-t-il accéléré, à près de vingt kilomètres de l'arrivée, au Tour de Lombardie ?",
+    options: [
+      {text:"Sur les pentes du Civiglio", type:"correct"},
+      {text:"Sur le Muro di Sormano", type:"plausible"},
+      {text:"Sur la côte du Tiramisu", type:"joke"}
+    ]
+  },
+  {
+    q: "Quels coureurs ont essayé de suivre Paul Seixas dans le Civiglio avant de devoir céder ?",
+    options: [
+      {text:"Remco Evenepoel, Tom Pidcock et Giulio Ciccone", type:"correct"},
+      {text:"Tadej Pogacar, Primoz Roglic et Juan Ayuso", type:"plausible"},
+      {text:"Trois facteurs italiens sur des vélos de course", type:"joke"}
+    ]
+  },
+  {
+    q: "Avec quelle avance Paul Seixas a-t-il battu Enric Mas, deuxième du Tour de Lombardie ?",
+    options: [
+      {text:"Plus de quarante secondes", type:"correct"},
+      {text:"Plus de deux minutes", type:"plausible"},
+      {text:"Le temps de boire un espresso", type:"joke"}
+    ]
+  },
+  {
+    q: "Quel record Paul Seixas a-t-il battu en gagnant le Tour de Lombardie, à vingt ans et seize jours ?",
+    options: [
+      {text:"Être le plus jeune vainqueur de l'histoire de la course", type:"correct"},
+      {text:"Être le premier Français à la gagner de toute l'histoire", type:"plausible"},
+      {text:"Être le premier coureur à finir en mangeant une glace", type:"joke"}
+    ]
   }
 ];
 
@@ -1192,7 +1234,7 @@ function showQuestion(){
   const q = currentQuestions[currentIndex];
   const shuffledOpts = shuffle(q.options);
 
-  const pct = ((currentIndex) / TOTAL_QUESTIONS) * 100;
+  const pct = ((currentIndex + 1) / TOTAL_QUESTIONS) * 100;
   document.getElementById('progress-fill').style.width = pct + '%';
   document.getElementById('progress-text').textContent = `ÉTAPE ${currentIndex+1} / ${TOTAL_QUESTIONS}`;
   document.getElementById('score-text').textContent = `★ ${score} PTS`;
