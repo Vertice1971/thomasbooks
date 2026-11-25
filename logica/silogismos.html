@@ -30,36 +30,6 @@
     overflow-x: hidden;
   }
 
-  /* ── PORTADA ── */
-  #cover {
-    position: fixed;
-    inset: 0;
-    background: #0f0e17;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    transition: opacity 0.9s ease;
-  }
-
-  #cover img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
-
-  #main {
-    display: none;
-    width: 100%;
-    min-height: 100vh;
-    animation: fadeIn 0.9s ease forwards;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
   /* ── HEADER ── */
   header {
     padding: 2.5rem 2rem 1.5rem;
@@ -511,583 +481,776 @@
     border-top: 1px solid var(--border);
     margin-top: 2rem;
   }
+
+  /* ── INTRODUCCIÓN Y ACCESIBILIDAD ── */
+  .intro {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  .intro-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.7rem;
+  }
+  .intro-card h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.45rem;
+    font-weight: 400;
+    margin-bottom: 0.75rem;
+  }
+  .intro-card p {
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: var(--text-dim);
+    margin-bottom: 0.8rem;
+  }
+  .intro-card p strong { color: var(--text); font-weight: 500; }
+  .intro-card p:last-child { margin-bottom: 0; }
+  .intro-example {
+    background: var(--surface2);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    margin: 0.85rem 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.83rem;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+  }
+  .intro-example .intro-conclusion { color: var(--accent); }
+  .intro-small { font-size: 0.84rem !important; }
+  .rec-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center; }
+  .rec-actions .action-btn { padding: 0.45rem 1rem; font-size: 0.78rem; }
+  .rec-complete { color: var(--accent); font-size: 0.9rem; margin-bottom: 0.8rem; }
+  .drag-hint { margin-top: 0.8rem; font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
+  .drag-selection { min-height: 1.2rem; margin-top: 0.7rem; font-size: 0.83rem; color: var(--accent); }
+  .chip.selected { border-color: var(--accent); background: rgba(232,197,71,0.18); color: var(--accent); }
+  .chip { white-space: normal; text-align: left; overflow-wrap: anywhere; touch-action: manipulation; }
+  .slot { cursor: pointer; width: 100%; text-align: left; font-family: 'DM Sans', sans-serif; overflow-wrap: anywhere; padding: 0.65rem 0.8rem; line-height: 1.5; }
+  .slot:disabled { cursor: default; }
+  .slot-row { min-width: 0; }
+  .syl-slots, .chips-pool { min-width: 0; }
+  .syl-box, .preview-box { overflow-wrap: anywhere; }
+  .progress-note { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; margin: 0.6rem 0 1.3rem; }
+  .field-group small { color: var(--text-dim); font-size: 0.75rem; line-height: 1.5; }
+  .note-in-card { color: var(--text-dim); font-size: 0.8rem; line-height: 1.6; margin-top: 0.8rem; }
+  .tab-btn:focus-visible, .choice-btn:focus-visible, .action-btn:focus-visible,
+  .chip:focus-visible, .slot:focus-visible, .field-input:focus-visible,
+  .next-btn:focus-visible, .build-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .score-bar { flex-wrap: wrap; justify-content: space-between; }
+  .progress-val { font-family: 'DM Mono', monospace; color: var(--accent); }
+  .drag-exercise-nav { flex-wrap: wrap; gap: 0.8rem; }
+  @media (max-width: 600px) {
+    header { padding: 1.7rem 1rem 1.25rem; }
+    header::before { width: 100%; }
+    .intro { padding: 0 1rem; }
+    .intro-card { padding: 1.1rem; }
+    main { padding: 0 1rem 3rem; }
+    nav { padding: 1rem; gap: 0.45rem; }
+    .tab-btn { padding: 0.65rem 0.9rem; font-size: 0.79rem; }
+    .card { padding: 1rem; }
+    .syl-box, .preview-box { padding: 0.9rem; font-size: 0.8rem; }
+    .drag-game { gap: 1rem; }
+    .slot-label { width: 68px; }
+    .slot { min-width: 0; }
+  }
+
+  /* Accesos comunes al ecosistema de Lógica para Bachillerato */
+  .ecosistema-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.2rem;
+    position: relative;
+  }
+  .ecosistema-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: 100px;
+    border: 1px solid var(--accent);
+    background: var(--surface);
+    color: var(--accent);
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .ecosistema-links a:hover { background: var(--accent); color: var(--bg); }
+  .ecosistema-links a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 </style>
 </head>
 <body>
 
-<div id="cover">
-  <img src="Portada.jpg" alt="Portada del libro">
-</div>
-
-<div id="main">
-
 <header>
-  <div class="tag">Filosofía · 1.º Bachillerato</div>
+  <div class="tag">Filosofía · 1.º Bachillerato. Tomás Cuesta</div>
   <h1>El arte del<br><em>silogismo</em></h1>
-  <p>Razona con estructura. Tres modos de practicar.</p>
+  <p>Este programa es una breve introducción a la silogística, no un catálogo exhaustivo de los modos y figuras del silogismo.</p>
+  <div class="ecosistema-links" role="navigation" aria-label="Recursos de Lógica para Bachillerato">
+    <a href="https://vertice1971.github.io/thomasbooks/logica/menu.html" target="_blank" rel="noopener noreferrer">Menú general</a>
+    <a href="https://www.amazon.es/dp/B0GXXSMN2M" target="_blank" rel="noopener noreferrer">Acceso al manual</a>
+  </div>
 </header>
 
-<nav>
-  <button class="tab-btn active" onclick="showPanel('reconoce')">① Reconocer</button>
-  <button class="tab-btn" onclick="showPanel('construye')">② Construir</button>
-  <button class="tab-btn" onclick="showPanel('arrastra')">③ Ordenar</button>
+
+<section class="intro" aria-labelledby="intro-title">
+  <div class="intro-card">
+    <h2 id="intro-title">Antes de empezar</h2>
+    <p>Un <strong>silogismo</strong> es un razonamiento deductivo en el que se obtiene una conclusión a partir de dos premisas. Las premisas aportan la información inicial; la conclusión expresa lo que se deduce de ellas.</p>
+    <div class="intro-example" aria-label="Ejemplo de razonamiento válido">
+      <div>Todos los mamíferos son animales.</div>
+      <div>Todos los perros son mamíferos.</div>
+      <div class="intro-conclusion">∴ Todos los perros son animales.</div>
+    </div>
+    <p>Un razonamiento es <strong>válido</strong> cuando, si sus premisas fueran verdaderas, resultaría imposible que la conclusión fuera falsa. Esto no significa que las premisas sean verdaderas en la realidad: la <strong>validez solo </strong> depende de la estructura o conexión lógica del razonamiento.</p>
+    <p>Practicarás de tres maneras: <strong>reconocer</strong> inferencias válidas e inválidas, <strong>construir</strong> ejemplos con términos que elijas y <strong>ordenar</strong> premisas y conclusiones. Este programa solo quiere enseñarte cómo funcionan los silogismos de forma general, no es un catálogo de todos los tipos posibles de silogismos.</p>
+    <p class="intro-small">Los ejercicios utilizan ejemplos cotidianos. Su finalidad es examinar cómo se razona, no verificar las afirmaciones sobre personas, productos o acontecimientos.</p>
+  </div>
+</section>
+
+<nav aria-label="Actividades">
+  <button class="tab-btn active" data-panel="reconoce" aria-selected="true">① Reconocer</button>
+  <button class="tab-btn" data-panel="construye" aria-selected="false">② Construir</button>
+  <button class="tab-btn" data-panel="arrastra" aria-selected="false">③ Ordenar</button>
 </nav>
 
 <main>
 
-  <!-- ══════════════════════════════════════════
-       PANEL 1 — RECONOCER
-  ══════════════════════════════════════════ -->
-  <div class="panel active" id="panel-reconoce">
-    <p class="section-title">Reconoce el silogismo</p>
-    <p class="section-desc">Lee cada razonamiento y decide si es <strong>válido</strong> (la conclusión se sigue necesariamente de las premisas) o <strong>inválido</strong> (hay un error en la estructura).</p>
-
+  <!-- PANEL 1: RECONOCER -->
+  <section class="panel active" id="panel-reconoce" aria-labelledby="rec-title">
+    <h2 class="section-title" id="rec-title">Reconoce el silogismo</h2>
+    <p class="section-desc">Lee cada razonamiento y decide si es <strong>válido</strong> (la conclusión se sigue necesariamente de las premisas) o <strong>inválido</strong> (no se sigue necesariamente). No importa si las premisas son verdaderas de hecho.</p>
     <div class="score-bar">
-      Aciertos: <span class="score-val" id="rec-score">0 / 0</span>
+      <span>Aciertos: <span class="score-val" id="rec-score">0 / 0</span></span>
+      <button class="action-btn" type="button" id="rec-reset">Reiniciar cuestionario</button>
     </div>
-
     <div class="card" id="rec-card">
       <div class="card-label" id="rec-num">Razonamiento 1 de 8</div>
       <div class="syl-box" id="rec-syl"></div>
-      <div class="choice-row">
-        <button class="choice-btn" id="btn-valid" onclick="checkRec(true)">✓ Válido</button>
-        <button class="choice-btn" id="btn-invalid" onclick="checkRec(false)">✗ Inválido</button>
+      <div class="choice-row" id="rec-choices">
+        <button class="choice-btn" type="button" id="btn-valid">Válido</button>
+        <button class="choice-btn" type="button" id="btn-invalid">Inválido</button>
       </div>
-      <div class="feedback" id="rec-feedback"></div>
-      <button class="next-btn" id="rec-next" onclick="nextRec()">Siguiente →</button>
+      <div class="feedback" id="rec-feedback" role="status" aria-live="polite"></div>
+      <button class="next-btn" type="button" id="rec-next">Siguiente</button>
     </div>
-  </div>
+  </section>
 
-  <!-- ══════════════════════════════════════════
-       PANEL 2 — CONSTRUIR
-  ══════════════════════════════════════════ -->
-  <div class="panel" id="panel-construye">
-    <p class="section-title">Construye tu silogismo</p>
-    <p class="section-desc">Rellena los campos con tus propias ideas. El sistema comprobará si la estructura es correcta y te explicará por qué.</p>
-
+  <!-- PANEL 2: CONSTRUIR -->
+  <section class="panel" id="panel-construye" aria-labelledby="build-title">
+    <h2 class="section-title" id="build-title">Construye tu silogismo</h2>
+    <p class="section-desc">Escribe un sujeto concreto y dos categorías, y elige las relaciones entre ellos. El programa <strong>genera y comprueba estructuras predeterminadas</strong>; no analiza argumentos redactados libremente ni comprueba si las premisas son ciertas.</p>
     <div class="card">
-      <div class="card-label">Introduce los términos</div>
+      <div class="card-label">Introduce los tres términos</div>
       <div class="build-grid">
         <div class="field-group">
-          <label class="field-label">Término mayor (grupo amplio)</label>
-          <input class="field-input" id="b-mayor" placeholder="ej: personas que estudian de noche" />
+          <label class="field-label" for="b-mayor">Término mayor · P</label>
+          <input class="field-input" id="b-mayor" placeholder="ej.: personas que estudian de noche" autocomplete="off" maxlength="120" />
+          <small>Predicado que aparece en la conclusión habitual.</small>
         </div>
         <div class="field-group">
-          <label class="field-label">Término medio (grupo intermedio)</label>
-          <input class="field-input" id="b-medio" placeholder="ej: streamers de Twitch" />
+          <label class="field-label" for="b-medio">Término medio · M</label>
+          <input class="field-input" id="b-medio" placeholder="ej.: streamers" autocomplete="off" maxlength="120" />
+          <small>Categoría que permite conectar las dos premisas.</small>
         </div>
         <div class="field-group">
-          <label class="field-label">Sujeto (individuo o grupo)</label>
-          <input class="field-input" id="b-sujeto" placeholder="ej: Ibai" />
+          <label class="field-label" for="b-sujeto">Sujeto · S</label>
+          <input class="field-input" id="b-sujeto" placeholder="ej.: Álex" autocomplete="off" maxlength="120" />
+          <small>Un caso concreto, para simplificar los ejemplos.</small>
         </div>
         <div class="field-group">
-          <label class="field-label">Tipo de premisa 1</label>
+          <label class="field-label" for="b-tipo">Primera premisa</label>
           <select class="field-input" id="b-tipo">
-            <option value="todo">Todo P es Q  (universal afirmativa)</option>
-            <option value="ninguno">Ningún P es Q  (universal negativa)</option>
-            <option value="algun">Algún P es Q  (particular afirmativa)</option>
+            <option value="todo">Todo M es P · universal afirmativa</option>
+            <option value="ninguno">Ningún M es P · universal negativa</option>
+            <option value="algun">Algún M es P · particular afirmativa</option>
           </select>
         </div>
       </div>
-
       <div class="field-group" style="margin-bottom:1rem">
-        <label class="field-label">Premisa 2 — relación del sujeto con el término medio</label>
+        <label class="field-label" for="b-rel">Segunda premisa</label>
         <select class="field-input" id="b-rel">
-          <option value="es">S es P  (el sujeto pertenece al grupo intermedio)</option>
-          <option value="no-es">S no es P  (el sujeto NO pertenece al grupo intermedio)</option>
-          <option value="es-q">S es Q  (el sujeto pertenece al grupo amplio)</option>
+          <option value="es">S pertenece a M</option>
+          <option value="no-es">S no pertenece a M</option>
+          <option value="es-q">S pertenece a P</option>
         </select>
       </div>
-
-      <button class="build-btn" onclick="buildSyl()">Construir silogismo</button>
-
-      <div class="card-label">Vista previa</div>
-      <div class="preview-box" id="build-preview">
-        <span style="opacity:0.4">Rellena los campos y pulsa «Construir»...</span>
-      </div>
-      <div id="build-badge"></div>
-      <div class="explain-box" id="build-explain" style="display:none"></div>
+      <button class="build-btn" type="button" id="build-submit">Construir silogismo</button>
+      <div class="card-label">Resultado</div>
+      <div class="preview-box" id="build-preview" aria-live="polite">Rellena los campos y pulsa «Construir silogismo».</div>
+      <div id="build-badge" aria-live="polite"></div>
+      <div class="explain-box" id="build-explain" style="display:none" aria-live="polite"></div>
+      <p class="note-in-card">Se trabaja con categorías expresadas como conjuntos para evitar problemas de género y número. La conclusión propuesta puede ser válida o inválida.</p>
     </div>
-  </div>
+  </section>
 
-  <!-- ══════════════════════════════════════════
-       PANEL 3 — ARRASTRAR
-  ══════════════════════════════════════════ -->
-  <div class="panel" id="panel-arrastra">
-    <p class="section-title">Ordena las piezas</p>
-    <p class="section-desc">Arrastra cada ficha al lugar correcto: Premisa 1, Premisa 2 o Conclusión.</p>
-
+  <!-- PANEL 3: ORDENAR -->
+  <section class="panel" id="panel-arrastra" aria-labelledby="drag-title">
+    <h2 class="section-title" id="drag-title">Ordena las piezas</h2>
+    <p class="section-desc">Reconstruye cada razonamiento: coloca las dos premisas y la conclusión. Hay una ficha distractora que no debes utilizar.</p>
+    <p class="drag-instructions">En ordenador puedes <strong>arrastrar</strong> cada ficha. En móvil o con teclado, <strong>selecciona una ficha</strong> y después pulsa la posición donde quieres colocarla. Puedes pulsar una posición ocupada para devolver su ficha.</p>
     <div class="drag-exercise-nav">
       <span class="ex-counter" id="drag-counter">Ejercicio 1 de 6</span>
-      <div class="ex-dots" id="drag-dots"></div>
+      <span class="ex-counter">Completados: <span class="progress-val" id="drag-score">0 / 6</span></span>
+      <div class="ex-dots" id="drag-dots" aria-label="Progreso de los ejercicios"></div>
     </div>
-
     <div class="drag-game">
       <div class="chips-pool">
         <div class="chips-pool-label">Fichas disponibles</div>
         <div class="chips-container" id="chips-pool"></div>
+        <p class="drag-selection" id="drag-selection" aria-live="polite"></p>
       </div>
-
       <div class="syl-slots">
         <div class="slot-row">
           <span class="slot-label">Premisa 1</span>
-          <div class="slot" id="slot-p1" data-slot="p1"
-               ondragover="dragOver(event)" ondrop="drop(event,'p1')"
-               ondragleave="dragLeave(event)">
-            Suelta aquí
-          </div>
+          <button class="slot" type="button" id="slot-p1" data-slot="p1">Coloca aquí</button>
         </div>
         <div class="slot-row">
           <span class="slot-label">Premisa 2</span>
-          <div class="slot" id="slot-p2" data-slot="p2"
-               ondragover="dragOver(event)" ondrop="drop(event,'p2')"
-               ondragleave="dragLeave(event)">
-            Suelta aquí
-          </div>
+          <button class="slot" type="button" id="slot-p2" data-slot="p2">Coloca aquí</button>
         </div>
         <hr class="slot-divider">
         <div class="slot-row">
           <span class="slot-label">Conclusión</span>
-          <div class="slot" id="slot-conc" data-slot="conc"
-               ondragover="dragOver(event)" ondrop="drop(event,'conc')"
-               ondragleave="dragLeave(event)">
-            Suelta aquí
-          </div>
+          <button class="slot" type="button" id="slot-conc" data-slot="conc">Coloca aquí</button>
         </div>
       </div>
     </div>
-
     <div class="drag-actions">
-      <button class="action-btn primary" onclick="checkDrag()">Comprobar</button>
-      <button class="action-btn" onclick="resetDrag()">Reiniciar</button>
-      <button class="action-btn" onclick="nextDrag()">Siguiente ejercicio →</button>
+      <button class="action-btn primary" type="button" id="drag-check">Comprobar</button>
+      <button class="action-btn" type="button" id="drag-reset">Reiniciar ejercicio</button>
+      <button class="action-btn" type="button" id="drag-next">Siguiente ejercicio</button>
     </div>
-    <div class="drag-feedback" id="drag-feedback"></div>
-  </div>
-
+    <div class="drag-feedback" id="drag-feedback" role="status" aria-live="polite"></div>
+  </section>
 </main>
 
-<footer>filosofía · bachillerato · silogismos</footer>
-
-</div><!-- fin #main -->
+<footer><span id="storage-note">El progreso se guarda en este navegador cuando el almacenamiento local está disponible.</span></footer>
 
 <script>
-// ═══════════════════════════════════════════════════════
-// PANEL SWITCHING
-// ═══════════════════════════════════════════════════════
+'use strict';
+
+// Navegación: no se depende de la variable global «event».
 function showPanel(id) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + id).classList.add('active');
-  event.target.classList.add('active');
+  document.querySelectorAll('.panel').forEach(panel => {
+    panel.classList.toggle('active', panel.id === 'panel-' + id);
+  });
+  document.querySelectorAll('[data-panel]').forEach(button => {
+    const isActive = button.dataset.panel === id;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-selected', String(isActive));
+  });
+}
+document.querySelectorAll('[data-panel]').forEach(button => {
+  button.addEventListener('click', () => showPanel(button.dataset.panel));
+});
+
+// Guardado local opcional: el HTML sigue funcionando si el navegador lo bloquea.
+const STORAGE_KEY = 'filosofia-silogismos-progreso-v2';
+function loadState() {
+  try {
+    const item = localStorage.getItem(STORAGE_KEY);
+    return item ? JSON.parse(item) : {};
+  } catch { return {}; }
+}
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      recAnswers, recIdx, dragIdx, dragResults
+    }));
+  } catch {
+    document.getElementById('storage-note').textContent =
+      'El almacenamiento local no está disponible: el progreso se conserva solo mientras esta página siga abierta.';
+  }
+}
+const saved = loadState();
+
+// Ayudas para construir la presentación sin interpretar texto introducido como HTML.
+function putLines(container, premises, conclusion, cssPrefix) {
+  container.replaceChildren();
+  for (const statement of premises) {
+    const line = document.createElement('div');
+    line.className = cssPrefix === 'premise' ? 'premise' : 'p-line';
+    line.textContent = statement;
+    container.append(line);
+  }
+  const hr = document.createElement('hr');
+  hr.className = cssPrefix === 'premise' ? 'divider' : 'p-div';
+  container.append(hr);
+  const last = document.createElement('div');
+  last.className = cssPrefix === 'premise' ? 'conclusion' : 'p-conc';
+  last.textContent = '∴ ' + conclusion;
+  container.append(last);
 }
 
-// ═══════════════════════════════════════════════════════
-// PANEL 1 — RECONOCER
-// ═══════════════════════════════════════════════════════
+// ── ACTIVIDAD 1: RECONOCER ──
 const recExercises = [
   {
-    premises: ["Todo streamer de Twitch pasa muchas horas frente a la pantalla.",
-               "Ibai es un streamer de Twitch."],
-    conclusion: "Ibai pasa muchas horas frente a la pantalla.",
+    premises: [
+      'Todo streamer de Twitch pasa muchas horas frente a la pantalla.',
+      'Ibai es un streamer de Twitch.'
+    ],
+    conclusion: 'Ibai pasa muchas horas frente a la pantalla.',
     valid: true,
-    explain: "✓ Estructura correcta. Ibai está dentro del grupo de streamers, y todos los streamers están dentro del grupo de los que pasan muchas horas frente a la pantalla. La cadena funciona."
+    explain: 'Válido. Si todos los streamers de Twitch pertenecen al grupo descrito y se acepta que Ibai es streamer, la conclusión se sigue necesariamente. No se está comprobando si la primera premisa es verdadera.'
   },
   {
-    premises: ["Todos los que usan AirPods en el metro quieren evitar conversaciones.",
-               "Clara quiere evitar conversaciones."],
-    conclusion: "Clara usa AirPods en el metro.",
+    premises: [
+      'Todos los que usan AirPods en el metro quieren evitar conversaciones.',
+      'Clara quiere evitar conversaciones.'
+    ],
+    conclusion: 'Clara usa AirPods en el metro.',
     valid: false,
-    explain: "✗ Error clásico: afirmar el consecuente. Querer evitar conversaciones no implica necesariamente usar AirPods. Puede haber otras formas de lograrlo. El grupo de los que evitan conversaciones es más grande que el de los usuarios de AirPods."
+    explain: 'Inválido. De que usar AirPods implique querer evitar conversaciones no se deduce la relación inversa. Clara podría querer evitarlas sin usar AirPods.'
   },
   {
-    premises: ["Ningún examen sorpresa avisa con antelación.",
-               "Este control es un examen sorpresa."],
-    conclusion: "Este control no avisa con antelación.",
+    premises: [
+      'Ningún examen sorpresa avisa con antelación.',
+      'Este control es un examen sorpresa.'
+    ],
+    conclusion: 'Este control no avisa con antelación.',
     valid: true,
-    explain: "✓ Silogismo negativo válido. Si ningún miembro del grupo avisa, y el sujeto está en ese grupo, el sujeto tampoco avisa."
+    explain: 'Válido. Ningún miembro de la categoría «exámenes sorpresa» avisa con antelación, y el control pertenece a esa categoría.'
   },
   {
-    premises: ["Todas las personas que aprueban selectividad estudian mucho.",
-               "Marta estudia mucho."],
-    conclusion: "Marta aprobará selectividad.",
+    premises: [
+      'Todas las personas que aprueban la PAU estudian mucho.',
+      'Marta estudia mucho.'
+    ],
+    conclusion: 'Marta aprueba la PAU.',
     valid: false,
-    explain: "✗ Estudiar mucho es condición de los que aprueban, pero no es suficiente por sí sola para garantizar el aprobado. Puede que Marta estudie mucho y aun así no apruebe por otros factores."
+    explain: 'Inválido. La primera premisa afirma que quienes aprueban estudian mucho, no que todas las personas que estudian mucho aprueben. Se invierte indebidamente la relación.'
   },
   {
-    premises: ["Todo videojuego con más de 90 en Metacritic es considerado un clásico.",
-               "The Legend of Zelda: Breath of the Wild tiene más de 90 en Metacritic."],
-    conclusion: "The Legend of Zelda: Breath of the Wild es considerado un clásico.",
+    premises: [
+      'Todo videojuego con más de 90 puntos en Metacritic es considerado un clásico.',
+      'The Legend of Zelda: Breath of the Wild tiene más de 90 puntos en Metacritic.'
+    ],
+    conclusion: 'The Legend of Zelda: Breath of the Wild es considerado un clásico.',
     valid: true,
-    explain: "✓ Estructura perfecta. El juego entra en el grupo de los que superan 90 en Metacritic, y todos los de ese grupo son considerados clásicos."
+    explain: 'Válido. Si se aceptan ambas premisas, el videojuego pertenece al conjunto al que la regla general atribuye esa propiedad.'
   },
   {
-    premises: ["Algunos youtubers de tecnología saben programar.",
-               "Carlos es youtuber de tecnología."],
-    conclusion: "Carlos sabe programar.",
+    premises: [
+      'Algunos youtubers de tecnología saben programar.',
+      'Carlos es youtuber de tecnología.'
+    ],
+    conclusion: 'Carlos sabe programar.',
     valid: false,
-    explain: "✗ La premisa 1 dice «algunos», no «todos». Carlos puede ser youtuber de tecnología sin saber programar. La particular afirmativa no permite concluir nada sobre un individuo concreto."
+    explain: 'Inválido. «Algunos» no significa «todos». Carlos puede pertenecer a la categoría de youtubers de tecnología sin estar entre quienes saben programar.'
   },
   {
-    premises: ["Todo algoritmo de redes sociales maximiza el tiempo de pantalla.",
-               "TikTok tiene un algoritmo de redes sociales."],
-    conclusion: "El algoritmo de TikTok maximiza el tiempo de pantalla.",
+    premises: [
+      'Todo algoritmo de red social maximiza el tiempo de pantalla.',
+      'El algoritmo de TikTok es un algoritmo de red social.'
+    ],
+    conclusion: 'El algoritmo de TikTok maximiza el tiempo de pantalla.',
     valid: true,
-    explain: "✓ Silogismo válido. TikTok está dentro del grupo de redes sociales, y todos los algoritmos de ese grupo maximizan el tiempo de pantalla."
+    explain: 'Válido. La segunda premisa incluye expresamente el algoritmo mencionado en la categoría de la primera. La verdad empírica de la regla no afecta a la validez de la inferencia.'
   },
   {
-    premises: ["Ningún spoiler avisa de lo que va a ocurrir antes de que ocurra.",
-               "Nadie avisa de lo que va a ocurrir antes de que ocurra."],
-    conclusion: "Todo el mundo hace spoilers.",
+    premises: [
+      'Ningún vídeo eliminado permanece visible en la plataforma.',
+      'Este vídeo no permanece visible en la plataforma.'
+    ],
+    conclusion: 'Este vídeo ha sido eliminado.',
     valid: false,
-    explain: "✗ Las premisas hablan de lo que hacen los spoilers y de quienes no avisan, pero no permiten concluir nada sobre «todo el mundo». La conclusión es mucho más amplia que lo que las premisas autorizan."
+    explain: 'Inválido. No estar visible no implica haber sido eliminado: el vídeo podría estar oculto o restringido. Se toma una consecuencia posible por una prueba de su causa.'
   }
 ];
 
-let recIdx = 0;
-let recCorrect = 0;
-let recAnswered = 0;
-let recDone = false;
+let recAnswers = Array.isArray(saved.recAnswers) && saved.recAnswers.length === recExercises.length
+  ? saved.recAnswers.map(a => typeof a === 'boolean' ? a : null)
+  : Array(recExercises.length).fill(null);
+let recIdx = Number.isInteger(saved.recIdx) && saved.recIdx >= 0 && saved.recIdx <= recExercises.length
+  ? saved.recIdx : 0;
 
+function recStats() {
+  let answered = 0;
+  let correct = 0;
+  recAnswers.forEach((answer, i) => {
+    if (answer !== null) {
+      answered++;
+      if (answer === recExercises[i].valid) correct++;
+    }
+  });
+  return {answered, correct};
+}
 function renderRec() {
-  const ex = recExercises[recIdx];
-  document.getElementById('rec-num').textContent = `Razonamiento ${recIdx + 1} de ${recExercises.length}`;
+  const {answered, correct} = recStats();
+  document.getElementById('rec-score').textContent = `${correct} / ${answered}`;
+  const title = document.getElementById('rec-num');
   const box = document.getElementById('rec-syl');
-  box.innerHTML = ex.premises.map(p => `<div class="premise">${p}</div>`).join('') +
-    `<hr class="divider"><div class="conclusion">∴ ${ex.conclusion}</div>`;
-  document.getElementById('rec-feedback').className = 'feedback';
-  document.getElementById('rec-feedback').textContent = '';
-  document.getElementById('rec-next').className = 'next-btn';
-  document.getElementById('btn-valid').className = 'choice-btn';
-  document.getElementById('btn-invalid').className = 'choice-btn';
-  recDone = false;
-}
+  const choices = document.getElementById('rec-choices');
+  const feedback = document.getElementById('rec-feedback');
+  const next = document.getElementById('rec-next');
+  feedback.className = 'feedback';
+  feedback.textContent = '';
+  next.className = 'next-btn';
+  choices.style.display = 'flex';
 
-function checkRec(userSaysValid) {
-  if (recDone) return;
-  recDone = true;
-  recAnswered++;
-  const ex = recExercises[recIdx];
-  const correct = userSaysValid === ex.valid;
-  if (correct) recCorrect++;
-  document.getElementById('rec-score').textContent = `${recCorrect} / ${recAnswered}`;
-
-  const fb = document.getElementById('rec-feedback');
-  fb.textContent = ex.explain;
-  fb.className = 'feedback show ' + (correct ? 'ok' : 'bad');
-
-  document.getElementById('btn-valid').className = 'choice-btn' + (ex.valid ? ' correct' : ' wrong');
-  document.getElementById('btn-invalid').className = 'choice-btn' + (!ex.valid ? ' correct' : ' wrong');
-  document.getElementById('rec-next').className = 'next-btn show';
-}
-
-function nextRec() {
-  recIdx = (recIdx + 1) % recExercises.length;
-  renderRec();
-}
-
-renderRec();
-
-// ═══════════════════════════════════════════════════════
-// PANEL 2 — CONSTRUIR
-// ═══════════════════════════════════════════════════════
-function buildSyl() {
-  const mayor  = document.getElementById('b-mayor').value.trim();
-  const medio  = document.getElementById('b-medio').value.trim();
-  const sujeto = document.getElementById('b-sujeto').value.trim();
-  const tipo   = document.getElementById('b-tipo').value;
-  const rel    = document.getElementById('b-rel').value;
-
-  if (!mayor || !medio || !sujeto) {
-    document.getElementById('build-preview').innerHTML = '<span style="color:var(--red)">Rellena todos los campos antes de continuar.</span>';
+  if (recIdx === recExercises.length) {
+    title.textContent = 'Actividad completada';
+    box.replaceChildren();
+    const finalLine = document.createElement('div');
+    finalLine.className = 'rec-complete';
+    finalLine.textContent = `Has respondido los ${recExercises.length} razonamientos.`;
+    box.append(finalLine);
+    const scoreLine = document.createElement('div');
+    scoreLine.textContent = `Resultado final: ${correct} aciertos de ${recExercises.length}.`;
+    box.append(scoreLine);
+    choices.style.display = 'none';
+    next.textContent = 'Volver a empezar';
+    next.className = 'next-btn show';
     return;
   }
 
-  let p1, p2, conc, valid, explain;
+  const ex = recExercises[recIdx];
+  title.textContent = `Razonamiento ${recIdx + 1} de ${recExercises.length}`;
+  putLines(box, ex.premises, ex.conclusion, 'premise');
+  const answeredHere = recAnswers[recIdx] !== null;
+  document.getElementById('btn-valid').className = 'choice-btn' + (answeredHere ? (ex.valid ? ' correct' : ' wrong') : '');
+  document.getElementById('btn-invalid').className = 'choice-btn' + (answeredHere ? (!ex.valid ? ' correct' : ' wrong') : '');
+  document.getElementById('btn-valid').disabled = answeredHere;
+  document.getElementById('btn-invalid').disabled = answeredHere;
+  if (answeredHere) {
+    const wasCorrect = recAnswers[recIdx] === ex.valid;
+    feedback.textContent = (wasCorrect ? 'Respuesta acertada. ' : 'Respuesta incorrecta. ') + ex.explain;
+    feedback.className = 'feedback show ' + (wasCorrect ? 'ok' : 'bad');
+    next.textContent = recIdx === recExercises.length - 1 ? 'Ver resultado final' : 'Siguiente';
+    next.className = 'next-btn show';
+  }
+}
+function checkRec(userSaysValid) {
+  if (recIdx >= recExercises.length || recAnswers[recIdx] !== null) return;
+  recAnswers[recIdx] = userSaysValid;
+  saveState();
+  renderRec();
+}
+function nextRec() {
+  if (recIdx === recExercises.length) {
+    restartRec();
+    return;
+  }
+  if (recAnswers[recIdx] === null) return;
+  recIdx++;
+  saveState();
+  renderRec();
+}
+function restartRec() {
+  recIdx = 0;
+  recAnswers = Array(recExercises.length).fill(null);
+  saveState();
+  renderRec();
+}
+document.getElementById('btn-valid').addEventListener('click', () => checkRec(true));
+document.getElementById('btn-invalid').addEventListener('click', () => checkRec(false));
+document.getElementById('rec-next').addEventListener('click', nextRec);
+document.getElementById('rec-reset').addEventListener('click', restartRec);
 
-  // Build premise 1
-  if (tipo === 'todo')    p1 = `Todo ${medio} es ${mayor}.`;
-  if (tipo === 'ninguno') p1 = `Ningún ${medio} es ${mayor}.`;
-  if (tipo === 'algun')   p1 = `Algún ${medio} es ${mayor}.`;
+// ── ACTIVIDAD 2: CONSTRUIR ──
+function buildSyl() {
+  const mayor = document.getElementById('b-mayor').value.trim().replace(/\s+/g, ' ');
+  const medio = document.getElementById('b-medio').value.trim().replace(/\s+/g, ' ');
+  const sujeto = document.getElementById('b-sujeto').value.trim().replace(/\s+/g, ' ');
+  const tipo = document.getElementById('b-tipo').value;
+  const rel = document.getElementById('b-rel').value;
+  const preview = document.getElementById('build-preview');
+  const badge = document.getElementById('build-badge');
+  const expl = document.getElementById('build-explain');
+  badge.replaceChildren();
+  expl.textContent = '';
+  expl.style.display = 'none';
 
-  // Build premise 2 & conclusion based on relation
-  if (rel === 'es') {
-    p2 = `${sujeto} es ${medio}.`;
-    if (tipo === 'todo') {
-      conc = `${sujeto} es ${mayor}.`;
-      valid = true;
-      explain = `La estructura es correcta. ${sujeto} pertenece al grupo «${medio}», y todos los de ese grupo pertenecen a «${mayor}». La cadena P → M → Mayor funciona.`;
-    } else if (tipo === 'ninguno') {
-      conc = `${sujeto} no es ${mayor}.`;
-      valid = true;
-      explain = `Silogismo negativo válido. Si ningún ${medio} es ${mayor}, y ${sujeto} es ${medio}, entonces ${sujeto} tampoco puede ser ${mayor}.`;
-    } else {
-      conc = `${sujeto} es ${mayor}.`;
-      valid = false;
-      explain = `Atención: la premisa 1 dice «algún», no «todos». Que algunos ${medio} sean ${mayor} no permite concluir nada seguro sobre ${sujeto} en particular. El silogismo no es válido.`;
-    }
-  } else if (rel === 'no-es') {
-    p2 = `${sujeto} no es ${medio}.`;
-    conc = `${sujeto} no es ${mayor}.`;
-    valid = false;
-    explain = `Error estructural: que ${sujeto} no sea ${medio} no implica que no sea ${mayor}. Puede pertenecer a «${mayor}» por otra vía. Las premisas no autorizan esta conclusión.`;
-  } else {
-    p2 = `${sujeto} es ${mayor}.`;
-    conc = `${sujeto} es ${medio}.`;
-    valid = false;
-    explain = `Error clásico: afirmar el consecuente. Pertenecer a «${mayor}» no implica pertenecer a «${medio}». El grupo «${mayor}» puede contener muchas otras cosas además de «${medio}».`;
+  if (!mayor || !medio || !sujeto) {
+    preview.textContent = 'Rellena los tres términos antes de continuar.';
+    return;
+  }
+  const norm = s => s.toLocaleLowerCase('es').normalize('NFC');
+  if (new Set([norm(mayor), norm(medio), norm(sujeto)]).size !== 3) {
+    preview.textContent = 'Utiliza tres términos diferentes para que se distinga la función de cada uno.';
+    return;
   }
 
-  // Render preview
-  document.getElementById('build-preview').innerHTML =
-    `<div class="p-line">${p1}</div>` +
-    `<div class="p-line">${p2}</div>` +
-    `<hr class="p-div">` +
-    `<div class="p-conc">∴ ${conc}</div>`;
+  const miembro = `grupo «${medio}»`;
+  const destino = `grupo «${mayor}»`;
+  const individuo = `«${sujeto}»`;
+  const p1 = tipo === 'todo'
+    ? `Todo elemento del ${miembro} pertenece al ${destino}.`
+    : tipo === 'ninguno'
+      ? `Ningún elemento del ${miembro} pertenece al ${destino}.`
+      : `Algunos elementos del ${miembro} pertenecen al ${destino}.`;
 
-  const badge = document.getElementById('build-badge');
-  badge.innerHTML = `<span class="validity-badge ${valid ? 'valid' : 'invalid'}">${valid ? '✓ Silogismo válido' : '✗ Silogismo inválido'}</span>`;
+  let p2, conclusion, valid, explain;
+  if (rel === 'es') {
+    p2 = `${individuo} pertenece al ${miembro}.`;
+    if (tipo === 'todo') {
+      conclusion = `${individuo} pertenece al ${destino}.`;
+      valid = true;
+      explain = 'Válido. Todo M pertenece a P y S pertenece a M; por tanto, S pertenece a P. Es la aplicación de una regla universal a un caso particular.';
+    } else if (tipo === 'ninguno') {
+      conclusion = `${individuo} no pertenece al ${destino}.`;
+      valid = true;
+      explain = 'Válido. Ningún M pertenece a P y S pertenece a M; por tanto, S no pertenece a P.';
+    } else {
+      conclusion = `${individuo} pertenece al ${destino}.`;
+      valid = false;
+      explain = 'Inválido. Que algunos elementos de M pertenezcan a P no significa que todos pertenezcan. S podría ser uno de los que no pertenecen a P.';
+    }
+  } else if (rel === 'no-es') {
+    p2 = `${individuo} no pertenece al ${miembro}.`;
+    conclusion = `${individuo} no pertenece al ${destino}.`;
+    valid = false;
+    explain = tipo === 'todo'
+      ? 'Inválido. Todo M pertenece a P, pero puede haber elementos de P que no pertenezcan a M. No pertenecer a M no implica quedar fuera de P.'
+      : tipo === 'ninguno'
+        ? 'Inválido. M y P no comparten elementos, pero un sujeto que esté fuera de M puede pertenecer o no a P.'
+        : 'Inválido. Saber que algunos M pertenecen a P y que S está fuera de M no permite determinar si S pertenece a P.';
+  } else {
+    p2 = `${individuo} pertenece al ${destino}.`;
+    conclusion = `${individuo} pertenece al ${miembro}.`;
+    valid = false;
+    explain = tipo === 'todo'
+      ? 'Inválido. Todo M pertenece a P, pero no necesariamente todo P pertenece a M. Es una inversión indebida de la implicación.'
+      : tipo === 'ninguno'
+        ? 'Inválido. Si ningún M pertenece a P y S pertenece a P, entonces S no puede pertenecer a M. La conclusión propuesta contradice las premisas.'
+        : 'Inválido. Que algunos M pertenezcan a P y S pertenezca a P no implica que S pertenezca a M.';
+  }
 
-  const expl = document.getElementById('build-explain');
+  putLines(preview, [p1, p2], conclusion, 'p-line');
+  const result = document.createElement('span');
+  result.className = 'validity-badge ' + (valid ? 'valid' : 'invalid');
+  result.textContent = valid ? 'Silogismo válido' : 'Silogismo inválido';
+  badge.append(result);
   expl.style.display = 'block';
   expl.textContent = explain;
 }
+document.getElementById('build-submit').addEventListener('click', buildSyl);
 
-// ═══════════════════════════════════════════════════════
-// PANEL 3 — ARRASTRAR
-// ═══════════════════════════════════════════════════════
+// ── ACTIVIDAD 3: ORDENAR ──
 const dragExercises = [
   {
     chips: [
-      "∴ Bad Bunny es muy escuchado en todo el mundo.",
-      "Todo artista latino con más de 50 millones de oyentes mensuales es muy escuchado en todo el mundo.",
-      "Bad Bunny tiene más de 50 millones de oyentes mensuales en Spotify.",
-      "Los lunes son difíciles." // distractor
+      '∴ Bad Bunny es muy escuchado en todo el mundo.',
+      'Todo artista latino con más de 50 millones de oyentes mensuales en Spotify es muy escuchado en todo el mundo.',
+      'Bad Bunny es un artista latino con más de 50 millones de oyentes mensuales en Spotify.',
+      'Los lunes son difíciles.'
     ],
-    answer: {
-      p1:   "Todo artista latino con más de 50 millones de oyentes mensuales es muy escuchado en todo el mundo.",
-      p2:   "Bad Bunny tiene más de 50 millones de oyentes mensuales en Spotify.",
-      conc: "∴ Bad Bunny es muy escuchado en todo el mundo."
-    }
+    answer: {p1: 1, p2: 2, conc: 0}
   },
   {
     chips: [
-      "∴ Inception no es fácil de ver distraído.",
-      "Ninguna película de Nolan es fácil de ver distraído.",
-      "Ver series en el móvil es cómodo.",
-      "Inception es una película de Nolan."
+      '∴ Inception no es fácil de ver distraído.',
+      'Ninguna película de Nolan es fácil de ver distraído.',
+      'Ver series en el móvil es cómodo.',
+      'Inception es una película de Nolan.'
     ],
-    answer: {
-      p1:   "Ninguna película de Nolan es fácil de ver distraído.",
-      p2:   "Inception es una película de Nolan.",
-      conc: "∴ Inception no es fácil de ver distraído."
-    }
+    answer: {p1: 1, p2: 3, conc: 0}
   },
   {
     chips: [
-      "∴ Este partido de Champions será impredecible.",
-      "Todo partido de Champions con dos equipos en racha es impredecible.",
-      "Hoy hay tráfico en la ciudad.",
-      "Este partido de Champions tiene dos equipos en racha."
+      '∴ Este partido de Champions es impredecible.',
+      'Todo partido de Champions con dos equipos en racha es impredecible.',
+      'Hoy hay tráfico en la ciudad.',
+      'Este partido de Champions tiene dos equipos en racha.'
     ],
-    answer: {
-      p1:   "Todo partido de Champions con dos equipos en racha es impredecible.",
-      p2:   "Este partido de Champions tiene dos equipos en racha.",
-      conc: "∴ Este partido de Champions será impredecible."
-    }
+    answer: {p1: 1, p2: 3, conc: 0}
   },
   {
     chips: [
-      "∴ Este restaurante tiene lista de espera.",
-      "Todos los restaurantes con más de 4,8 en Google tienen lista de espera.",
-      "El tiempo en Málaga es bueno en verano.",
-      "Este restaurante tiene 4,9 en Google."
+      '∴ Este restaurante tiene lista de espera.',
+      'Todos los restaurantes con más de 4,8 puntos en Google tienen lista de espera.',
+      'El tiempo en Málaga es bueno en verano.',
+      'Este restaurante tiene 4,9 puntos en Google.'
     ],
-    answer: {
-      p1:   "Todos los restaurantes con más de 4,8 en Google tienen lista de espera.",
-      p2:   "Este restaurante tiene 4,9 en Google.",
-      conc: "∴ Este restaurante tiene lista de espera."
-    }
+    answer: {p1: 1, p2: 3, conc: 0}
   },
   {
     chips: [
-      "∴ Fortnite consume mucha RAM.",
-      "Todo juego con gráficos en tiempo real consume mucha RAM.",
-      "Fortnite tiene gráficos en tiempo real.",
-      "Las zapatillas de baloncesto son caras."
+      '∴ Fortnite consume mucha RAM.',
+      'Todo videojuego con gráficos en tiempo real consume mucha RAM.',
+      'Fortnite es un videojuego con gráficos en tiempo real.',
+      'Las zapatillas de baloncesto son caras.'
     ],
-    answer: {
-      p1:   "Todo juego con gráficos en tiempo real consume mucha RAM.",
-      p2:   "Fortnite tiene gráficos en tiempo real.",
-      conc: "∴ Fortnite consume mucha RAM."
-    }
+    answer: {p1: 1, p2: 2, conc: 0}
   },
   {
     chips: [
-      "∴ Este meme ya no hace gracia.",
-      "Todo meme que lleva más de dos semanas circulando ya no hace gracia.",
-      "Este meme lleva tres semanas circulando.",
-      "El café con leche está bueno por las mañanas."
+      '∴ Este meme ya no hace gracia.',
+      'Todo meme que lleva más de dos semanas circulando ya no hace gracia.',
+      'Este meme lleva más de dos semanas circulando.',
+      'El café con leche está bueno por las mañanas.'
     ],
-    answer: {
-      p1:   "Todo meme que lleva más de dos semanas circulando ya no hace gracia.",
-      p2:   "Este meme lleva tres semanas circulando.",
-      conc: "∴ Este meme ya no hace gracia."
-    }
+    answer: {p1: 1, p2: 2, conc: 0}
   }
 ];
-
-let dragIdx = 0;
-let dragPlaced = { p1: null, p2: null, conc: null };
+let dragIdx = Number.isInteger(saved.dragIdx) && saved.dragIdx >= 0 && saved.dragIdx < dragExercises.length
+  ? saved.dragIdx : 0;
+let dragResults = Array.isArray(saved.dragResults) && saved.dragResults.length === dragExercises.length
+  ? saved.dragResults.map(Boolean) : Array(dragExercises.length).fill(false);
+let dragPlaced = {p1: null, p2: null, conc: null};
+let dragSelected = null;
 let dragChecked = false;
+let dragOrder = [];
 
-function initDragDots() {
-  const dots = document.getElementById('drag-dots');
-  dots.innerHTML = dragExercises.map((_, i) =>
-    `<div class="ex-dot ${i === 0 ? 'active' : ''}" id="dot-${i}"></div>`
-  ).join('');
+function shuffleIndices(count) {
+  const arr = Array.from({length: count}, (_, i) => i);
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
-
+function updateDragProgress() {
+  const count = dragResults.filter(Boolean).length;
+  document.getElementById('drag-score').textContent = `${count} / ${dragExercises.length}`;
+  const dots = document.getElementById('drag-dots');
+  dots.replaceChildren();
+  dragExercises.forEach((_, i) => {
+    const dot = document.createElement('span');
+    dot.className = 'ex-dot' + (dragResults[i] ? ' done' : '') + (i === dragIdx ? ' active' : '');
+    dot.setAttribute('aria-label', `Ejercicio ${i + 1}: ${dragResults[i] ? 'resuelto' : 'pendiente'}`);
+    dot.title = `Ejercicio ${i + 1}: ${dragResults[i] ? 'resuelto' : 'pendiente'}`;
+    dots.append(dot);
+  });
+}
 function renderDrag() {
   const ex = dragExercises[dragIdx];
-  dragPlaced = { p1: null, p2: null, conc: null };
+  dragPlaced = {p1: null, p2: null, conc: null};
+  dragSelected = null;
   dragChecked = false;
-
+  dragOrder = shuffleIndices(ex.chips.length);
   document.getElementById('drag-counter').textContent = `Ejercicio ${dragIdx + 1} de ${dragExercises.length}`;
-
-  // Update dots
-  document.querySelectorAll('.ex-dot').forEach((d, i) => {
-    d.className = 'ex-dot' + (i < dragIdx ? ' done' : i === dragIdx ? ' active' : '');
-  });
-
-  // Shuffle chips
-  const shuffled = [...ex.chips].sort(() => Math.random() - 0.5);
-  const pool = document.getElementById('chips-pool');
-  pool.innerHTML = '';
-  shuffled.forEach((text, i) => {
-    const chip = document.createElement('div');
-    chip.className = 'chip';
-    chip.id = `chip-${i}`;
-    chip.textContent = text;
-    chip.draggable = true;
-    chip.addEventListener('dragstart', e => {
-      e.dataTransfer.setData('text/plain', text);
-      chip.classList.add('dragging');
-    });
-    chip.addEventListener('dragend', () => chip.classList.remove('dragging'));
-    pool.appendChild(chip);
-  });
-
-  // Reset slots
-  ['p1','p2','conc'].forEach(s => {
-    const slot = document.getElementById('slot-' + s);
-    slot.textContent = 'Suelta aquí';
-    slot.className = 'slot';
-    slot.dataset.value = '';
-  });
-
-  // Reset feedback
   const fb = document.getElementById('drag-feedback');
   fb.className = 'drag-feedback';
   fb.textContent = '';
+  updateDragDisplay();
+  updateDragProgress();
 }
-
-function dragOver(e) {
-  e.preventDefault();
-  e.currentTarget.classList.add('drag-over');
-}
-function dragLeave(e) {
-  e.currentTarget.classList.remove('drag-over');
-}
-function drop(e, slotId) {
-  e.preventDefault();
+function selectChip(index) {
   if (dragChecked) return;
-  const text = e.dataTransfer.getData('text/plain');
-  const slot = document.getElementById('slot-' + slotId);
-  slot.classList.remove('drag-over');
-
-  // If slot already had a value, return it to pool
-  const prev = slot.dataset.value;
-  if (prev) {
-    const pool = document.getElementById('chips-pool');
-    const returnChip = document.createElement('div');
-    returnChip.className = 'chip';
-    returnChip.textContent = prev;
-    returnChip.draggable = true;
-    returnChip.addEventListener('dragstart', ev => {
-      ev.dataTransfer.setData('text/plain', prev);
-      returnChip.classList.add('dragging');
-    });
-    returnChip.addEventListener('dragend', () => returnChip.classList.remove('dragging'));
-    pool.appendChild(returnChip);
-  }
-
-  // Remove chip from pool
-  Array.from(document.getElementById('chips-pool').children).forEach(c => {
-    if (c.textContent === text) c.remove();
-  });
-
-  slot.textContent = text;
-  slot.dataset.value = text;
-  slot.className = 'slot filled';
-  dragPlaced[slotId] = text;
+  dragSelected = dragSelected === index ? null : index;
+  updateDragDisplay();
 }
+function placeChip(index, slotId) {
+  if (dragChecked || !Number.isInteger(index) || index < 0 || index >= dragExercises[dragIdx].chips.length) return;
+  if (!['p1','p2','conc'].includes(slotId)) return;
+  for (const key of ['p1','p2','conc']) {
+    if (dragPlaced[key] === index) dragPlaced[key] = null;
+  }
+  dragPlaced[slotId] = index;
+  dragSelected = null;
+  const fb = document.getElementById('drag-feedback');
+  fb.className = 'drag-feedback';
+  fb.textContent = '';
+  updateDragDisplay();
+}
+function slotClick(slotId) {
+  if (dragChecked) return;
+  if (dragSelected !== null) {
+    placeChip(dragSelected, slotId);
+  } else if (dragPlaced[slotId] !== null) {
+    dragPlaced[slotId] = null;
+    updateDragDisplay();
+  }
+}
+function updateDragDisplay() {
+  const ex = dragExercises[dragIdx];
+  const pool = document.getElementById('chips-pool');
+  pool.replaceChildren();
+  const placed = new Set(Object.values(dragPlaced).filter(i => i !== null));
+  for (const i of dragOrder) {
+    if (placed.has(i)) continue;
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip' + (dragSelected === i ? ' selected' : '');
+    chip.textContent = ex.chips[i];
+    chip.setAttribute('aria-pressed', String(dragSelected === i));
+    chip.draggable = !dragChecked;
+    chip.addEventListener('click', () => selectChip(i));
+    chip.addEventListener('dragstart', ev => {
+      if (dragChecked) { ev.preventDefault(); return; }
+      ev.dataTransfer.setData('text/plain', String(i));
+      ev.dataTransfer.effectAllowed = 'move';
+      chip.classList.add('dragging');
+    });
+    chip.addEventListener('dragend', () => chip.classList.remove('dragging'));
+    pool.append(chip);
+  }
+  document.getElementById('drag-selection').textContent = dragSelected === null
+    ? 'Selecciona una ficha o arrástrala.'
+    : 'Ficha seleccionada. Pulsa Premisa 1, Premisa 2 o Conclusión.';
 
+  for (const slotId of ['p1','p2','conc']) {
+    const slot = document.getElementById('slot-' + slotId);
+    slot.textContent = dragPlaced[slotId] === null ? 'Coloca aquí' : ex.chips[dragPlaced[slotId]];
+    slot.className = 'slot' + (dragPlaced[slotId] === null ? '' : ' filled');
+    slot.disabled = dragChecked;
+  }
+}
 function checkDrag() {
   const ex = dragExercises[dragIdx];
-  if (!dragPlaced.p1 || !dragPlaced.p2 || !dragPlaced.conc) {
-    const fb = document.getElementById('drag-feedback');
+  const fb = document.getElementById('drag-feedback');
+  if (['p1','p2','conc'].some(s => dragPlaced[s] === null)) {
     fb.textContent = 'Coloca una ficha en cada posición antes de comprobar.';
     fb.className = 'drag-feedback show bad';
     return;
   }
-  dragChecked = true;
-
   let allOk = true;
-  ['p1','p2','conc'].forEach(s => {
-    const slot = document.getElementById('slot-' + s);
+  for (const s of ['p1','p2','conc']) {
     const correct = dragPlaced[s] === ex.answer[s];
+    const slot = document.getElementById('slot-' + s);
     slot.className = 'slot filled ' + (correct ? 'correct' : 'wrong');
     if (!correct) allOk = false;
-  });
-
-  const fb = document.getElementById('drag-feedback');
+  }
   if (allOk) {
-    fb.textContent = '✓ Perfecto. Las tres piezas están en el lugar correcto. La cadena del silogismo funciona.';
+    dragChecked = true;
+    dragResults[dragIdx] = true;
+    dragSelected = null;
+    document.querySelectorAll('.slot').forEach(slot => {slot.disabled = true;});
+    saveState();
+    updateDragProgress();
+    fb.textContent = dragResults.every(Boolean)
+      ? 'Correcto. Has completado los seis ejercicios.'
+      : 'Correcto. Las dos premisas y la conclusión están en su lugar.';
     fb.className = 'drag-feedback show ok';
   } else {
-    fb.textContent = '✗ Hay alguna pieza fuera de su sitio. Fíjate en cuál es la premisa universal, cuál conecta el sujeto con el término medio, y cuál es la conclusión (va precedida de ∴).';
+    fb.textContent = 'Hay fichas mal colocadas. Puedes cambiar las posiciones y volver a comprobar. Observa qué enunciado es la regla general y cuál es la conclusión.';
     fb.className = 'drag-feedback show bad';
   }
 }
-
-function resetDrag() {
-  dragChecked = false;
-  renderDrag();
-}
-
+function resetDrag() { renderDrag(); }
 function nextDrag() {
   dragIdx = (dragIdx + 1) % dragExercises.length;
+  saveState();
   renderDrag();
 }
+for (const id of ['p1','p2','conc']) {
+  const slot = document.getElementById('slot-' + id);
+  slot.addEventListener('click', () => slotClick(id));
+  slot.addEventListener('dragover', e => {
+    if (dragChecked) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    slot.classList.add('drag-over');
+  });
+  slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+  slot.addEventListener('drop', e => {
+    e.preventDefault();
+    slot.classList.remove('drag-over');
+    const content = e.dataTransfer.getData('text/plain');
+    if (/^[0-3]$/.test(content)) placeChip(Number(content), id);
+  });
+}
+document.getElementById('drag-check').addEventListener('click', checkDrag);
+document.getElementById('drag-reset').addEventListener('click', resetDrag);
+document.getElementById('drag-next').addEventListener('click', nextDrag);
 
-initDragDots();
+renderRec();
 renderDrag();
-
-window.addEventListener("load", function () {
-  setTimeout(function () {
-    var cover = document.getElementById("cover");
-    var main  = document.getElementById("main");
-
-    cover.style.opacity = "0";
-    cover.style.transition = "opacity 0.9s ease";
-
-    setTimeout(function () {
-      cover.style.display = "none";
-      main.style.display = "block";
-    }, 900);
-  }, 4000);
-});
 </script>
 </body>
 </html>
