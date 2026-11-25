@@ -112,6 +112,24 @@
   .card-wide {
     grid-column: 1 / -1;
     text-align: center;
+    min-height: 140px;
+    justify-content: center;
+    background-image: linear-gradient(rgba(13, 13, 16, 0.55), rgba(13, 13, 16, 0.75)), url('Portada.jpg');
+    background-size: cover;
+    background-position: center 45%;
+  }
+
+  .card-wide .label {
+    font-size: 26px;
+    color: #f0ebe2;
+    text-shadow: 0 2px 8px #000;
+  }
+
+  .card.card-wide:hover {
+    background-image: linear-gradient(rgba(13, 13, 16, 0.40), rgba(13, 13, 16, 0.65)), url('Portada.jpg');
+    background-size: cover;
+    background-position: center 45%;
+    border-color: #c9a84c;
   }
 
   .card::before {
@@ -249,7 +267,7 @@
         cover.style.display = "none";
         main.style.display = "flex";
       }, 900);
-    }, 4000);
+    }, 3000);
   });
 </script>
 
